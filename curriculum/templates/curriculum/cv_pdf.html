@@ -157,7 +157,8 @@
             <td class="sidebar-cell">
                 <div style="text-align: center;">
                     {% if perfil.foto %}
-                        <img src="{{ perfil.foto.path }}" class="profile-img">
+                        <!-- CORRECCIÓN IMPORTANTE: Se usa .url en lugar de .path para compatibilidad con la nube -->
+                        <img src="{{ perfil.foto.url }}" class="profile-img">
                     {% else %}
                         <div style="width: 130px; height: 160px; background: #fdfdfd; border: 2pt solid #3E2723; margin: 0 auto 15px auto; line-height: 160px; color: #3E2723; font-size: 8pt; opacity: 0.3;">SIN FOTO</div>
                     {% endif %}
