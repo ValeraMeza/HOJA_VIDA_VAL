@@ -6,212 +6,302 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Hoja de Vida{% endblock %}</title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tipografía Armoniosa y Elegante -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,900;1,9..144,900&family=Montserrat:wght@300;400;600;900&display=swap" rel="stylesheet">
     
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        bloom: {
+                            pink: '#FFE2E7',     /* Fondo Crema Rosado */
+                            accent: '#93032E',   /* Burgundy Principal / Botones */
+                            secondary: '#C75C74',/* Vino Vintage / Detalles */
+                            muted: '#5A1A28',    /* Rosa Oscuro / Acentos Muted */
+                            espresso: '#3A0D16', /* Texto principal claro */
+                            night: '#121212',    /* Fondo Modo Oscuro */
+                            cardDark: '#1A1A1A'  /* Fondo tarjetas en modo oscuro */
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Fraunces', 'serif'],
+                        body: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
-        
         body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f8f9fc; 
-            color: #1a1a1a; 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: #FFE2E7; 
+            color: #3A0D16; 
             margin: 0; 
-            font-size: 115%; 
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, .font-display { 
+            font-family: 'Fraunces', serif; 
+        }
+
+        /* Estilos Modo Oscuro Armonizados */
+        .dark body {
+            background-color: #121212;
+            color: #F5E9EC;
         }
         
-        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Glass Nav Refinado */
+        .glass-nav { 
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(20px); 
+            border-right: 1px solid rgba(147, 3, 46, 0.1); 
         }
 
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 10px;
+        .dark .glass-nav {
+            background: rgba(18, 18, 18, 0.9);
+            border-right: 1px solid rgba(147, 3, 46, 0.2);
+        }
+        
+        /* Botón Activo Estilo Burgundy */
+        .nav-active { 
+            background-color: #93032E !important; 
+            color: #FFF5F7 !important; 
+            box-shadow: 0 12px 25px -8px rgba(147, 3, 46, 0.4); 
+            transform: scale(1.05);
         }
 
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(25px);
-            border-right: 2px solid rgba(255, 255, 255, 0.3);
+        .dark .nav-active {
+            background-color: #93032E !important;
+            color: #F5E9EC !important;
+            box-shadow: 0 12px 25px -8px rgba(147, 3, 46, 0.5);
         }
 
-        .nav-active {
-            background-color: #1a1a1a !important;
-            color: white !important;
-            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2);
+        /* Contenedor de foto con detalle Rosa Oscuro */
+        .profile-img-container {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 2rem;
+            padding: 4px;
+            background: #93032E;
+            box-shadow: 0 10px 20px -5px rgba(58, 13, 22, 0.15);
+            transition: all 0.5s ease;
         }
 
-        /* Contenedor de iconos */
-        .nav-icon-container {
-            min-width: 80px; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .profile-img-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            background: #3A0D16;
         }
+
+        .profile-img-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #C75C74; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #93032E; }
+
+        /* Ocultar scrollbar en el nav */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="min-h-screen overflow-x-hidden">
 
-    <!-- Navegación Lateral Balanceada -->
-    <aside id="main-sidebar" class="fixed left-0 top-0 bottom-0 w-20 hover:w-72 glass-nav hidden lg:flex flex-col items-center py-12 z-[100] transition-all duration-500 group overflow-hidden shadow-2xl">
+<aside class="fixed left-0 top-0 bottom-0 w-24 hover:w-72 glass-nav hidden lg:flex flex-col z-[100] transition-all duration-500 group overflow-hidden shadow-2xl">
         
-        <!-- Logo / Inicial -->
-        <div class="mb-16 flex flex-col items-center w-full shrink-0">
-            <div class="w-14 h-14 bg-[#1a1a1a] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg group-hover:rotate-[360deg] transition-transform duration-1000 uppercase">
-                {% if perfil %}{{ perfil.nombres|first }}{% else %}V{% endif %}
+        <!-- CABECERA DE PERFIL -->
+        <div class="mt-14 mb-10 flex flex-col items-center w-full shrink-0">
+            <div class="profile-img-container group-hover:rotate-6 transition-transform duration-500">
+                <div class="profile-img-inner">
+                    {% if perfil and perfil.foto %}
+                        <img src="{{ perfil.foto.url }}" alt="{{ perfil.nombres }}">
+                    {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-bloom-secondary font-black text-3xl">
+                            {{ perfil.nombres|first|default:"V" }}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            <div class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-center whitespace-nowrap px-6">
-                <p class="font-black text-sm tracking-tight text-gray-900 uppercase">
-                    {% if perfil %}{{ perfil.nombres }} {{ perfil.apellidos }}{% else %}Valeria Meza{% endif %}
+
+            <div class="mt-6 opacity-0 group-hover:opacity-100 transition-all duration-500 text-center whitespace-nowrap px-6 translate-y-2 group-hover:translate-y-0">
+                <p class="font-display font-black text-lg tracking-tight text-bloom-espresso dark:text-bloom-pink">
+                    {% if perfil %}{{ perfil.nombres }}{% else %}Valeria{% endif %}
                 </p>
-                <p class="text-[10px] font-bold text-pink-500 uppercase tracking-widest mt-1">Hoja de Vida</p>
+                <p class="text-[10px] font-black text-bloom-secondary dark:text-bloom-secondary uppercase tracking-[0.2em] mt-1 italic">
+                    Hoja de Vida
+                </p>
             </div>
         </div>
 
-        <!-- Enlaces del Menú -->
-        <ul id="nav-list" class="w-full space-y-3 flex-grow overflow-y-auto custom-scrollbar px-2 scroll-smooth">
-            {% with request.resolver_match.url_name as url_name %}
+        <!-- NAVEGACIÓN PRINCIPAL -->
+        <nav class="w-full flex-grow flex flex-col overflow-y-auto no-scrollbar px-4" id="nav-list">
+            <ul class="w-full space-y-4">
+                {% with request.resolver_match.url_name as url_name %}
+                
+                <!-- Inicio -->
+                <li>
+                    <a href="{% url 'inicio' %}" class="flex items-center h-12 rounded-[1.2rem] transition-all duration-300 group/item {% if url_name == 'inicio' %}nav-active{% else %}text-gray-400 hover:bg-white dark:hover:bg-white/5 hover:text-bloom-accent dark:hover:text-bloom-secondary{% endif %}">
+                        <div class="min-w-[64px] flex justify-center items-center">
+                            <i data-lucide="home" stroke-width="2.5" size="20" class="group-hover/item:scale-110 transition-transform"></i>
+                        </div>
+                        <span class="font-bold text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pr-6">Inicio</span>
+                    </a>
+                </li>
+
+                <!-- Perfil -->
+                <li>
+                    <a href="{% url 'perfil' %}" class="flex items-center h-12 rounded-[1.2rem] transition-all duration-300 group/item {% if url_name == 'perfil' %}nav-active{% else %}text-gray-400 hover:bg-white dark:hover:bg-white/5 hover:text-bloom-accent dark:hover:text-bloom-secondary{% endif %}">
+                        <div class="min-w-[64px] flex justify-center items-center">
+                            <i data-lucide="user" stroke-width="2.5" size="20" class="group-hover/item:scale-110 transition-transform"></i>
+                        </div>
+                        <span class="font-bold text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pr-6">Perfil</span>
+                    </a>
+                </li>
+
+                <!-- Trayectoria -->
+                <li>
+                    <a href="{% url 'experiencia' %}" class="flex items-center h-12 rounded-[1.2rem] transition-all duration-300 group/item {% if url_name == 'experiencia' %}nav-active{% else %}text-gray-400 hover:bg-white dark:hover:bg-white/5 hover:text-bloom-accent dark:hover:text-bloom-secondary{% endif %}">
+                        <div class="min-w-[64px] flex justify-center items-center">
+                            <i data-lucide="briefcase" stroke-width="2.5" size="20" class="group-hover/item:scale-110 transition-transform"></i>
+                        </div>
+                        <span class="font-bold text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pr-6">Trayectoria</span>
+                    </a>
+                </li>
+
+                <!-- Estudios -->
+                <li>
+                    <a href="{% url 'educacion' %}" class="flex items-center h-12 rounded-[1.2rem] transition-all duration-300 group/item {% if url_name == 'educacion' %}nav-active{% else %}text-gray-400 hover:bg-white dark:hover:bg-white/5 hover:text-bloom-accent dark:hover:text-bloom-secondary{% endif %}">
+                        <div class="min-w-[64px] flex justify-center items-center">
+                            <i data-lucide="graduation-cap" stroke-width="2.5" size="20" class="group-hover/item:scale-110 transition-transform"></i>
+                        </div>
+                        <span class="font-bold text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pr-6">Estudios</span>
+                    </a>
+                </li>
+
+                <!-- Cursos -->
+                <li>
+                    <a href="{% url 'cursos' %}" class="flex items-center h-12 rounded-[1.2rem] transition-all duration-300 group/item {% if url_name == 'cursos' %}nav-active{% else %}text-gray-400 hover:bg-white dark:hover:bg-white/5 hover:text-bloom-accent dark:hover:text-bloom-secondary{% endif %}">
+                        <div class="min-w-[64px] flex justify-center items-center">
+                            <i data-lucide="book-open-check" stroke-width="2.5" size="20" class="group-hover/item:scale-110 transition-transform"></i>
+                        </div>
+                        <span class="font-bold text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pr-6">Cursos</span>
+                    </a>
+                </li>
+
+                <!-- Logros -->
+                <li>
+                    <a href="{% url 'reconocimientos' %}" class="flex items-center h-12 rounded-[1.2rem] transition-all duration-300 group/item {% if url_name == 'reconocimientos' %}nav-active{% else %}text-gray-400 hover:bg-white dark:hover:bg-white/5 hover:text-bloom-accent dark:hover:text-bloom-secondary{% endif %}">
+                        <div class="min-w-[64px] flex justify-center items-center">
+                            <i data-lucide="trophy" stroke-width="2.5" size="20" class="group-hover/item:scale-110 transition-transform"></i>
+                        </div>
+                        <span class="font-bold text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pr-6">Logros</span>
+                    </a>
+                </li>
+
+                <!-- Trabajos -->
+                <li>
+                    <a href="{% url 'trabajos' %}" class="flex items-center h-12 rounded-[1.2rem] transition-all duration-300 group/item {% if url_name == 'trabajos' %}nav-active{% else %}text-gray-400 hover:bg-white dark:hover:bg-white/5 hover:text-bloom-accent dark:hover:text-bloom-secondary{% endif %}">
+                        <div class="min-w-[64px] flex justify-center items-center">
+                            <i data-lucide="layers" stroke-width="2.5" size="20" class="group-hover/item:scale-110 transition-transform"></i>
+                        </div>
+                        <span class="font-bold text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pr-6">Trabajos</span>
+                    </a>
+                </li>
+
+                <!-- Venta -->
+                <li>
+                    <a href="{% url 'venta' %}" class="flex items-center h-12 rounded-[1.2rem] transition-all duration-300 group/item {% if url_name == 'venta' %}nav-active{% else %}text-gray-400 hover:bg-white dark:hover:bg-white/5 hover:text-bloom-accent dark:hover:text-bloom-secondary{% endif %}">
+                        <div class="min-w-[64px] flex justify-center items-center">
+                            <i data-lucide="tag" stroke-width="2.5" size="20" class="group-hover/item:scale-110 transition-transform"></i>
+                        </div>
+                        <span class="font-bold text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pr-6">Venta</span>
+                    </a>
+                </li>
+
+                <!-- Contacto -->
+                <li>
+                    <a href="{% url 'contacto' %}" class="flex items-center h-12 rounded-[1.2rem] transition-all duration-300 group/item {% if url_name == 'contacto' %}nav-active{% else %}text-gray-400 hover:bg-white dark:hover:bg-white/5 hover:text-bloom-accent dark:hover:text-bloom-secondary{% endif %}">
+                        <div class="min-w-[64px] flex justify-center items-center">
+                            <i data-lucide="message-square" stroke-width="2.5" size="20" class="group-hover/item:scale-110 transition-transform"></i>
+                        </div>
+                        <span class="font-bold text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pr-6">Contacto</span>
+                    </a>
+                </li>
+
+                {% endwith %}
+            </ul>
+        </nav>
+
+        <!-- SECCIÓN ADMINISTRATIVA -->
+        <div class="mt-auto w-full px-4 pb-8 pt-6 border-t border-bloom-accent/10 dark:border-white/5 space-y-3 shrink-0">
+            <button id="theme-toggle" class="flex items-center w-full h-11 rounded-xl transition-all text-gray-400 hover:bg-white dark:hover:bg-white/5 hover:text-bloom-secondary">
+                <div class="min-w-[64px] flex justify-center items-center">
+                    <i id="theme-icon-moon" data-lucide="moon" class="block dark:hidden" size="18"></i>
+                    <i id="theme-icon-sun" data-lucide="sun" class="hidden dark:block" size="18"></i>
+                </div>
+                <span class="font-bold text-[11px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Modo Visual</span>
+            </button>
+
+            <a href="/admin/" target="_blank" class="flex items-center w-full h-11 rounded-xl transition-all text-gray-400 hover:bg-bloom-accent dark:hover:bg-bloom-secondary hover:text-white dark:hover:text-bloom-night">
+                <div class="min-w-[64px] flex justify-center items-center">
+                    <i data-lucide="settings" size="18"></i>
+                </div>
+                <span class="font-bold text-[11px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Dashboard</span>
+            </a>
             
-            <li>
-                <a href="{% url 'inicio' %}" class="flex items-center h-16 rounded-2xl transition-all duration-300 {% if url_name == 'inicio' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500{% endif %}">
-                    <div class="nav-icon-container">
-                        <i data-lucide="home" stroke-width="2" size="28"></i>
-                    </div>
-                    <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Inicio</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{% url 'perfil' %}" class="flex items-center h-16 rounded-2xl transition-all duration-300 {% if url_name == 'perfil' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500{% endif %}">
-                    <div class="nav-icon-container">
-                        <i data-lucide="user" stroke-width="2" size="28"></i>
-                    </div>
-                    <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Perfil</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{% url 'experiencia' %}" class="flex items-center h-16 rounded-2xl transition-all duration-300 {% if url_name == 'experiencia' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500{% endif %}">
-                    <div class="nav-icon-container">
-                        <i data-lucide="briefcase" stroke-width="2" size="28"></i>
-                    </div>
-                    <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Experiencia</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{% url 'educacion' %}" class="flex items-center h-16 rounded-2xl transition-all duration-300 {% if url_name == 'educacion' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500{% endif %}">
-                    <div class="nav-icon-container">
-                        <i data-lucide="graduation-cap" stroke-width="2" size="28"></i>
-                    </div>
-                    <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Educación</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{% url 'cursos' %}" class="flex items-center h-16 rounded-2xl transition-all duration-300 {% if url_name == 'cursos' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500{% endif %}">
-                    <div class="nav-icon-container">
-                        <i data-lucide="book-open-check" stroke-width="2" size="28"></i>
-                    </div>
-                    <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Cursos</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{% url 'reconocimientos' %}" class="flex items-center h-16 rounded-2xl transition-all duration-300 {% if url_name == 'reconocimientos' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500{% endif %}">
-                    <div class="nav-icon-container">
-                        <i data-lucide="trophy" stroke-width="2" size="28"></i>
-                    </div>
-                    <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Logros</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{% url 'trabajos' %}" class="flex items-center h-16 rounded-2xl transition-all duration-300 {% if url_name == 'trabajos' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500{% endif %}">
-                    <div class="nav-icon-container">
-                        <i data-lucide="layers" stroke-width="2" size="28"></i>
-                    </div>
-                    <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Trabajos</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{% url 'venta' %}" class="flex items-center h-16 rounded-2xl transition-all duration-300 {% if url_name == 'venta' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500{% endif %}">
-                    <div class="nav-icon-container">
-                        <i data-lucide="tag" stroke-width="2" size="28"></i>
-                    </div>
-                    <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Venta</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{% url 'contacto' %}" class="flex items-center h-16 rounded-2xl transition-all duration-300 {% if url_name == 'contacto' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500{% endif %}">
-                    <div class="nav-icon-container">
-                        <i data-lucide="message-square" stroke-width="2" size="28"></i>
-                    </div>
-                    <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Contacto</span>
-                </a>
-            </li>
-            <li class="pt-6 border-t border-gray-100">
-                <a href="/admin/" class="flex items-center gap-6 p-4 rounded-2xl transition-all text-gray-300 hover:bg-[#1a1a1a] hover:text-pink-400">
-                    <i data-lucide="settings"></i>
-                    <span class="font-bold text-[11px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Admin</span>
-                </a>
-            </li>
-
-            {% endwith %}
-        </ul>
-
-        <div class="mt-auto opacity-0 group-hover:opacity-100 transition-opacity duration-500 pb-6">
-            <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter italic">© 2026</p>
+            <div class="text-center pt-4 opacity-30 group-hover:opacity-100 transition-opacity">
+                <div class="h-px w-8 bg-bloom-accent mx-auto"></div>
+            </div>
         </div>
     </aside>
 
-    <!-- Contenedor Principal -->
-    <main class="lg:ml-20 min-h-screen flex flex-col justify-center px-12 md:px-24 py-12 relative z-10 transition-all duration-500">
-        <div class="max-w-[1400px] w-full mx-auto fade-in">
+    <main class="lg:ml-24 min-h-screen flex flex-col px-8 md:px-20 py-12 relative z-10">
+        <div class="max-w-[1200px] w-full mx-auto fade-in">
             {% block content %}{% endblock %}
         </div>
     </main>
 
-    <!-- Decoraciones de Fondo -->
-    <div class="fixed top-0 right-0 w-[50vw] h-[50vh] bg-gradient-to-bl from-pink-100/20 via-transparent to-transparent -z-0 rounded-bl-full"></div>
-    <div class="fixed bottom-0 left-0 w-[20vw] h-[20vh] bg-gradient-to-tr from-blue-100/10 via-transparent to-transparent -z-0 rounded-tr-full"></div>
+    <!-- Fondo Decorativo Armonizado -->
+    <div class="fixed -top-24 -right-24 w-[40vw] h-[40vw] bg-bloom-accent/10 dark:bg-bloom-accent/5 -z-0 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="fixed -bottom-24 -left-24 w-[30vw] h-[30vw] bg-bloom-secondary/10 dark:bg-bloom-secondary/5 -z-0 rounded-full blur-[100px] pointer-events-none"></div>
 
-    <!-- Scripts -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
 
-        const sidebar = document.getElementById('main-sidebar');
-        const navList = document.getElementById('nav-list');
-        let scrollInterval;
-
-        sidebar.addEventListener('mousemove', (e) => {
-            if (sidebar.offsetWidth < 150) {
-                clearInterval(scrollInterval);
-                return;
-            }
-            const rect = sidebar.getBoundingClientRect();
-            const y = e.clientY - rect.top;
-            const height = rect.height;
-            const topThreshold = 500; 
-            const bottomThreshold = 200;
-            const baseSpeed = 10;
-
-            clearInterval(scrollInterval);
-            if (y < topThreshold && y > 100) {
-                const intensity = (topThreshold - y) / 80;
-                scrollInterval = setInterval(() => { navList.scrollTop -= baseSpeed * intensity; }, 15);
-            } else if (y > height - bottomThreshold) {
-                const intensity = (y - (height - bottomThreshold)) / 80;
-                scrollInterval = setInterval(() => { navList.scrollTop += baseSpeed * intensity; }, 15);
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
             }
         });
-        sidebar.addEventListener('mouseleave', () => { clearInterval(scrollInterval); });
     </script>
 </body>
 </html>

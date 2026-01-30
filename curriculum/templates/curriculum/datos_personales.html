@@ -1,176 +1,259 @@
 {% extends 'curriculum/base.html' %}
+{% load static %}
 
-{% block title %}Datos Personales | Valeria Meza{% endblock %}
+{% block title %}Perfil | {{ perfil.nombres }} {{ perfil.apellidos }}{% endblock %}
 
 {% block content %}
-<div class="fade-in max-w-7xl mx-auto pb-20">
-    
-    <!-- Encabezado con Estilo -->
-    <div class="mb-12">
-        <h2 class="text-6xl font-black italic uppercase tracking-tighter text-[#1a1a1a] leading-none">
-            Datos <span class="text-pink-500">Personales</span>
+
+<div class="max-w-7xl mx-auto px-4 py-8 lg:py-12 fade-in">
+
+    <!-- Encabezado de Sección Estilo Editorial -->
+    <div class="mb-12 relative">
+        <div class="inline-flex items-center gap-2 mb-4">
+            <span class="text-bloom-accent text-xl">𐙚</span>
+            <span class="text-bloom-accent dark:text-bloom-lime font-black tracking-[0.3em] text-[9px] uppercase">Identity Card</span>
+        </div>
+        <h2 class="text-6xl md:text-7xl font-display font-black italic uppercase tracking-tighter text-bloom-espresso dark:text-white leading-none">
+            Datos <span class="text-bloom-accent">Personales</span>
         </h2>
-        <div class="h-2 w-24 bg-pink-400 mt-4 rounded-full"></div>
+        <div class="h-2 w-32 bg-bloom-lime mt-4 rounded-full shadow-[0_5px_15px_rgba(209,249,133,0.3)]"></div>
     </div>
 
-    <!-- Contenedor Principal (Ajuste de proporciones: 3 vs 9) -->
     <div class="grid lg:grid-cols-12 gap-10">
         
-        <!-- Columna Izquierda: Imagen y Bio Principal (Sección más pequeña) -->
-        <div class="lg:col-span-3 space-y-8">
+        <!-- COLUMNA IZQUIERDA: IMAGEN, LOCALIZACIÓN Y REDES -->
+        <div class="lg:col-span-4 space-y-8">
+            <!-- Marco de Foto Editorial -->
             <div class="relative group">
-                <div class="absolute -inset-4 bg-pink-100 rounded-[3rem] -rotate-3 group-hover:rotate-0 transition-transform duration-500 -z-10"></div>
-                <div class="bg-white p-3 rounded-[2.5rem] shadow-xl border border-gray-100 relative z-10 overflow-hidden">
+                <div class="absolute -inset-4 bg-bloom-lime/20 dark:bg-bloom-lime/5 rounded-[4rem] -rotate-3 group-hover:rotate-0 transition-transform duration-700 -z-10"></div>
+                <div class="bg-white dark:bg-bloom-cardDark p-4 rounded-[3.5rem] shadow-xl border border-bloom-accent/10 dark:border-white/5 relative z-10 overflow-hidden">
                     {% if perfil.foto %}
-                        <img src="{{ perfil.foto.url }}" alt="{{ perfil.nombres }}" class="w-full aspect-square object-cover rounded-[1.8rem] grayscale hover:grayscale-0 transition-all duration-700">
+                        <img src="{{ perfil.foto.url }}" alt="{{ perfil.nombres }}" class="w-full aspect-[4/5] object-cover rounded-[2.8rem] grayscale hover:grayscale-0 transition-all duration-1000">
                     {% else %}
-                        <div class="w-full aspect-square bg-gray-50 rounded-[1.8rem] flex flex-col items-center justify-center text-gray-300">
-                            <i data-lucide="user" size="48" class="mb-4 opacity-20"></i>
-                            <span class="text-[8px] font-black uppercase tracking-widest">Sin Foto</span>
+                        <div class="w-full aspect-[4/5] bg-bloom-pink dark:bg-bloom-night rounded-[2.8rem] flex flex-col items-center justify-center text-bloom-accent/30">
+                            <i data-lucide="flower-2" size="64" class="mb-4 animate-pulse"></i>
+                            <span class="text-[10px] font-black uppercase tracking-widest">Sin Retrato</span>
                         </div>
                     {% endif %}
                 </div>
-                
-                <!-- Badge de ID Flotante sutil -->
-                <div class="absolute -bottom-3 -right-3 bg-[#1a1a1a] text-white px-4 py-2 rounded-xl shadow-2xl z-20 transform group-hover:scale-105 transition-transform border-2 border-white">
-                    <p class="text-[7px] font-black uppercase tracking-[0.2em] text-pink-400 mb-0.5">Identificación</p>
-                    <h4 class="text-xs font-black tracking-tight">{{ perfil.cedula }}</h4>
+                <!-- Badge de ID con Cédula -->
+                <div class="absolute -bottom-4 -right-2 bg-bloom-espresso dark:bg-bloom-accent text-white dark:text-bloom-night px-6 py-3 rounded-[2rem] shadow-2xl z-20 border-4 border-white dark:border-bloom-night transform rotate-6 hover:rotate-0 transition-transform cursor-default">
+                    <p class="text-[8px] font-black uppercase tracking-[0.2em] text-bloom-lime dark:text-bloom-espresso mb-0.5">ID Identification</p>
+                    <h4 class="text-sm font-display font-black tracking-tight">{{ perfil.cedula }}</h4>
                 </div>
             </div>
 
-            <!-- Perfil Profesional Compacto -->
-            <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-50 relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-5">
-                    <i data-lucide="quote" size="40" class="text-pink-500"></i>
-                </div>
-                <h3 class="text-[9px] font-black uppercase tracking-[0.4em] text-pink-500 mb-3 flex items-center gap-2">
-                    <span class="h-px w-4 bg-pink-200"></span> Localizaciones y Otros 
+            <!-- Localización Ficha -->
+            <div class="bg-white dark:bg-bloom-cardDark p-8 rounded-[3.5rem] border border-bloom-accent/5 dark:border-white/5 shadow-sm space-y-6">
+                <h3 class="text-[10px] font-black uppercase tracking-[0.4em] text-bloom-accent dark:text-bloom-lime mb-2 flex items-center gap-2">
+                    <span class="h-px w-6 bg-bloom-lime"></span> Localización
                 </h3>
-                <div class="flex gap-4">
-                    <div class="shrink-0 w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400">
-                        <i data-lucide="map-pin" size="20"></i>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Dirección Domiciliaria</label>
-                        <p class="text-sm font-bold text-gray-800 leading-tight">{{ perfil.direccion }}</p>
-                    </div>
-                </div>
-                <div class="flex gap-4">
-                    <div class="shrink-0 w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400">
-                        <i data-lucide="building-2" size="20"></i>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Dirección Trabajo</label>
-                        <p class="text-sm font-bold text-gray-800 leading-tight">{{ perfil.direccion_trabajo|default:"Studio Creativo Manta" }}</p>
-                    </div>
-                </div>
-                <div class="md:col-span-2 pt-4">
-                    <div class="bg-gray-50 p-6 rounded-[2rem] flex items-center justify-between border border-gray-100">
-                        <div class="flex items-center gap-4">
-                            <i data-lucide="car" class="text-gray-400"></i>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">Licencia de Conducir</span>
+                <div class="space-y-4">
+                    <div class="flex gap-4">
+                        <div class="w-8 h-8 rounded-xl bg-bloom-pink dark:bg-white/5 flex items-center justify-center shrink-0">
+                            <i data-lucide="map-pin" size="14" class="text-bloom-accent"></i>
                         </div>
-                        <span class="px-4 py-1.5 bg-white rounded-full text-[10px] font-black text-gray-800 shadow-sm border border-gray-100">
-                            {{ perfil.licencia|default:"No disponible" }}
+                        <div>
+                            <label class="text-[8px] font-black uppercase tracking-widest text-gray-400 block">Domicilio Actual</label>
+                            <p class="text-[12px] font-bold text-bloom-espresso dark:text-zinc-300 leading-tight">{{ perfil.direccion }}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-8 h-8 rounded-xl bg-bloom-pink dark:bg-white/5 flex items-center justify-center shrink-0">
+                            <i data-lucide="building-2" size="14" class="text-bloom-accent"></i>
+                        </div>
+                        <div>
+                            <label class="text-[8px] font-black uppercase tracking-widest text-gray-400 block">Oficina / Trabajo</label>
+                            <p class="text-[12px] font-bold text-bloom-espresso dark:text-zinc-300 leading-tight">{{ perfil.direccion_trabajo|default:"Remoto / No especificado" }}</p>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-bloom-pink dark:border-white/5 flex justify-between items-center">
+                        <span class="text-[10px] font-black uppercase text-gray-400 flex items-center gap-2">
+                            <i data-lucide="car" size="12"></i> Licencia:
                         </span>
+                        <span class="text-[11px] font-black text-bloom-accent dark:text-bloom-lime uppercase tracking-widest">{{ perfil.licencia|default:"N/A" }}</span>
                     </div>
                 </div>
             </div>
 
-
-            <!-- Redes y Licencia -->
-            <div class="bg-pink-50/50 p-4 rounded-[2rem] border border-pink-100 flex items-center justify-center">
-                <div class="flex gap-5">
-                    {% if perfil.url_linkedin %}
-                    <a href="{{ perfil.url_linkedin }}" target="_blank" class="text-gray-400 hover:text-blue-600 transition-colors">
-                        <i data-lucide="linkedin" size="18"></i>
-                    </a>
-                    {% endif %}
-                    
-                    {% if perfil.url_github %}
-                    <a href="{{ perfil.url_github }}" target="_blank" class="text-gray-400 hover:text-purple-600 transition-colors">
-                        <i data-lucide="github" size="18"></i>
-                    </a>
-                    {% endif %}
-                    
-                    {% if perfil.url_instagram %}
-                    <a href="{{ perfil.url_instagram }}" target="_blank" class="text-gray-400 hover:text-pink-600 transition-colors">
-                        <i data-lucide="instagram" size="18"></i>
-                    </a>
-                    {% endif %}
-                </div>
+            <!-- Redes Sociales Dinámicas -->
+            <div class="bg-white/50 dark:bg-white/5 p-6 rounded-[3rem] border border-white dark:border-white/10 flex flex-wrap items-center justify-center gap-5">
+                {% if perfil.url_linkedin %}
+                <a href="{{ perfil.url_linkedin }}" target="_blank" class="w-12 h-12 rounded-full bg-white dark:bg-bloom-cardDark shadow-sm flex items-center justify-center text-gray-400 hover:text-blue-500 hover:scale-110 transition-all"><i data-lucide="linkedin" size="20"></i></a>
+                {% endif %}
+                {% if perfil.url_github %}
+                <a href="{{ perfil.url_github }}" target="_blank" class="w-12 h-12 rounded-full bg-white dark:bg-bloom-cardDark shadow-sm flex items-center justify-center text-gray-400 hover:text-bloom-espresso dark:hover:text-white hover:scale-110 transition-all"><i data-lucide="github" size="20"></i></a>
+                {% endif %}
+                {% if perfil.url_instagram %}
+                <a href="{{ perfil.url_instagram }}" target="_blank" class="w-12 h-12 rounded-full bg-white dark:bg-bloom-cardDark shadow-sm flex items-center justify-center text-gray-400 hover:text-bloom-accent hover:scale-110 transition-all"><i data-lucide="instagram" size="20"></i></a>
+                {% endif %}
+                {% if perfil.url_youtube %}
+                <a href="{{ perfil.url_youtube }}" target="_blank" class="w-12 h-12 rounded-full bg-white dark:bg-bloom-cardDark shadow-sm flex items-center justify-center text-gray-400 hover:text-red-500 hover:scale-110 transition-all"><i data-lucide="youtube" size="20"></i></a>
+                {% endif %}
             </div>
+
+            <!-- Botón de Generar CV -->
+            <a href="{% url 'generar_cv' %}" target="_blank" class="group relative w-full py-5 bg-bloom-espresso dark:bg-bloom-accent text-white dark:text-bloom-night rounded-full font-black uppercase text-[11px] tracking-[0.3em] flex items-center justify-center gap-3 overflow-hidden shadow-2xl transition-transform hover:-translate-y-1">
+                <div class="absolute inset-0 bg-bloom-lime translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <span class="relative z-10 flex items-center gap-3 group-hover:text-bloom-espresso transition-colors">
+                    <i data-lucide="file-down" size="18"></i> Generar CV PDF
+                </span>
+            </a>
         </div>
 
-
-        <!-- Columna Derecha: El resto de la información (Sección principal) -->
-        <div class="lg:col-span-9 space-y-6">
+        <!-- COLUMNA DERECHA: INFORMACIÓN DETALLADA -->
+        <div class="lg:col-span-8 space-y-8">
             
-            <!-- SECCIÓN 1: Identidad Básica (Incluyendo Cédula) -->
-            <div class="bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-sm grid md:grid-cols-3 gap-8">
-                <div class="md:col-span-3 border-b border-gray-50 pb-4 mb-2">
-                    <h3 class="text-xs font-black uppercase tracking-[0.5em] text-gray-900">Identidad Básica</h3>
+            <!-- TARJETA 1: FICHA DE IDENTIDAD -->
+            <div class="bg-white dark:bg-bloom-cardDark p-10 rounded-[4rem] border border-bloom-accent/5 dark:border-white/5 shadow-sm relative overflow-hidden group">
+                <div class="absolute -right-6 -top-6 text-bloom-lime/10 group-hover:rotate-45 transition-transform duration-1000">
+                    <i data-lucide="flower" size="160"></i>
                 </div>
-                <div>
-                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Nombres Completos</label>
-                    <p class="text-xl font-black text-gray-800">{{ perfil.nombres }}</p>
+
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="h-1.5 w-12 bg-bloom-accent rounded-full"></div>
+                    <h3 class="font-display font-black uppercase tracking-[0.3em] text-bloom-espresso dark:text-white">Bio-Identity Card</h3>
                 </div>
-                <div>
-                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Apellidos Completos</label>
-                    <p class="text-xl font-black text-gray-800">{{ perfil.apellidos }}</p>
-                </div>
-                <div>
-                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Sexo / Género</label>
-                    <p class="text-xl font-black text-gray-800">{{ perfil.sexo }}</p>
-                </div>
-                <div>
-                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Estado Civil</label>
-                    <p class="text-xl font-black text-gray-800">{{ perfil.estado_civil }}</p>
-                </div>
-                <div>
-                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Nacionalidad</label>
-                    <p class="text-xl font-black text-gray-800">{{ perfil.nacionalidad }}</p>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 relative z-10">
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-widest text-bloom-accent dark:text-bloom-lime flex items-center gap-2">
+                            <i data-lucide="user" size="10"></i> Nombres
+                        </label>
+                        <p class="text-[13px] font-bold text-bloom-espresso dark:text-zinc-200 uppercase">{{ perfil.nombres }}</p>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-widest text-bloom-accent dark:text-bloom-lime flex items-center gap-2">
+                            <i data-lucide="users" size="10"></i> Apellidos
+                        </label>
+                        <p class="text-[13px] font-bold text-bloom-espresso dark:text-zinc-200 uppercase">{{ perfil.apellidos }}</p>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-widest text-bloom-accent dark:text-bloom-lime flex items-center gap-2">
+                            <i data-lucide="venus-mars" size="10"></i> Género
+                        </label>
+                        <p class="text-[13px] font-bold text-bloom-espresso dark:text-zinc-200 uppercase">{{ perfil.sexo }}</p>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-widest text-bloom-accent dark:text-bloom-lime flex items-center gap-2">
+                            <i data-lucide="heart" size="10"></i> Estado Civil
+                        </label>
+                        <p class="text-[13px] font-bold text-bloom-espresso dark:text-zinc-200 uppercase">{{ perfil.estado_civil }}</p>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-widest text-bloom-accent dark:text-bloom-lime flex items-center gap-2">
+                            <i data-lucide="flag" size="10"></i> Nacionalidad
+                        </label>
+                        <p class="text-[13px] font-bold text-bloom-espresso dark:text-zinc-200 uppercase">{{ perfil.nacionalidad }}</p>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-widest text-bloom-accent dark:text-bloom-lime flex items-center gap-2">
+                            <i data-lucide="map" size="10"></i> Origen
+                        </label>
+                        <p class="text-[13px] font-bold text-bloom-espresso dark:text-zinc-200 uppercase">{{ perfil.lugar_nacimiento }}</p>
+                    </div>
+                    <div class="space-y-2 md:col-span-2">
+                        <label class="text-[9px] font-black uppercase tracking-widest text-bloom-accent dark:text-bloom-lime flex items-center gap-2">
+                            <i data-lucide="calendar" size="10"></i> Fecha Nacimiento
+                        </label>
+                        <p class="text-[13px] font-bold text-bloom-espresso dark:text-zinc-200 uppercase">{{ perfil.fecha_nacimiento|date:"d \d\e F, Y" }}</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- SECCIÓN 2: Origen y Demografía -->
-            <div class="bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-sm grid md:grid-cols-2 gap-8">
-                <div class="md:col-span-2 border-b border-gray-50 pb-4 mb-2">
-                    <h3 class="text-xs font-black uppercase tracking-[0.5em] text-blue-500">Origen & Fecha</h3>
+            <!-- TARJETA 2: IDIOMAS Y APTITUDES -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- IDIOMAS -->
+                <div class="bg-white dark:bg-bloom-cardDark p-8 rounded-[3.5rem] border border-bloom-accent/5 dark:border-white/5 shadow-sm">
+                    <div class="flex items-center gap-3 mb-8">
+                        <i data-lucide="languages" class="text-bloom-accent" size="20"></i>
+                        <h3 class="font-display font-black uppercase tracking-widest text-bloom-espresso dark:text-white">Idiomas</h3>
+                    </div>
+                    <div class="space-y-4">
+                        {% for idioma in perfil.idiomas.all %}
+                        <div class="flex items-center justify-between p-4 bg-bloom-pink/30 dark:bg-white/5 rounded-[2rem] border border-bloom-accent/10">
+                            <span class="text-[11px] font-black text-bloom-espresso dark:text-white uppercase tracking-wider">{{ idioma.nombre }}</span>
+                            <span class="px-4 py-1.5 {% if idioma.nivel == 'Nativo' %}bg-bloom-accent text-white{% else %}bg-white dark:bg-bloom-night text-bloom-accent border border-bloom-accent/20{% endif %} text-[9px] font-black rounded-full uppercase tracking-tighter">
+                                {{ idioma.nivel }}
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
-                <div>
-                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Lugar de Nacimiento</label>
-                    <p class="text-base font-black text-gray-800">{{ perfil.lugar_nacimiento }}</p>
-                </div>
-                <div>
-                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Fecha de Nacimiento</label>
-                    <p class="text-base font-black text-gray-800">{{ perfil.fecha_nacimiento }}</p>
+
+                <!-- INTERESES & VALORES -->
+                <div class="bg-white dark:bg-bloom-cardDark p-8 rounded-[3.5rem] border border-bloom-accent/5 dark:border-white/5 shadow-sm space-y-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="sparkles" class="text-bloom-accent" size="20"></i>
+                            <h3 class="font-display font-black uppercase tracking-widest text-bloom-espresso dark:text-white text-xs">Intereses</h3>
+                        </div>
+                        <p class="text-[13px] font-body font-medium italic text-gray-500 dark:text-gray-400 leading-relaxed">
+                            {{ perfil.intereses|default:"Explorando horizontes creativos y tecnológicos cada día." }}
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="award" class="text-bloom-lime" size="16"></i>
+                            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-900 dark:text-white">Valores Profesionales</h3>
+                        </div>
+                    <div class="flex flex-wrap gap-2">
+                        {% if perfil.valores_profesionales %}
+                            {% for valor in perfil.valores_profesionales.split %}
+                                <span class="px-4 py-1.5 bg-bloom-espresso dark:bg-bloom-lime/10 text-white dark:text-bloom-lime text-[9px] font-black uppercase rounded-xl border border-bloom-espresso dark:border-bloom-lime/20 transition-transform hover:scale-105">
+                                    ✦ {{ valor|cut:"," }}
+                                </span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 
-            <!-- SECCIÓN 3: Contacto & Enlaces -->
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- Teléfonos -->
-                <div class="bg-[#1a1a1a] p-10 rounded-[3.5rem] text-white space-y-6">
-                    <div>
-                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 block mb-1">Teléfono Personal</label>
-                        <p class="text-xl font-black text-pink-400">{{ perfil.telefono }}</p>
+            <!-- TARJETA 3: CONTACTO INTEGRADO -->
+            <div class="bg-bloom-espresso dark:bg-bloom-cardDark p-10 rounded-[4rem] text-white shadow-2xl relative overflow-hidden">
+                <span class="absolute right-10 top-10 text-5xl text-bloom-accent opacity-20">𐙚</span>
+                <h3 class="font-display font-black uppercase tracking-[0.4em] text-bloom-lime mb-10 text-[10px]">Direct Connection</h3>
+                
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 border border-white/5">
+                                <i data-lucide="smartphone" class="text-bloom-accent" size="18"></i>
+                            </div>
+                            <div>
+                                <label class="text-[9px] font-black uppercase tracking-widest text-gray-400 block mb-1">Móvil</label>
+                                <p class="text-base font-bold text-white">{{ perfil.telefono }}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 border border-white/5">
+                                <i data-lucide="mail" class="text-bloom-accent" size="18"></i>
+                            </div>
+                            <div class="overflow-hidden">
+                                <label class="text-[9px] font-black uppercase tracking-widest text-gray-400 block mb-1">E-mail</label>
+                                <p class="text-base font-bold text-white truncate">{{ perfil.email }}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 block mb-1">Teléfono Convencional</label>
-                        <p class="text-xl font-black text-blue-400">{{ perfil.telefono_convencional|default:"N/A" }}</p>
-                    </div>
-                </div>
 
-                <!-- Digital -->
-                <div class="bg-pink-50 p-10 rounded-[3.5rem] border border-pink-100 space-y-6">
-                    <div>
-                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-pink-400 block mb-1">Email Profesional</label>
-                        <p class="text-sm font-black text-gray-800 truncate">{{ perfil.email }}</p>
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-pink-400 block mb-1">Sitio Web</label>
-                        <p class="text-sm font-black text-gray-800">{{ perfil.sitio_web|default:"valeria.dev" }}</p>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 border border-white/5">
+                                <i data-lucide="phone" class="text-bloom-lime" size="18"></i>
+                            </div>
+                            <div>
+                                <label class="text-[9px] font-black uppercase tracking-widest text-gray-400 block mb-1">Convencional</label>
+                                <p class="text-base font-bold text-white">{{ perfil.telefono_convencional|default:"N/A" }}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 border border-white/5">
+                                <i data-lucide="globe" class="text-bloom-lime" size="18"></i>
+                            </div>
+                            <div>
+                                <label class="text-[9px] font-black uppercase tracking-widest text-gray-400 block mb-1">Web</label>
+                                <p class="text-base font-bold text-white">{{ perfil.sitio_web|default:"valeriameza.me" }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -179,8 +262,13 @@
 </div>
 
 <style>
-    .fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .font-display { font-family: 'Fraunces', serif; }
+    .font-body { font-family: 'Outfit', sans-serif; }
+    
+    .fade-in { animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    
     .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 </style>
+
 {% endblock %}

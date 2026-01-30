@@ -1,94 +1,120 @@
 {% extends 'curriculum/base.html' %}
 {% load static %}
 
-{% block title %}Perfil Profesional - {{ perfil.nombres }}{% endblock %}
+{% block title %}Inicio | {{ perfil.nombres }}{% endblock %}
 
 {% block content %}
-<div class="grid lg:grid-cols-2 gap-12 items-center min-h-[75vh]">
+<div class="grid lg:grid-cols-2 gap-16 items-center min-h-[80vh] relative">
     
-    <!-- Lado Izquierdo: Texto Persuasivo -->
+    <!-- Lado Izquierdo: Contenido Textual Editorial -->
     <div class="relative z-10 fade-in">
-        <div class="flex items-center gap-3 mb-8">
-            <div class="h-[2px] w-12 bg-pink-400"></div>
-            <span class="text-pink-500 font-bold tracking-[0.2em] text-xs uppercase">Portfolio Personal</span>
+        <!-- Badge de Bienvenida con estilo "Lazo" -->
+        <div class="inline-flex items-center gap-3 px-5 py-2 bg-white dark:bg-white/5 rounded-full border border-bloom-accent/20 mb-8 shadow-sm">
+            <span class="text-bloom-accent dark:text-bloom-lime text-lg">𐙚</span>
+            <span class="text-bloom-accent dark:text-bloom-lime font-black tracking-[0.3em] text-[9px] uppercase">
+                Welcome to my creative space
+            </span>
         </div>
         
-        <h1 class="text-5xl md:text-7xl font-black mb-8 leading-[0.95] text-[#1a1a1a]">
-            BIENVENIDO A MI <br /> 
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 uppercase italic tracking-tighter">
-                PERFIL PROFESIONAL
+        <!-- Título Principal Extravagante -->
+        <h1 class="text-6xl md:text-8xl font-display font-black mb-8 leading-[0.85] text-bloom-espresso dark:text-white transition-colors">
+            BIENVENIDO <br /> 
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-bloom-accent via-bloom-accent to-bloom-lime uppercase italic tracking-tighter">
+                A MI PERFIL
             </span>
         </h1>
         
+        <!-- Bloque de Bio Estilo Editorial con Flor -->
         {% if perfil.descripcion_perfil %}
-            <div class=" p-6 rounded-[2.5rem] overflow-hidden">
-                <div class="absolute -top-2 -right-2 opacity-5">
-                    <i data-lucide="quote" size="40" class="text-pink-500"></i>
+            <div class="mb-10 max-w-lg relative group">
+                <div class="absolute -left-8 top-2 text-bloom-lime opacity-40 group-hover:rotate-12 transition-transform">
+                    <i data-lucide="flower-2" size="32"></i>
                 </div>
-                <h3 class="text-[14px] font-black uppercase tracking-[0.4em] text-pink-500 mb-3 italic">﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌</h3>
-                <p class="text-gray-800 font-bold italic leading-tight">
+                <p class="text-xl md:text-2xl font-body font-light text-bloom-espresso dark:text-gray-300 leading-tight italic pl-4">
                     "{{ perfil.descripcion_perfil }}"
                 </p>
+                
+                <!-- Valores Profesionales como Stickers / Píldoras Soft -->
+                <div class="mt-8 flex flex-wrap gap-3">
+                    {% if perfil.valores_profesionales %}
+                        {% for valor in perfil.valores_profesionales.split %}
+                            <span class="text-[9px] font-black uppercase tracking-widest px-4 py-1.5 bg-bloom-lime/20 text-bloom-espresso dark:text-bloom-lime rounded-full border border-bloom-lime/30 shadow-sm transition-transform hover:scale-105">
+                                ✦ {{ valor|cut:"," }}
+                            </span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
-            {% endif %} 
-        <div class="flex flex-wrap gap-4">
-            <!-- Botón Proyectos -->
-            <a href="{% url 'trabajos' %}" class="px-10 py-6 bg-[#1a1a1a] text-white font-black rounded-full shadow-2xl hover:scale-105 transition-all uppercase text-[10px] tracking-widest flex items-center gap-3">
-                Explorar mi Trayectoria <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        {% endif %} 
+
+        <!-- Acciones Principales con Estilo Pill -->
+        <div class="flex flex-wrap gap-6 mt-12">
+            <a href="{% url 'experiencia' %}" class="group relative px-10 py-5 bg-bloom-espresso dark:bg-bloom-accent text-white dark:text-bloom-night font-black rounded-full shadow-2xl transition-all hover:-translate-y-1 overflow-hidden">
+                <div class="absolute inset-0 bg-bloom-lime translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <span class="relative z-10 flex items-center gap-3 uppercase text-[10px] tracking-[0.2em] group-hover:text-bloom-espresso transition-colors">
+                    Explorar Trayectoria <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </span>
             </a>
             
-            <!-- Botón Generar Hoja de Vida Automática -->
-            <a href="{% url 'generar_cv' %}" target="_blank" class="px-10 py-6 bg-white border border-gray-100 text-gray-800 font-black rounded-full shadow-lg hover:shadow-pink-100 hover:scale-105 transition-all uppercase text-[10px] tracking-widest flex items-center gap-3">
-                Generar Hoja de Vida <i data-lucide="file-text" class="w-4 h-4 text-pink-400"></i>
+            <a href="{% url 'generar_cv' %}" target="_blank" class="px-10 py-5 bg-white dark:bg-transparent border-2 border-bloom-accent/20 dark:border-bloom-lime/20 text-bloom-espresso dark:text-white font-black rounded-full shadow-lg hover:bg-bloom-pink dark:hover:bg-bloom-lime/10 transition-all uppercase text-[10px] tracking-[0.2em] flex items-center gap-3">
+                Hoja de Vida <i data-lucide="flower" class="w-4 h-4 text-bloom-accent dark:text-bloom-lime"></i>
             </a>
         </div>
     </div>
 
-    <!-- Lado Derecho: Fotografía en Marco Extravagante -->
+    <!-- Lado Derecho: Fotografía con Composición Artística (Flor y Blob) -->
     <div class="relative flex justify-center items-center">
-        <!-- Aura de brillo de fondo -->
-        <div class="absolute inset-0 bg-pink-200/30 blur-[120px] rounded-full animate-pulse"></div>
+        <!-- Luces de Fondo -->
+        <div class="absolute w-[120%] h-[120%] bg-bloom-accent/10 dark:bg-bloom-lime/5 blur-[120px] rounded-full animate-pulse"></div>
         
-        <div class="relative w-full max-w-[450px]">
-            <!-- Blob Decorativo de Fondo -->
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 w-full h-full drop-shadow-2xl opacity-80">
-                <path fill="#FF7EB9" d="M44.7,-76.4C58.1,-69.2,69.5,-57.4,76.5,-43.8C83.5,-30.2,86.2,-15.1,84.1,-0.6C81.9,13.8,75,27.7,66.6,40.1C58.1,52.4,48.2,63.3,35.8,70.1C23.4,76.9,8.5,79.5,-6.6,77.3C-21.7,75.1,-37,68,-49.6,58.1C-62.2,48.2,-72.1,35.4,-77.8,20.8C-83.5,6.2,-85,-10.1,-80.7,-25.2C-76.4,-40.3,-66.2,-54.2,-52.8,-61.4C-39.4,-68.5,-22.8,-69,-7.2,-75.7C8.4,-82.5,23.1,-83.6,44.7,-76.4Z" transform="translate(100 100)" />
+        <div class="relative w-full max-w-[480px]">
+            <!-- Blob SVG Suave Bloom Accent -->
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 w-full h-full drop-shadow-3xl opacity-80 transition-all duration-1000 group-hover:scale-105">
+                <path fill="#FC97B7" d="M42.7,-68.4C54.4,-61.7,62.1,-48.4,67.7,-34.8C73.3,-21.2,76.8,-7.4,74.7,5.8C72.6,19,64.9,31.7,55.1,42.4C45.3,53.1,33.4,61.8,20.4,66.4C7.4,71.1,-6.6,71.7,-20.2,68C-33.8,64.3,-47.1,56.3,-58.1,45.2C-69.1,34.1,-77.8,19.9,-79.8,4.7C-81.8,-10.5,-77.1,-26.7,-67.2,-39C-57.3,-51.3,-42.2,-59.7,-28.5,-65.4C-14.8,-71.1,0.5,-74.1,14.8,-74.1C29.1,-74.1,42.7,-71.1,42.7,-68.4Z" transform="translate(100 100)" />
             </svg>
 
-            <!-- Marco de la Fotografía -->
+            <!-- Marco de la Fotografía con Borde Editorial -->
             <div class="relative z-10 p-4">
                 {% if perfil and perfil.foto %}
-                    <div class="rounded-[4rem] overflow-hidden border-[15px] border-white shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] rotate-3 hover:rotate-0 transition-transform duration-700 aspect-[4/5] group cursor-pointer bg-white">
+                    <div class="rounded-[4rem] overflow-hidden border-[15px] border-white dark:border-bloom-cardDark shadow-[0_50px_100px_-20px_rgba(0,0,0,0.2)] rotate-3 hover:rotate-0 transition-all duration-1000 aspect-[4/5] bg-white dark:bg-bloom-cardDark group">
                         <img src="{{ perfil.foto.url }}" 
-                             alt="Fotografía de {{ perfil.nombres }}" 
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        
-                        <div class="hidden w-full h-full bg-gray-50 flex-col items-center justify-center p-8 text-center">
-                            <i data-lucide="image-off" class="w-12 h-12 text-gray-200 mb-4"></i>
-                            <p class="text-[9px] font-black text-gray-300 uppercase tracking-widest">Error de carga: Verifica la carpeta MEDIA</p>
-                        </div>
+                             alt="{{ perfil.nombres }}" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale hover:grayscale-0">
                     </div>
                 {% else %}
-                    <div class="rounded-[4rem] overflow-hidden border-[15px] border-white shadow-2xl rotate-3 aspect-[4/5] bg-gradient-to-br from-pink-50 to-purple-50 flex flex-col items-center justify-center">
-                        <div class="p-8 text-center">
-                            <i data-lucide="user-x" class="w-20 h-20 mx-auto text-pink-200 mb-6"></i>
-                            <p class="text-[10px] font-black text-pink-300 uppercase tracking-[0.3em] leading-relaxed">
-                                Sube tu fotografía en el panel administrativo
-                            </p>
-                        </div>
+                    <div class="rounded-[4rem] overflow-hidden border-[15px] border-white dark:border-bloom-cardDark shadow-2xl rotate-3 aspect-[4/5] bg-gradient-to-br from-bloom-pink to-white dark:from-bloom-cardDark dark:to-bloom-night flex flex-col items-center justify-center">
+                        <i data-lucide="flower-2" class="w-20 h-20 text-bloom-accent opacity-20 mb-4 animate-spin-slow"></i>
+                        <p class="text-[10px] font-black text-bloom-accent uppercase tracking-[0.3em]">Bloom Studio</p>
                     </div>
                 {% endif %}
 
-                <!-- Elementos Flotantes -->
-                <div class="absolute -top-6 -right-6 p-5 bg-white rounded-[2rem] shadow-2xl animate-bounce" style="animation-duration: 4s;">
-                    <i data-lucide="sparkles" class="text-yellow-400 w-8 h-8"></i>
+                <!-- Stickers Flotantes -->
+                <!-- Flor Lima Superior -->
+                <div class="absolute -top-8 -right-8 p-5 bg-bloom-lime text-bloom-espresso rounded-[2.5rem] shadow-2xl animate-bounce border-4 border-white dark:border-bloom-night" style="animation-duration: 5s;">
+                    <i data-lucide="flower" size="28"></i>
                 </div>
-                <div class="absolute -bottom-10 -left-10 p-6 bg-[#1a1a1a] rounded-[2rem] shadow-2xl animate-pulse">
-                    <i data-lucide="star" class="text-pink-400 w-8 h-8 fill-pink-400"></i>
+                <!-- Lazo Coquette Inferior -->
+                <div class="absolute -bottom-10 -left-10 p-6 bg-bloom-espresso text-bloom-pink rounded-[2.5rem] shadow-2xl border-4 border-white dark:border-bloom-night group-hover:scale-110 transition-transform flex flex-col items-center">
+                    <span class="text-3xl leading-none">𐙚</span>
+                    <p class="text-[8px] font-black uppercase tracking-tighter mt-2 text-bloom-lime">Curated Mind</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Tipografías específicas para el look editorial */
+    .font-display { font-family: 'Fraunces', serif; }
+    .font-body { font-family: 'Outfit', sans-serif; }
+    
+    .fade-in { animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+    @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow { animation: spin-slow 12s linear infinite; }
+</style>
 {% endblock %}

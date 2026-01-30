@@ -1,35 +1,115 @@
 {% extends 'curriculum/base.html' %}
+{% load static %}
+
+{% block title %}Contacto | {{ perfil.nombres }}{% endblock %}
 
 {% block content %}
-<div class="flex flex-col items-center justify-center min-h-[70vh] text-center">
-    <h2 class="text-5xl md:text-8xl font-black tracking-tighter mb-12 leading-none uppercase text-gray-900 italic">
-        INICIEMOS TU <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-orange-400">PROYECTO</span>
-    </h2>
-    
-    <div class="grid md:grid-cols-3 gap-8 w-full max-w-5xl px-6">
-        <a href="https://wa.me/593998136345" target="_blank" class="bg-white p-12 rounded-[4rem] border border-gray-100 shadow-xl hover:-translate-y-2 transition-all flex flex-col items-center group">
-            <div class="w-20 h-20 bg-green-50 text-green-500 rounded-[2rem] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <i data-lucide="message-circle" style="width: 44px; height: 44px;"></i>
+<div class="flex flex-col items-center justify-center min-h-[85vh] py-12 px-4 fade-in overflow-hidden relative">
+
+    <!-- Elementos Decorativos de Fondo Bloom & Lime -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-bloom-lime/10 dark:bg-bloom-lime/5 rounded-full blur-[140px] -z-10 animate-pulse"></div>
+    <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-bloom-accent/5 rounded-full blur-[100px] -z-10"></div>
+
+    <!-- Título de Impacto Editorial -->
+    <div class="text-center mb-24 relative z-10">
+        <div class="inline-flex items-center gap-2 mb-6">
+            <span class="text-bloom-accent text-2xl">𐙚</span>
+            <span class="text-bloom-accent dark:text-bloom-lime font-black tracking-[0.4em] text-[10px] uppercase">Available for new ventures</span>
+        </div>
+        
+        <h2 class="text-6xl md:text-9xl font-display font-black tracking-tighter mb-6 leading-none uppercase text-bloom-espresso dark:text-white italic">
+            INICIEMOS TU <br/> 
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-bloom-accent via-bloom-lime to-bloom-accent bg-[length:200%_auto] animate-gradient-x">
+                PROYECTO
+            </span>
+        </h2>
+        
+        <div class="flex items-center justify-center gap-4 mt-8">
+            <div class="h-px w-12 bg-bloom-accent/30"></div>
+            <p class="text-gray-400 dark:text-gray-500 font-body font-black uppercase tracking-[0.4em] text-[10px]">
+                ✦ Curated Collaboration & Innovation ✦
+            </p>
+            <div class="h-px w-12 bg-bloom-accent/30"></div>
+        </div>
+    </div>
+
+    <!-- Grid de Métodos Directos Estilo Boutique -->
+    <div class="grid md:grid-cols-3 gap-8 w-full max-w-6xl relative z-10">
+        
+        <!-- WhatsApp Premium -->
+        <a href="https://wa.me/{{ perfil.telefono|default:'' }}" target="_blank" 
+           class="group bg-white/70 dark:bg-bloom-cardDark/80 backdrop-blur-xl p-12 rounded-[4rem] border border-bloom-accent/5 dark:border-white/5 shadow-xl hover:shadow-bloom-lime/20 hover:-translate-y-3 transition-all duration-700 flex flex-col items-center relative overflow-hidden">
+            <div class="absolute -right-4 -top-4 text-bloom-lime/10 group-hover:rotate-12 transition-transform duration-700">
+                <i data-lucide="message-circle" size="120"></i>
             </div>
-            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">WhatsApp</p>
-            <p class="font-black text-gray-900 text-sm">0998136345</p>
+            
+            <div class="w-24 h-24 bg-bloom-pink dark:bg-bloom-night text-bloom-accent rounded-[2.5rem] flex items-center justify-center mb-8 border border-bloom-accent/10 shadow-inner group-hover:bg-bloom-lime group-hover:text-bloom-espresso transition-all duration-500 relative z-10">
+                <i data-lucide="message-circle" class="w-12 h-12"></i>
+            </div>
+            <p class="text-[9px] font-black text-bloom-accent dark:text-bloom-lime uppercase tracking-[0.3em] mb-3 relative z-10">Instant Chat</p>
+            <p class="font-display font-black text-bloom-espresso dark:text-zinc-100 text-xl relative z-10 tracking-tight">{{ perfil.telefono|default:"S/N" }}</p>
+            <span class="mt-4 text-[8px] font-black text-gray-300 dark:text-gray-600 uppercase tracking-widest relative z-10 group-hover:text-bloom-accent transition-colors">✿ Open Chat</span>
         </a>
 
-        <a href="tel:0998136345" class="bg-white p-12 rounded-[4rem] border border-gray-100 shadow-xl hover:-translate-y-2 transition-all flex flex-col items-center group">
-            <div class="w-20 h-20 bg-blue-50 text-blue-500 rounded-[2rem] flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
-                <i data-lucide="phone" style="width: 44px; height: 44px;"></i>
+        <!-- Llamada Directa -->
+        <a href="tel:{{ perfil.telefono|default:'' }}" 
+           class="group bg-white/70 dark:bg-bloom-cardDark/80 backdrop-blur-xl p-12 rounded-[4rem] border border-bloom-accent/5 dark:border-white/5 shadow-xl hover:shadow-bloom-accent/20 hover:-translate-y-3 transition-all duration-700 flex flex-col items-center relative overflow-hidden">
+            <div class="absolute -left-4 -bottom-4 text-bloom-accent/10 group-hover:-rotate-12 transition-transform duration-700">
+                <i data-lucide="phone" size="120"></i>
             </div>
-            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Llamar</p>
-            <p class="font-black text-gray-900 text-sm uppercase">Direct Call</p>
+
+            <div class="w-24 h-24 bg-bloom-espresso text-bloom-lime rounded-[2.5rem] flex items-center justify-center mb-8 shadow-2xl group-hover:scale-110 transition-all duration-500 relative z-10 border-4 border-white dark:border-bloom-night">
+                <i data-lucide="phone" class="w-10 h-10"></i>
+            </div>
+            <p class="text-[9px] font-black text-bloom-accent dark:text-bloom-lime uppercase tracking-[0.3em] mb-3 relative z-10">Voice Connection</p>
+            <p class="font-display font-black text-bloom-espresso dark:text-zinc-100 text-xl uppercase italic tracking-tighter relative z-10">Direct Line</p>
+            <span class="mt-4 text-[8px] font-black text-gray-300 dark:text-gray-600 uppercase tracking-widest relative z-10 group-hover:text-bloom-lime transition-colors">✿ Call Now</span>
         </a>
 
-        <a href="mailto:valeriamezamacias05@gmail.com" class="bg-white p-12 rounded-[4rem] border border-gray-100 shadow-xl hover:-translate-y-2 transition-all flex flex-col items-center group">
-            <div class="w-20 h-20 bg-pink-50 text-pink-400 rounded-[2rem] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <i data-lucide="mail" style="width: 44px; height: 44px;"></i>
+        <!-- Email Editorial -->
+        <a href="mailto:{{ perfil.email|default:'' }}" 
+           class="group bg-white/70 dark:bg-bloom-cardDark/80 backdrop-blur-xl p-12 rounded-[4rem] border border-bloom-accent/5 dark:border-white/5 shadow-xl hover:shadow-bloom-pink/20 hover:-translate-y-3 transition-all duration-700 flex flex-col items-center relative overflow-hidden">
+            
+            <div class="w-24 h-24 bg-bloom-pink/50 dark:bg-white/5 text-bloom-accent rounded-[2.5rem] flex items-center justify-center mb-8 border border-bloom-accent/10 group-hover:rotate-6 transition-all duration-500 relative z-10 shadow-sm">
+                <i data-lucide="mail" class="w-12 h-12"></i>
             </div>
-            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Email</p>
-            <p class="font-black text-[10px] text-gray-900 truncate w-full px-4 lowercase italic">valeriamezamacias05@gmail.com</p>
+            <p class="text-[9px] font-black text-bloom-accent dark:text-bloom-lime uppercase tracking-[0.3em] mb-3 relative z-10">Digital Letter</p>
+            <p class="font-body font-black text-[11px] text-bloom-espresso dark:text-zinc-100 truncate w-full px-2 text-center lowercase italic relative z-10 tracking-wider">
+                {{ perfil.email|default:"hello@valeriameza.me" }}
+            </p>
+            <span class="mt-4 text-[8px] font-black text-gray-300 dark:text-gray-600 uppercase tracking-widest relative z-10 group-hover:text-bloom-accent transition-colors">✿ Send Inquiry</span>
+            
+            <div class="absolute -right-8 -bottom-8 text-9xl text-bloom-accent opacity-0 group-hover:opacity-5 transition-all duration-1000">𐙚</div>
         </a>
     </div>
+
+    <!-- Botón de Retroceso Stylized -->
+    <div class="mt-24">
+        <a href="/" class="group flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.5em] text-gray-400 hover:text-bloom-accent transition-all">
+            <span class="w-16 h-px bg-bloom-pink dark:bg-white/10 group-hover:w-24 group-hover:bg-bloom-accent transition-all duration-500"></span>
+            Volver al inicio
+            <span class="w-16 h-px bg-bloom-pink dark:bg-white/10 group-hover:w-24 group-hover:bg-bloom-accent transition-all duration-500"></span>
+        </a>
+    </div>
+
 </div>
+
+<style>
+    .font-display { font-family: 'Fraunces', serif; }
+    .font-body { font-family: 'Outfit', sans-serif; }
+
+    .fade-in { animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    .animate-gradient-x {
+        background-size: 200% auto;
+        animation: gradient-x 4s linear infinite;
+    }
+
+    @keyframes gradient-x {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+</style>
 {% endblock %}

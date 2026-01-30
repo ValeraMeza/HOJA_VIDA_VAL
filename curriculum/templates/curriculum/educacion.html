@@ -1,69 +1,98 @@
 {% extends 'curriculum/base.html' %}
+{% load static %}
 
-{% block title %}Formación Académica{% endblock %}
+{% block title %}Estudios | {{ perfil.nombres }}{% endblock %}
 
 {% block content %}
-<div class="fade-in">
-    <!-- Título con aumento ligero del 10% -->
-    <h2 class="text-5xl md:text-6xl font-black italic uppercase mb-20 tracking-tighter text-[#1a1a1a] leading-none">
-        Productos <br><span class="text-blue-500">Academicos</span>
-    </h2>
+<div class="max-w-7xl mx-auto px-4 py-12 lg:py-20 fade-in">
+    
+    <!-- Encabezado Editorial -->
+    <div class="mb-20 relative">
+        <div class="inline-flex items-center gap-2 mb-4">
+            <span class="text-bloom-accent text-xl">𐙚</span>
+            <span class="text-bloom-accent dark:text-bloom-lime font-black tracking-[0.3em] text-[9px] uppercase">Academic Formation</span>
+        </div>
+        <h2 class="text-6xl md:text-8xl font-display font-black italic uppercase tracking-tighter text-bloom-espresso dark:text-white leading-none">
+            Formación <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-bloom-accent to-bloom-lime">Académica</span>
+        </h2>
+        <div class="h-2 w-32 bg-bloom-accent mt-6 rounded-full shadow-[0_5px_15px_rgba(252,151,183,0.3)]"></div>
+    </div>
 
-   
-  
-    <!-- Rejilla de Educación (3 columnas) -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Grid de Contenido -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
         {% for estudio in estudios %}
-        <div class="bg-white p-8 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 relative overflow-hidden group flex flex-col h-full">
+        <div class="bg-white dark:bg-bloom-cardDark p-10 rounded-[3.5rem] border border-bloom-accent/5 dark:border-white/5 shadow-sm hover:shadow-2xl dark:hover:shadow-bloom-accent/5 transition-all duration-700 relative overflow-hidden group flex flex-col h-full transform hover:-translate-y-2">
             
-            <!-- Decoración de fondo sutil -->
-            <div class="absolute right-0 top-0 w-32 h-32 bg-blue-50 rounded-full blur-3xl -z-0 group-hover:bg-blue-100 transition-colors"></div>
+            <!-- Resplandores Bloom & Lime en hover -->
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-bloom-accent/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-0"></div>
+            <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-bloom-lime/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-0"></div>
             
-            <!-- Icono de Logro Académico -->
-            <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center mb-8 shadow-sm group-hover:rotate-6 transition-transform relative z-10">
-                <i data-lucide="award" size="32"></i>
+            <!-- Icono con degradado -->
+            <div class="w-20 h-20 bg-bloom-pink dark:bg-bloom-night text-bloom-accent rounded-3xl flex items-center justify-center mb-10 shadow-inner group-hover:bg-gradient-to-br group-hover:from-bloom-accent group-hover:to-bloom-lime group-hover:text-bloom-espresso transition-all duration-500 relative z-10">
+                <i data-lucide="graduation-cap" class="w-10 h-10"></i>
             </div>
             
-            <!-- Título del Grado -->
-            <h3 class="text-2xl font-black uppercase text-gray-800 leading-tight mb-4 relative z-10 group-hover:text-blue-600 transition-colors">
-                {{ estudio.titulo }}
-            </h3>
+            <!-- Información Principal -->
+            <div class="relative z-10 flex-grow">
+                <h3 class="text-2xl font-display font-black uppercase text-bloom-espresso dark:text-zinc-100 leading-tight mb-4 group-hover:text-bloom-accent transition-colors">
+                    {{ estudio.titulo }}
+                </h3>
+                
+                <p class="font-body font-bold text-sm text-gray-400 dark:text-zinc-500 uppercase tracking-widest leading-relaxed">
+                    {{ estudio.institucion }}
+                </p>
+            </div>
             
-            <!-- Institución -->
-            <p class="font-bold text-base text-gray-400 uppercase tracking-widest relative z-10 leading-relaxed mb-6">
-                {{ estudio.institucion }}
-            </p>
-            
-            <!-- Pie de la Tarjeta con Fecha y Botón de Diploma -->
-            <div class="mt-auto pt-6 border-t border-gray-50 flex justify-between items-end relative z-10">
-                <div class="flex flex-col gap-1">
-                    <p class="text-[8px] font-black text-gray-300 uppercase tracking-tighter">Periodo de Desarrollo</p>
-                    <span class="text-[11px] font-black text-blue-400 uppercase tracking-widest">
-                        {{ estudio.fecha_inicio }} - {{ estudio.fecha_fin }}
-                    </span>
+            <!-- Divisor y Footer -->
+            <div class="mt-10 pt-8 border-t border-bloom-pink dark:border-white/5 flex justify-between items-center relative z-10">
+                <div class="space-y-1">
+                    <p class="text-[9px] font-black text-gray-300 dark:text-zinc-600 uppercase tracking-widest">Cronología</p>
+                    <div class="flex items-center gap-2">
+                        <span class="px-4 py-1.5 bg-bloom-lime/20 text-bloom-espresso dark:text-bloom-lime text-[10px] font-black rounded-full border border-bloom-lime/30">
+                            {{ estudio.fecha_inicio|date:"Y" }} — {{ estudio.fecha_fin|date:"Y" }}
+                        </span>
+                    </div>
                 </div>
 
-                <!-- Botón para ver Diploma con icono de documento solicitado -->
+                <!-- Botón de Acción -->
                 {% if estudio.certificado_pdf %}
                 <a href="{{ estudio.certificado_pdf.url }}" 
                    target="_blank" 
-                   class="p-4 bg-[#1a1a1a] text-white rounded-2xl shadow-lg hover:bg-blue-600 hover:scale-110 transition-all group/btn"
-                   title="Ver Certificado">
-                    <i data-lucide="file-text" size="20" class="group-hover/btn:rotate-12 transition-transform"></i>
+                   class="flex items-center justify-center w-14 h-14 bg-bloom-espresso dark:bg-bloom-accent text-white dark:text-bloom-night rounded-2xl shadow-xl hover:bg-bloom-lime hover:scale-110 transition-all duration-300 group/btn"
+                   aria-label="Descargar Certificado">
+                    <i data-lucide="external-link" class="w-6 h-6 group-hover/btn:rotate-45 transition-transform"></i>
                 </a>
                 {% else %}
-                <div class="p-4 bg-gray-50 text-gray-200 rounded-2xl border border-dashed border-gray-100 cursor-not-allowed" title="No cargado">
-                    <i data-lucide="file-x" size="20"></i>
+                <div class="flex items-center justify-center w-14 h-14 bg-bloom-pink dark:bg-bloom-night text-bloom-accent/30 rounded-2xl border border-dashed border-bloom-accent/20 cursor-help" 
+                     title="Sin documento adjunto">
+                    <i data-lucide="file-minus" class="w-6 h-6"></i>
                 </div>
                 {% endif %}
             </div>
+
+            <!-- Sticker Decorativo en Hover -->
+            <div class="absolute top-6 right-8 opacity-0 group-hover:opacity-10 transition-opacity duration-700">
+                <span class="text-4xl">✿</span>
+            </div>
         </div>
         {% empty %}
-        <div class="col-span-full py-20 text-center bg-white rounded-[4rem] border border-dashed border-gray-100">
-            <i data-lucide="graduation-cap" size="48" class="mx-auto mb-4 text-gray-200"></i>
-            <p class="text-gray-400 font-bold uppercase tracking-widest text-xs italic">Registros académicos no disponibles.</p>
+        <!-- Estado Vacío Bloom Style -->
+        <div class="col-span-full py-32 text-center bg-white dark:bg-bloom-cardDark rounded-[5rem] border-2 border-dashed border-bloom-accent/20">
+            <div class="bg-bloom-pink dark:bg-white/5 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm">
+                <i data-lucide="book-open" class="text-bloom-accent/40 w-12 h-12"></i>
+            </div>
+            <h4 class="text-bloom-espresso dark:text-white font-display font-black text-2xl uppercase tracking-tighter">La biblioteca está vacía</h4>
+            <p class="text-gray-400 font-body italic mt-2">Aún no se han registrado hitos académicos.</p>
         </div>
         {% endfor %}
     </div>
 </div>
+
+<style>
+    .font-display { font-family: 'Fraunces', serif; }
+    .font-body { font-family: 'Outfit', sans-serif; }
+
+    .fade-in { animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+</style>
 {% endblock %}

@@ -6,7 +6,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from .models import (
     DatosPersonales, ExperienciaLaboral, EstudioRealizado, 
-    CursoCapacitacion, Reconocimiento, ProductoLaboral, VentaGarage
+    CursoCapacitacion, Reconocimiento, ProductoAcademico, VentaGarage
 )
 
 def link_callback(uri, rel):
@@ -14,11 +14,10 @@ def link_callback(uri, rel):
     Convierte las URIs de Django (static y media) en rutas de archivos absolutas
     para que xhtml2pdf pueda encontrarlas en el sistema de archivos.
     """
-    # Usar las configuraciones de MEDIA y STATIC de settings
-    sUrl = settings.STATIC_URL      # /static/
-    sRoot = settings.STATIC_ROOT    # ruta al directorio static
-    mUrl = settings.MEDIA_URL       # /media/
-    mRoot = settings.MEDIA_ROOT     # ruta al directorio media
+    sUrl = settings.STATIC_URL
+    sRoot = settings.STATIC_ROOT
+    mUrl = settings.MEDIA_URL
+    mRoot = settings.MEDIA_ROOT
 
     if uri.startswith(mUrl):
         path = os.path.join(mRoot, uri.replace(mUrl, ""))
@@ -27,52 +26,64 @@ def link_callback(uri, rel):
     else:
         return uri
 
-    # Verificar que el archivo realmente existe
     if not os.path.isfile(path):
         return uri
     return path
 
 def inicio(request):
-    perfil = DatosPersonales.objects.first()
+    # Solo mostramos si la sección está marcada como activa
+    perfil = DatosPersonales.objects.filter(mostrar_seccion=True).first()
     return render(request, 'curriculum/inicio.html', {'perfil': perfil})
 
 def perfil(request):
-    perfil = DatosPersonales.objects.first()
+    perfil = DatosPersonales.objects.filter(mostrar_seccion=True).first()
     return render(request, 'curriculum/datos_personales.html', {'perfil': perfil})
 
 def experiencia(request):
     perfil = DatosPersonales.objects.first()
-    experiencias = ExperienciaLaboral.objects.all().order_by('-id')
+    # Filtramos por activo y el orden ya viene del Meta del modelo (-fecha_inicio)
+    experiencias = ExperienciaLaboral.objects.filter(activo=True)
     return render(request, 'curriculum/experiencia.html', {'perfil': perfil, 'experiencias': experiencias})
 
 def educacion(request):
     perfil = DatosPersonales.objects.first()
-    estudios = EstudioRealizado.objects.all().order_by('-id')
+    # Filtramos por activo y el orden ya viene del Meta del modelo (-fecha_fin)
+    estudios = EstudioRealizado.objects.filter(activo=True)
     return render(request, 'curriculum/educacion.html', {'perfil': perfil, 'estudios': estudios})
 
 def cursos(request):
     perfil = DatosPersonales.objects.first()
-    cursos = CursoCapacitacion.objects.all().order_by('-id')
+    # Filtramos por activo y el orden ya viene del Meta del modelo (-fecha_realizacion)
+    cursos = CursoCapacitacion.objects.filter(activo=True)
     return render(request, 'curriculum/cursos.html', {'perfil': perfil, 'cursos': cursos})
 
 def reconocimientos(request):
     perfil = DatosPersonales.objects.first()
-    reconocimientos = Reconocimiento.objects.all().order_by('-fecha')
+    # Corregido el campo de ordenamiento a fecha_obtencion
+    reconocimientos = Reconocimiento.objects.filter(activo=True)
     return render(request, 'curriculum/reconocimientos.html', {'perfil': perfil, 'reconocimientos': reconocimientos})
 
 def trabajos(request):
+    """Vista para Productos Académicos (Renombrado de ProductoLaboral)"""
     perfil = DatosPersonales.objects.first()
-    proyectos = ProductoLaboral.objects.all().order_by('-id')
+    # Cambiado a ProductoAcademico y filtrado por activo
+    proyectos = ProductoAcademico.objects.filter(activo=True)
     return render(request, 'curriculum/proyectos.html', {'perfil': perfil, 'proyectos': proyectos})
 
 def venta(request):
+    # Obtenemos el perfil desde el modelo DatosPersonales
     perfil = DatosPersonales.objects.first()
-    # Debe llamarse 'productos' para coincidir con el Canvas
-    productos = VentaGarage.objects.all().order_by('-id') 
-    return render(request, 'curriculum/venta.html', {
+    
+    # Filtramos los productos que están marcados como activos
+    productos = VentaGarage.objects.filter(activo=True) 
+    
+    # Pasamos 'productos' al contexto para que coincida con el template
+    context = {
         'perfil': perfil,
         'productos': productos
-    })
+    }
+    
+    return render(request, 'curriculum/venta.html', context)
 
 def contacto(request):
     perfil = DatosPersonales.objects.first()
@@ -81,27 +92,25 @@ def contacto(request):
 def generar_cv(request):
     """
     Función para generar el PDF dinámico.
-    Recopila toda la información ingresada en el Admin y maneja rutas de archivos.
+    Solo incluye elementos marcados como 'activo'.
     """
-    perfil = DatosPersonales.objects.first()
+    perfil = DatosPersonales.objects.filter(mostrar_seccion=True).first()
     context = {
         'perfil': perfil,
-        'experiencias': ExperienciaLaboral.objects.all().order_by('-id'),
-        'estudios': EstudioRealizado.objects.all().order_by('-id'),
-        'cursos': CursoCapacitacion.objects.all().order_by('-id'),
-        'reconocimientos': Reconocimiento.objects.all().order_by('-fecha'),
-        'proyectos': ProductoLaboral.objects.all().order_by('-id'),
+        'experiencias': ExperienciaLaboral.objects.filter(activo=True),
+        'estudios': EstudioRealizado.objects.filter(activo=True),
+        'cursos': CursoCapacitacion.objects.filter(activo=True),
+        'reconocimientos': Reconocimiento.objects.filter(activo=True),
+        'proyectos': ProductoAcademico.objects.filter(activo=True),
         'MEDIA_URL': settings.MEDIA_URL,
     }
     
-    # Cargar plantilla
     template = get_template('curriculum/cv_pdf.html')
     html = template.render(context)
     
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="Hoja_de_Vida_Valeria_Meza.pdf"'
+    response['Content-Disposition'] = 'inline; filename="Hoja_de_Vida.pdf"'
 
-    # Creamos el PDF pasando el link_callback para resolver rutas de imágenes
     pisa_status = pisa.CreatePDF(
         html, 
         dest=response, 
@@ -109,6 +118,6 @@ def generar_cv(request):
     )
     
     if pisa_status.err:
-        return HttpResponse('Hubo un error al procesar los datos para el PDF.', status=500)
+        return HttpResponse('Hubo un error al generar el PDF.', status=500)
     
     return response
