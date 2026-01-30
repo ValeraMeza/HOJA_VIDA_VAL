@@ -49,6 +49,7 @@ class DatosPersonalesAdmin(BaseAdmin):
         }),
         ('Perfil y Redes Sociales', {
             'fields': (
+                'descripcion_perfil',  # <-- ¡AQUÍ FALTABA ESTE CAMPO!
                 'intereses', 
                 'valores_profesionales', 
                 ('url_linkedin', 'url_github'), 
