@@ -1,0 +1,65 @@
+{% extends 'curriculum/base.html' %}
+
+{% block content %}
+<div class="fade-in">
+    <h2 class="text-5xl md:text-6xl font-black italic uppercase mb-20 tracking-tighter text-[#1a1a1a] leading-none">
+        Cursos & <br><span class="text-green-500">Capacitaciones</span>
+    </h2>
+
+ 
+     <!-- Rejilla de Cursos (3 columnas) -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for curso in cursos %}
+        <div class="bg-white p-8 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 relative overflow-hidden group flex flex-col h-full">
+            
+            <!-- Decoración de fondo -->
+            <div class="absolute right-0 top-0 w-32 h-32 bg-green-50 rounded-full blur-3xl -z-0 group-hover:bg-green-100 transition-colors"></div>
+            
+            <!-- Icono de Curso -->
+            <div class="w-16 h-16 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-8 shadow-sm group-hover:rotate-6 transition-transform relative z-10">
+                <i data-lucide="book-open-check" size="32"></i>
+            </div>
+            
+            <!-- Nombre del Curso -->
+            <h3 class="text-2xl font-black uppercase text-gray-800 leading-tight mb-4 relative z-10 group-hover:text-green-600 transition-colors">
+                {{ curso.nombre_curso }}
+            </h3>
+            
+            <!-- Institución -->
+            <p class="font-bold text-base text-gray-400 uppercase tracking-widest relative z-10 leading-relaxed mb-6">
+                {{ curso.institucion }}
+            </p>
+            
+            <!-- Pie de la Tarjeta con Carga Horaria y Botón de Certificado -->
+            <div class="mt-auto pt-6 border-t border-gray-50 flex justify-between items-end relative z-10">
+                <div class="flex flex-col gap-1">
+                    <p class="text-[8px] font-black text-gray-300 uppercase tracking-tighter">Intensidad</p>
+                    <span class="text-[11px] font-black text-green-500 uppercase tracking-widest">
+                        {{ curso.horas }} Horas
+                    </span>
+                </div>
+
+                <!-- Botón para ver Certificado de Curso -->
+                {% if curso.certificado_pdf %}
+                <a href="{{ curso.certificado_pdf.url }}" 
+                   target="_blank" 
+                   class="p-4 bg-[#1a1a1a] text-white rounded-2xl shadow-lg hover:bg-green-600 hover:scale-110 transition-all group/btn"
+                   title="Ver Certificado de Curso">
+                    <i data-lucide="file-text" size="20" class="group-hover/btn:rotate-12 transition-transform"></i>
+                </a>
+                {% else %}
+                <div class="p-4 bg-gray-50 text-gray-200 rounded-2xl border border-dashed border-gray-100 cursor-not-allowed" title="Sin archivo">
+                    <i data-lucide="file-x-2" size="20"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full py-20 text-center bg-white rounded-[4rem] border border-dashed border-gray-100">
+            <i data-lucide="scroll" size="48" class="mx-auto mb-4 text-gray-200"></i>
+            <p class="text-gray-400 font-bold uppercase tracking-widest text-xs italic">No hay certificaciones registradas.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

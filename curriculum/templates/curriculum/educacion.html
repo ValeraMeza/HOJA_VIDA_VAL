@@ -1,0 +1,69 @@
+{% extends 'curriculum/base.html' %}
+
+{% block title %}Formación Académica{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Título con aumento ligero del 10% -->
+    <h2 class="text-5xl md:text-6xl font-black italic uppercase mb-20 tracking-tighter text-[#1a1a1a] leading-none">
+        Productos <br><span class="text-blue-500">Academicos</span>
+    </h2>
+
+   
+  
+    <!-- Rejilla de Educación (3 columnas) -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for estudio in estudios %}
+        <div class="bg-white p-8 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 relative overflow-hidden group flex flex-col h-full">
+            
+            <!-- Decoración de fondo sutil -->
+            <div class="absolute right-0 top-0 w-32 h-32 bg-blue-50 rounded-full blur-3xl -z-0 group-hover:bg-blue-100 transition-colors"></div>
+            
+            <!-- Icono de Logro Académico -->
+            <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center mb-8 shadow-sm group-hover:rotate-6 transition-transform relative z-10">
+                <i data-lucide="award" size="32"></i>
+            </div>
+            
+            <!-- Título del Grado -->
+            <h3 class="text-2xl font-black uppercase text-gray-800 leading-tight mb-4 relative z-10 group-hover:text-blue-600 transition-colors">
+                {{ estudio.titulo }}
+            </h3>
+            
+            <!-- Institución -->
+            <p class="font-bold text-base text-gray-400 uppercase tracking-widest relative z-10 leading-relaxed mb-6">
+                {{ estudio.institucion }}
+            </p>
+            
+            <!-- Pie de la Tarjeta con Fecha y Botón de Diploma -->
+            <div class="mt-auto pt-6 border-t border-gray-50 flex justify-between items-end relative z-10">
+                <div class="flex flex-col gap-1">
+                    <p class="text-[8px] font-black text-gray-300 uppercase tracking-tighter">Periodo de Desarrollo</p>
+                    <span class="text-[11px] font-black text-blue-400 uppercase tracking-widest">
+                        {{ estudio.fecha_inicio }} - {{ estudio.fecha_fin }}
+                    </span>
+                </div>
+
+                <!-- Botón para ver Diploma con icono de documento solicitado -->
+                {% if estudio.certificado_pdf %}
+                <a href="{{ estudio.certificado_pdf.url }}" 
+                   target="_blank" 
+                   class="p-4 bg-[#1a1a1a] text-white rounded-2xl shadow-lg hover:bg-blue-600 hover:scale-110 transition-all group/btn"
+                   title="Ver Certificado">
+                    <i data-lucide="file-text" size="20" class="group-hover/btn:rotate-12 transition-transform"></i>
+                </a>
+                {% else %}
+                <div class="p-4 bg-gray-50 text-gray-200 rounded-2xl border border-dashed border-gray-100 cursor-not-allowed" title="No cargado">
+                    <i data-lucide="file-x" size="20"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full py-20 text-center bg-white rounded-[4rem] border border-dashed border-gray-100">
+            <i data-lucide="graduation-cap" size="48" class="mx-auto mb-4 text-gray-200"></i>
+            <p class="text-gray-400 font-bold uppercase tracking-widest text-xs italic">Registros académicos no disponibles.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

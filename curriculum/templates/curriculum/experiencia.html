@@ -1,0 +1,49 @@
+{% extends 'curriculum/base.html' %}
+
+{% block title %}Trayectoria Profesional - {{ perfil.nombres }}{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Título con aumento ligero del 10% -->
+    <h2 class="text-5xl md:text-6xl font-black italic uppercase mb-20 tracking-tighter text-[#1a1a1a] leading-none">
+        Trayectoria<br><span class="text-pink-500">Profesional</span>
+    </h2>
+    
+    <div class="grid gap-12 relative">
+        <!-- Línea central decorativa (solo en desktop) -->
+        <div class="absolute left-1/2 top-0 bottom-0 w-[1px] bg-pink-100 hidden lg:block"></div>
+        
+        {% for exp in experiencias %}
+        <div class="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-2xl transition-all group relative lg:w-[48%] {% if forloop.counter|divisibleby:2 %}lg:ml-auto{% endif %}">
+            <div class="flex justify-between items-start mb-6">
+                <!-- Contador de registro dinámico -->
+                <span class="px-4 py-1 bg-[#1a1a1a] text-white text-[10px] font-black rounded-full uppercase tracking-tighter">REG. {{ forloop.counter|stringformat:"02d" }}</span>
+                <span class="text-pink-500 font-black text-xs uppercase tracking-widest">{{ exp.fecha_inicio }} — {{ exp.fecha_fin }}</span>
+            </div>
+            
+            <h3 class="text-3xl font-black uppercase text-gray-800 group-hover:text-pink-500 transition-colors leading-tight">
+                {{ exp.cargo }}
+            </h3>
+            
+            <p class="text-blue-500 font-bold text-[10px] uppercase mb-6 tracking-[0.2em]">
+                {{ exp.empresa }} | {{ exp.ubicacion }}
+            </p>
+            
+            <div class="space-y-4">
+                <p class="text-gray-500 text-sm italic leading-relaxed">
+                    "{{ exp.descripcion }}"
+                </p>
+            </div>
+
+            <!-- Decoración flotante sutil al hacer hover -->
+            <div class="absolute -right-2 -bottom-2 w-24 h-24 bg-pink-50 rounded-full -z-10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+        {% empty %}
+        <div class="bg-white p-12 rounded-[3rem] border-2 border-dashed border-gray-100 text-center col-span-full">
+            <i data-lucide="briefcase" class="mx-auto mb-4 text-gray-300 w-12 h-12"></i>
+            <p class="text-gray-400 italic font-medium">Aún no has registrado experiencias en el panel administrativo.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

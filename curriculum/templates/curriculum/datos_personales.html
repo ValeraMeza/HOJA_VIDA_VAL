@@ -1,0 +1,186 @@
+{% extends 'curriculum/base.html' %}
+
+{% block title %}Datos Personales | Valeria Meza{% endblock %}
+
+{% block content %}
+<div class="fade-in max-w-7xl mx-auto pb-20">
+    
+    <!-- Encabezado con Estilo -->
+    <div class="mb-12">
+        <h2 class="text-6xl font-black italic uppercase tracking-tighter text-[#1a1a1a] leading-none">
+            Datos <span class="text-pink-500">Personales</span>
+        </h2>
+        <div class="h-2 w-24 bg-pink-400 mt-4 rounded-full"></div>
+    </div>
+
+    <!-- Contenedor Principal (Ajuste de proporciones: 3 vs 9) -->
+    <div class="grid lg:grid-cols-12 gap-10">
+        
+        <!-- Columna Izquierda: Imagen y Bio Principal (Sección más pequeña) -->
+        <div class="lg:col-span-3 space-y-8">
+            <div class="relative group">
+                <div class="absolute -inset-4 bg-pink-100 rounded-[3rem] -rotate-3 group-hover:rotate-0 transition-transform duration-500 -z-10"></div>
+                <div class="bg-white p-3 rounded-[2.5rem] shadow-xl border border-gray-100 relative z-10 overflow-hidden">
+                    {% if perfil.foto %}
+                        <img src="{{ perfil.foto.url }}" alt="{{ perfil.nombres }}" class="w-full aspect-square object-cover rounded-[1.8rem] grayscale hover:grayscale-0 transition-all duration-700">
+                    {% else %}
+                        <div class="w-full aspect-square bg-gray-50 rounded-[1.8rem] flex flex-col items-center justify-center text-gray-300">
+                            <i data-lucide="user" size="48" class="mb-4 opacity-20"></i>
+                            <span class="text-[8px] font-black uppercase tracking-widest">Sin Foto</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Badge de ID Flotante sutil -->
+                <div class="absolute -bottom-3 -right-3 bg-[#1a1a1a] text-white px-4 py-2 rounded-xl shadow-2xl z-20 transform group-hover:scale-105 transition-transform border-2 border-white">
+                    <p class="text-[7px] font-black uppercase tracking-[0.2em] text-pink-400 mb-0.5">Identificación</p>
+                    <h4 class="text-xs font-black tracking-tight">{{ perfil.cedula }}</h4>
+                </div>
+            </div>
+
+            <!-- Perfil Profesional Compacto -->
+            <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-50 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-5">
+                    <i data-lucide="quote" size="40" class="text-pink-500"></i>
+                </div>
+                <h3 class="text-[9px] font-black uppercase tracking-[0.4em] text-pink-500 mb-3 flex items-center gap-2">
+                    <span class="h-px w-4 bg-pink-200"></span> Localizaciones y Otros 
+                </h3>
+                <div class="flex gap-4">
+                    <div class="shrink-0 w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400">
+                        <i data-lucide="map-pin" size="20"></i>
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Dirección Domiciliaria</label>
+                        <p class="text-sm font-bold text-gray-800 leading-tight">{{ perfil.direccion }}</p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="shrink-0 w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400">
+                        <i data-lucide="building-2" size="20"></i>
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Dirección Trabajo</label>
+                        <p class="text-sm font-bold text-gray-800 leading-tight">{{ perfil.direccion_trabajo|default:"Studio Creativo Manta" }}</p>
+                    </div>
+                </div>
+                <div class="md:col-span-2 pt-4">
+                    <div class="bg-gray-50 p-6 rounded-[2rem] flex items-center justify-between border border-gray-100">
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="car" class="text-gray-400"></i>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">Licencia de Conducir</span>
+                        </div>
+                        <span class="px-4 py-1.5 bg-white rounded-full text-[10px] font-black text-gray-800 shadow-sm border border-gray-100">
+                            {{ perfil.licencia|default:"No disponible" }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Redes y Licencia -->
+            <div class="bg-pink-50/50 p-4 rounded-[2rem] border border-pink-100 flex items-center justify-center">
+                <div class="flex gap-5">
+                    {% if perfil.url_linkedin %}
+                    <a href="{{ perfil.url_linkedin }}" target="_blank" class="text-gray-400 hover:text-blue-600 transition-colors">
+                        <i data-lucide="linkedin" size="18"></i>
+                    </a>
+                    {% endif %}
+                    
+                    {% if perfil.url_github %}
+                    <a href="{{ perfil.url_github }}" target="_blank" class="text-gray-400 hover:text-purple-600 transition-colors">
+                        <i data-lucide="github" size="18"></i>
+                    </a>
+                    {% endif %}
+                    
+                    {% if perfil.url_instagram %}
+                    <a href="{{ perfil.url_instagram }}" target="_blank" class="text-gray-400 hover:text-pink-600 transition-colors">
+                        <i data-lucide="instagram" size="18"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Columna Derecha: El resto de la información (Sección principal) -->
+        <div class="lg:col-span-9 space-y-6">
+            
+            <!-- SECCIÓN 1: Identidad Básica (Incluyendo Cédula) -->
+            <div class="bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-sm grid md:grid-cols-3 gap-8">
+                <div class="md:col-span-3 border-b border-gray-50 pb-4 mb-2">
+                    <h3 class="text-xs font-black uppercase tracking-[0.5em] text-gray-900">Identidad Básica</h3>
+                </div>
+                <div>
+                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Nombres Completos</label>
+                    <p class="text-xl font-black text-gray-800">{{ perfil.nombres }}</p>
+                </div>
+                <div>
+                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Apellidos Completos</label>
+                    <p class="text-xl font-black text-gray-800">{{ perfil.apellidos }}</p>
+                </div>
+                <div>
+                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Sexo / Género</label>
+                    <p class="text-xl font-black text-gray-800">{{ perfil.sexo }}</p>
+                </div>
+                <div>
+                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Estado Civil</label>
+                    <p class="text-xl font-black text-gray-800">{{ perfil.estado_civil }}</p>
+                </div>
+                <div>
+                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Nacionalidad</label>
+                    <p class="text-xl font-black text-gray-800">{{ perfil.nacionalidad }}</p>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: Origen y Demografía -->
+            <div class="bg-white p-10 rounded-[3.5rem] border border-gray-100 shadow-sm grid md:grid-cols-2 gap-8">
+                <div class="md:col-span-2 border-b border-gray-50 pb-4 mb-2">
+                    <h3 class="text-xs font-black uppercase tracking-[0.5em] text-blue-500">Origen & Fecha</h3>
+                </div>
+                <div>
+                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Lugar de Nacimiento</label>
+                    <p class="text-base font-black text-gray-800">{{ perfil.lugar_nacimiento }}</p>
+                </div>
+                <div>
+                    <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-1">Fecha de Nacimiento</label>
+                    <p class="text-base font-black text-gray-800">{{ perfil.fecha_nacimiento }}</p>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 3: Contacto & Enlaces -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Teléfonos -->
+                <div class="bg-[#1a1a1a] p-10 rounded-[3.5rem] text-white space-y-6">
+                    <div>
+                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 block mb-1">Teléfono Personal</label>
+                        <p class="text-xl font-black text-pink-400">{{ perfil.telefono }}</p>
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 block mb-1">Teléfono Convencional</label>
+                        <p class="text-xl font-black text-blue-400">{{ perfil.telefono_convencional|default:"N/A" }}</p>
+                    </div>
+                </div>
+
+                <!-- Digital -->
+                <div class="bg-pink-50 p-10 rounded-[3.5rem] border border-pink-100 space-y-6">
+                    <div>
+                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-pink-400 block mb-1">Email Profesional</label>
+                        <p class="text-sm font-black text-gray-800 truncate">{{ perfil.email }}</p>
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black uppercase tracking-[0.3em] text-pink-400 block mb-1">Sitio Web</label>
+                        <p class="text-sm font-black text-gray-800">{{ perfil.sitio_web|default:"valeria.dev" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+</style>
+{% endblock %}
