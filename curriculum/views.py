@@ -128,17 +128,13 @@ def checkout(request):
     })
 
 def generar_cv(request):
-    """
-    Función para generar el PDF dinámico y adjuntar los certificados.
-    """
     perfil = DatosPersonales.objects.first()
     
-    # URL Base para el template
     scheme = request.scheme
     host = request.get_host()
     base_url = f"{scheme}://{host}"
     
-    # Capturamos los parámetros
+    # Parámetros de visibilidad
     ocultar_foto = request.GET.get('ocultar_foto') == 'on'
     ocultar_contacto = request.GET.get('ocultar_contacto') == 'on'
     ocultar_perfil = request.GET.get('ocultar_perfil') == 'on'
@@ -152,23 +148,23 @@ def generar_cv(request):
     ocultar_proyectos = request.GET.get('ocultar_proyectos') == 'on'
     ocultar_reconocimientos = request.GET.get('ocultar_reconocimientos') == 'on'
     ocultar_venta = request.GET.get('ocultar_venta') == 'on'
+    ocultar_certificados = request.GET.get('ocultar_certificados') == 'on'
 
-    # Consultas de datos
     estudios = EstudioRealizado.objects.filter(activo=True)
     proyectos = ProductoAcademico.objects.filter(activo=True)
+    cursos = CursoCapacitacion.objects.filter(activo=True)
 
     context = {
         'perfil': perfil,
         'experiencias': ExperienciaLaboral.objects.filter(activo=True),
         'estudios': estudios,
-        'cursos': CursoCapacitacion.objects.filter(activo=True),
+        'cursos': cursos,
         'reconocimientos': Reconocimiento.objects.filter(activo=True),
         'proyectos': proyectos,
         'productos': VentaGarage.objects.filter(activo=True),
         'MEDIA_URL': settings.MEDIA_URL,
         'base_url': base_url,
         
-        # Banderas
         'ocultar_foto': ocultar_foto,
         'ocultar_contacto': ocultar_contacto,
         'ocultar_perfil': ocultar_perfil,
@@ -182,9 +178,10 @@ def generar_cv(request):
         'ocultar_proyectos': ocultar_proyectos,
         'ocultar_reconocimientos': ocultar_reconocimientos,
         'ocultar_venta': ocultar_venta,
+        'ocultar_certificados': ocultar_certificados,
     }
     
-    # 1. Generar el PDF principal del CV en memoria
+    # 1. Generar PDF principal
     template = get_template('curriculum/cv_pdf.html')
     html = template.render(context)
     
@@ -194,45 +191,55 @@ def generar_cv(request):
     if pisa_status.err:
         return HttpResponse('Hubo un error al generar el PDF principal.', status=500)
 
-    # 2. Inicializar el fusionador de PDFs
     merger = PdfWriter()
-    
-    # Agregar el CV generado al inicio
     cv_buffer.seek(0)
     merger.append(cv_buffer)
 
-    # Función auxiliar para descargar y adjuntar archivos
+    # FUNCIÓN MEJORADA: Valida que sea PDF real
     def adjuntar_archivo(campo_archivo):
         try:
             if not campo_archivo: return
             
-            # Opción A: Archivo remoto (Cloudinary/S3/Web)
+            content = None
+            filename = getattr(campo_archivo, 'name', 'archivo desconocido')
+
+            # Descargar o leer archivo
             if hasattr(campo_archivo, 'url') and campo_archivo.url.startswith('http'):
                 response = requests.get(campo_archivo.url)
                 if response.status_code == 200:
-                    archivo_memoria = io.BytesIO(response.content)
-                    merger.append(archivo_memoria)
-            
-            # Opción B: Archivo local (Desarrollo)
+                    content = response.content
             else:
-                with campo_archivo.open('rb') as f:
-                    archivo_memoria = io.BytesIO(f.read())
-                    merger.append(archivo_memoria)
+                try:
+                    with campo_archivo.open('rb') as f:
+                        content = f.read()
+                except Exception:
+                    pass
+
+            if content:
+                # VALIDACIÓN CRÍTICA: Chequear cabecera PDF
+                if not content.startswith(b'%PDF'):
+                    print(f"⚠️ OMITIDO: El archivo '{filename}' NO es un PDF válido (Detectado header: {content[:4]}).")
+                    return
+
+                merger.append(io.BytesIO(content))
+            
         except Exception as e:
-            print(f"No se pudo adjuntar el archivo: {e}")
-            # Continuamos sin romper el flujo si un archivo falla
+            print(f"Error adjuntando archivo: {e}")
 
-    # 3. Recorrer y adjuntar certificados de Educación (si no están ocultos)
-    if not ocultar_educacion:
-        for estudio in estudios:
-            adjuntar_archivo(estudio.certificado_pdf)
+    # Solo intentamos adjuntar si el usuario NO ocultó certificados
+    if not ocultar_certificados:
+        if not ocultar_educacion:
+            for estudio in estudios:
+                adjuntar_archivo(estudio.certificado_pdf)
 
-    # 4. Recorrer y adjuntar documentos de Proyectos (si no están ocultos)
-    if not ocultar_proyectos:
-        for proyecto in proyectos:
-            adjuntar_archivo(proyecto.archivo)
+        if not ocultar_proyectos:
+            for proyecto in proyectos:
+                adjuntar_archivo(proyecto.archivo)
+                
+        if not ocultar_cursos:
+            for curso in cursos:
+                adjuntar_archivo(curso.certificado_pdf)
 
-    # 5. Generar la respuesta final con todos los PDFs unidos
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'inline; filename="Hoja_de_Vida_Completa.pdf"'
     

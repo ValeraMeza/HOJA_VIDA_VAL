@@ -183,6 +183,18 @@
             font-weight: bold;
             font-size: 9pt;
         }
+        /* Estilo para enlace en cuerpo principal */
+        .attachment-link {
+            display: inline-block;
+            margin-top: 4px;
+            font-size: 8pt;
+            color: #000;
+            text-decoration: none;
+            border: 1pt solid #000;
+            padding: 1px 4px;
+            border-radius: 2px;
+            background-color: #f5f5f5;
+        }
     </style>
 </head>
 <body>
@@ -332,6 +344,14 @@
                 <div class="job-block">
                     <div class="job-title">{{ est.titulo }}</div>
                     <div class="job-meta">{{ est.institucion }} | Finalizado: {{ est.fecha_fin|date:"Y" }}</div>
+                    
+                    {% if est.certificado_pdf and not ocultar_certificados %}
+                    <div>
+                        <a href="{% if 'http' in est.certificado_pdf.url %}{{ est.certificado_pdf.url }}{% else %}{{ base_url }}{{ est.certificado_pdf.url }}{% endif %}" class="attachment-link" target="_blank">
+                            &bull; Ver Certificado (PDF)
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
                 {% endif %}
@@ -346,11 +366,19 @@
                     {% if pro.descripcion %}
                     <div class="job-desc">{{ pro.descripcion }}</div>
                     {% endif %}
+
+                    {% if pro.archivo and not ocultar_certificados %}
+                    <div>
+                        <a href="{% if 'http' in pro.archivo.url %}{{ pro.archivo.url }}{% else %}{{ base_url }}{{ pro.archivo.url }}{% endif %}" class="attachment-link" target="_blank">
+                            &bull; Ver Documento del Proyecto
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
                 {% endif %}
 
-                <!-- 12. CURSOS -->
+                <!-- 12. CURSOS (AHORA CON PDF) -->
                 {% if not ocultar_cursos and cursos %}
                 <div class="section-title">Cursos y Certificaciones</div>
                 {% for curso in cursos %}
@@ -358,6 +386,14 @@
                     <span style="font-weight: bold;">{{ curso.nombre_curso }}</span>
                     <br>
                     <span style="font-size: 9pt;">{{ curso.institucion }} - {{ curso.fecha_realizacion|date:"Y" }} ({{ curso.horas }}h)</span>
+                    
+                    {% if curso.certificado_pdf and not ocultar_certificados %}
+                    <div style="margin-top: 2px;">
+                        <a href="{% if 'http' in curso.certificado_pdf.url %}{{ curso.certificado_pdf.url }}{% else %}{{ base_url }}{{ curso.certificado_pdf.url }}{% endif %}" class="attachment-link" target="_blank">
+                            &bull; Ver Certificado (PDF)
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
                 {% endif %}
@@ -387,50 +423,72 @@
     </table>
 
     <!-- SECCIÓN DE ANEXOS / ADJUNTOS (AL FINAL) -->
-    <div style="page-break-before: always;"></div>
-    
-    <div class="appendix-header">Anexos: Documentación de Respaldo</div>
-    <div style="font-size: 9pt; color: #444; margin-bottom: 20px; text-align: center;">
-        Relación de documentos digitales adjuntos a este Curriculum Vitae.
-        Haga clic en los enlaces para visualizar los archivos originales.
-    </div>
+    <!-- Solo si no se ocultaron los certificados -->
+    {% if not ocultar_certificados %}
+        <div style="page-break-before: always;"></div>
+        
+        <div class="appendix-header">Anexos: Documentación de Respaldo</div>
+        <div style="font-size: 9pt; color: #444; margin-bottom: 20px; text-align: center;">
+            Relación de documentos digitales adjuntos a este Curriculum Vitae.
+            Haga clic en los enlaces para visualizar los archivos originales.
+        </div>
 
-    <!-- Anexos de Educación -->
-    {% if not ocultar_educacion %}
-        {% for est in estudios %}
-            {% if est.certificado_pdf %}
-            <div class="appendix-item">
-                <span class="appendix-section-label">SECCIÓN: FORMACIÓN ACADÉMICA</span>
-                <div style="font-weight: bold;">{{ est.titulo }}</div>
-                <div style="font-size: 9pt; margin-bottom: 5px;">{{ est.institucion }}</div>
-                
-                <div style="margin-top: 8px;">
-                    <a class="pdf-link" href="{% if 'http' in est.certificado_pdf.url %}{{ est.certificado_pdf.url }}{% else %}{{ base_url }}{{ est.certificado_pdf.url }}{% endif %}" target="_blank">
-                        VER DOCUMENTO ADJUNTO (PDF)
-                    </a>
+        <!-- Anexos de Educación -->
+        {% if not ocultar_educacion %}
+            {% for est in estudios %}
+                {% if est.certificado_pdf %}
+                <div class="appendix-item">
+                    <span class="appendix-section-label">SECCIÓN: FORMACIÓN ACADÉMICA</span>
+                    <div style="font-weight: bold;">{{ est.titulo }}</div>
+                    <div style="font-size: 9pt; margin-bottom: 5px;">{{ est.institucion }}</div>
+                    
+                    <div style="margin-top: 8px;">
+                        <a class="pdf-link" href="{% if 'http' in est.certificado_pdf.url %}{{ est.certificado_pdf.url }}{% else %}{{ base_url }}{{ est.certificado_pdf.url }}{% endif %}" target="_blank">
+                            VER DOCUMENTO ADJUNTO (PDF)
+                        </a>
+                    </div>
                 </div>
-            </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
 
-    <!-- Anexos de Proyectos -->
-    {% if not ocultar_proyectos %}
-        {% for pro in proyectos %}
-            {% if pro.archivo %}
-            <div class="appendix-item">
-                <span class="appendix-section-label">SECCIÓN: PROYECTOS</span>
-                <div style="font-weight: bold;">{{ pro.nombre }}</div>
-                <div style="font-size: 9pt; margin-bottom: 5px;">ID Registro: {{ pro.registro_id|default:"N/A" }}</div>
-                
-                <div style="margin-top: 8px;">
-                    <a class="pdf-link" href="{% if 'http' in pro.archivo.url %}{{ pro.archivo.url }}{% else %}{{ base_url }}{{ pro.archivo.url }}{% endif %}" target="_blank">
-                        VER DOCUMENTO DEL PROYECTO (PDF)
-                    </a>
+        <!-- Anexos de Proyectos -->
+        {% if not ocultar_proyectos %}
+            {% for pro in proyectos %}
+                {% if pro.archivo %}
+                <div class="appendix-item">
+                    <span class="appendix-section-label">SECCIÓN: PROYECTOS</span>
+                    <div style="font-weight: bold;">{{ pro.nombre }}</div>
+                    <div style="font-size: 9pt; margin-bottom: 5px;">ID Registro: {{ pro.registro_id|default:"N/A" }}</div>
+                    
+                    <div style="margin-top: 8px;">
+                        <a class="pdf-link" href="{% if 'http' in pro.archivo.url %}{{ pro.archivo.url }}{% else %}{{ base_url }}{{ pro.archivo.url }}{% endif %}" target="_blank">
+                            VER DOCUMENTO DE PROYECTO (PDF)
+                        </a>
+                    </div>
                 </div>
-            </div>
-            {% endif %}
-        {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <!-- Anexos de Cursos (NUEVO) -->
+        {% if not ocultar_cursos %}
+            {% for curso in cursos %}
+                {% if curso.certificado_pdf %}
+                <div class="appendix-item">
+                    <span class="appendix-section-label">SECCIÓN: CURSOS Y CERTIFICACIONES</span>
+                    <div style="font-weight: bold;">{{ curso.nombre_curso }}</div>
+                    <div style="font-size: 9pt; margin-bottom: 5px;">{{ curso.institucion }} ({{ curso.fecha_realizacion|date:"Y" }})</div>
+                    
+                    <div style="margin-top: 8px;">
+                        <a class="pdf-link" href="{% if 'http' in curso.certificado_pdf.url %}{{ curso.certificado_pdf.url }}{% else %}{{ base_url }}{{ curso.certificado_pdf.url }}{% endif %}" target="_blank">
+                            VER CERTIFICADO DEL CURSO
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     {% endif %}
 
     <div id="footerContent" style="text-align: center; font-size: 8pt; border-top: 1pt solid #000; padding-top: 5px; color: #666;">

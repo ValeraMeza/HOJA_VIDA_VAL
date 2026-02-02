@@ -7,7 +7,7 @@
 <!-- Layout Split-Screen: Mantiene la estética pero divide el espacio -->
 <div class="flex flex-col lg:flex-row h-[calc(100vh-80px)] overflow-hidden">
     
-    <!-- 1. PANEL IZQUIERDO: CONTROLES (Estética UI Moderna con color) -->
+    <!-- 1. PANEL IZQUIERDO: CONTROLES -->
     <div class="w-full lg:w-5/12 h-full bg-white dark:bg-zinc-900 border-r border-gray-100 dark:border-zinc-800 relative z-20 shadow-2xl flex flex-col">
         
         <!-- Cabecera -->
@@ -136,9 +136,15 @@
                         <input type="checkbox" name="ocultar_venta" class="accent-pink-500 w-4 h-4 rounded cursor-pointer" onchange="togglePreview('preview-venta')">
                     </label>
                     <!-- Redes -->
-                    <label class="group flex items-center justify-between p-3 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all col-span-2">
+                    <label class="group flex items-center justify-between p-3 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all">
                         <span class="font-bold text-gray-700 dark:text-gray-200 text-xs">Redes Sociales</span>
                         <input type="checkbox" name="ocultar_redes" class="accent-pink-500 w-4 h-4 rounded cursor-pointer" onchange="togglePreview('preview-redes')">
+                    </label>
+                    
+                    <!-- NUEVA OPCIÓN: ANEXOS -->
+                    <label class="group flex items-center justify-between p-3 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-pink-50 dark:bg-pink-900/10 cursor-pointer transition-all border-l-4 border-l-pink-500 shadow-sm">
+                        <span class="font-bold text-gray-700 dark:text-gray-200 text-xs">Anexos (PDFs)</span>
+                        <input type="checkbox" name="ocultar_certificados" class="accent-pink-500 w-4 h-4 rounded cursor-pointer">
                     </label>
                 </div>
             </form>
