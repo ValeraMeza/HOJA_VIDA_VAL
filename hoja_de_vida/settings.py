@@ -51,7 +51,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             # Ruta absoluta a la carpeta de templates de tu app
-            os.path.join(BASE_DIR/ 'curriculum' / 'templates' / 'curriculum'),
+            os.path.join(BASE_DIR / 'curriculum' / 'templates' / 'curriculum'),
             os.path.join(BASE_DIR, 'templates'),
         ], 
         'APP_DIRS': True,
@@ -80,11 +80,15 @@ DATABASES = {
 }
 
 # --- ARCHIVOS ESTÁTICOS Y MEDIA ---
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'curriculum', 'static'),
 ]
+
+# CORRECCIÓN PARA RENDER:
+# Definimos explícitamente el almacenamiento antiguo para evitar el AttributeError
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
