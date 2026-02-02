@@ -249,7 +249,9 @@
             <ul class="w-full space-y-1 px-3">
                 {% with request.resolver_match.url_name as url_name %}
                 
-                {% if not config or config.mostrar_inicio %}
+                <!-- CORRECCIÓN: Lógica estricta. Si 'secciones.mostrar_X' es False (o no existe), se oculta. -->
+
+                {% if secciones.mostrar_inicio %}
                 <li>
                     <a href="{% url 'inicio' %}" class="flex items-center h-12 rounded-xl transition-all duration-300 {% if url_name == 'inicio' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500 dark:hover:bg-pink-900/20{% endif %}">
                         <div class="nav-icon-container"><i data-lucide="home" stroke-width="2.5" size="22"></i></div>
@@ -258,7 +260,7 @@
                 </li>
                 {% endif %}
 
-                {% if not config or config.mostrar_perfil %}
+                {% if secciones.mostrar_perfil %}
                 <li>
                     <a href="{% url 'perfil' %}" class="flex items-center h-12 rounded-xl transition-all duration-300 {% if url_name == 'perfil' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500 dark:hover:bg-pink-900/20{% endif %}">
                         <div class="nav-icon-container"><i data-lucide="user" stroke-width="2.5" size="22"></i></div>
@@ -267,7 +269,7 @@
                 </li>
                 {% endif %}
 
-                {% if not config or config.mostrar_experiencia %}
+                {% if secciones.mostrar_experiencia %}
                 <li>
                     <a href="{% url 'experiencia' %}" class="flex items-center h-12 rounded-xl transition-all duration-300 {% if url_name == 'experiencia' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500 dark:hover:bg-pink-900/20{% endif %}">
                         <div class="nav-icon-container"><i data-lucide="briefcase" stroke-width="2.5" size="22"></i></div>
@@ -276,7 +278,7 @@
                 </li>
                 {% endif %}
 
-                {% if not config or config.mostrar_educacion %}
+                {% if secciones.mostrar_educacion %}
                 <li>
                     <a href="{% url 'educacion' %}" class="flex items-center h-12 rounded-xl transition-all duration-300 {% if url_name == 'educacion' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500 dark:hover:bg-pink-900/20{% endif %}">
                         <div class="nav-icon-container"><i data-lucide="graduation-cap" stroke-width="2.5" size="22"></i></div>
@@ -285,7 +287,7 @@
                 </li>
                 {% endif %}
 
-                {% if not config or config.mostrar_cursos %}
+                {% if secciones.mostrar_cursos %}
                 <li>
                     <a href="{% url 'cursos' %}" class="flex items-center h-12 rounded-xl transition-all duration-300 {% if url_name == 'cursos' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500 dark:hover:bg-pink-900/20{% endif %}">
                         <div class="nav-icon-container"><i data-lucide="book-open-check" stroke-width="2.5" size="22"></i></div>
@@ -294,7 +296,7 @@
                 </li>
                 {% endif %}
 
-                {% if not config or config.mostrar_logros %}
+                {% if secciones.mostrar_logros %}
                 <li>
                     <a href="{% url 'reconocimientos' %}" class="flex items-center h-12 rounded-xl transition-all duration-300 {% if url_name == 'reconocimientos' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500 dark:hover:bg-pink-900/20{% endif %}">
                         <div class="nav-icon-container"><i data-lucide="trophy" stroke-width="2.5" size="22"></i></div>
@@ -303,21 +305,25 @@
                 </li>
                 {% endif %}
 
+                {% if secciones.mostrar_trabajos %}
                 <li>
                     <a href="{% url 'trabajos' %}" class="flex items-center h-12 rounded-xl transition-all duration-300 {% if url_name == 'trabajos' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500 dark:hover:bg-pink-900/20{% endif %}">
                         <div class="nav-icon-container"><i data-lucide="layers" stroke-width="2.5" size="22"></i></div>
                         <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Trabajos</span>
                     </a>
                 </li>
+                {% endif %}
 
+                {% if secciones.mostrar_venta %}
                 <li>
                     <a href="{% url 'venta' %}" class="flex items-center h-12 rounded-xl transition-all duration-300 {% if url_name == 'venta' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500 dark:hover:bg-pink-900/20{% endif %}">
                         <div class="nav-icon-container"><i data-lucide="tag" stroke-width="2.5" size="22"></i></div>
                         <span class="font-bold text-[13px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Venta</span>
                     </a>
                 </li>
+                {% endif %}
 
-                {% if not config or config.mostrar_contacto %}
+                {% if secciones.mostrar_contacto %}
                 <li>
                     <a href="{% url 'contacto' %}" class="flex items-center h-12 rounded-xl transition-all duration-300 {% if url_name == 'contacto' %}nav-active{% else %}text-gray-400 hover:bg-pink-50 hover:text-pink-500 dark:hover:bg-pink-900/20{% endif %}">
                         <div class="nav-icon-container"><i data-lucide="message-square" stroke-width="2.5" size="22"></i></div>

@@ -4,149 +4,82 @@
     <meta charset="UTF-8">
     <title>CV - {{ perfil.nombres }}</title>
     <style>
-        /* CSS LIMPIO PARA PDF (Sin animaciones ni Tailwind) */
         @page {
             size: a4;
-            margin: 1.2cm;
+            margin: 1cm;
+            @frame footer_frame {
+                -pdf-frame-content: footerContent;
+                bottom: 0.5cm;
+                margin-left: 1cm;
+                margin-right: 1cm;
+                height: 1cm;
+            }
         }
 
         body {
-            font-family: 'Helvetica', 'Arial', sans-serif; /* Fuentes seguras para PDF */
-            color: #3E2723;
-            line-height: 1.5;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #222222;
+            line-height: 1.4;
             font-size: 10pt;
             background-color: #ffffff;
         }
 
-        /* Tablas para estructura (xhtml2pdf maneja mejor tablas que flexbox/grid) */
-        .main-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        .main-table { width: 100%; border-collapse: collapse; }
+        .sidebar-cell { width: 30%; vertical-align: top; padding-right: 15px; border-right: 1pt solid #444; }
+        .content-cell { width: 70%; vertical-align: top; padding-left: 20px; }
 
-        .sidebar-cell {
-            width: 28%;
-            vertical-align: top;
-            padding-right: 15px;
-            border-right: 1.5pt solid #F4C9D6;
-        }
+        .profile-container { text-align: center; margin-bottom: 20px; }
+        .profile-img { width: 130px; height: 160px; object-fit: cover; border: 1pt solid #000; }
+        .profile-placeholder { width: 130px; height: 160px; background: #f0f0f0; border: 1pt solid #000; margin: 0 auto; line-height: 160px; color: #666; font-size: 8pt; }
 
-        .content-cell {
-            width: 72%;
-            vertical-align: top;
-            padding-left: 20px;
-        }
+        .sidebar-title { font-size: 10pt; font-weight: bold; text-transform: uppercase; color: #000; border-bottom: 1pt solid #000; margin-top: 20px; margin-bottom: 8px; padding-bottom: 2px; letter-spacing: 1px; }
+        .section-title { font-size: 12pt; font-weight: bold; text-transform: uppercase; color: #000; border-bottom: 1.5pt solid #000; margin-bottom: 12px; margin-top: 20px; padding-bottom: 3px; letter-spacing: 1px; }
+        
+        .header-name { font-size: 26pt; font-weight: bold; text-transform: uppercase; color: #000; line-height: 0.9; margin-bottom: 5px; }
+        .header-subtitle { font-size: 10pt; text-transform: uppercase; letter-spacing: 3px; color: #444; margin-bottom: 25px; }
 
-        /* Imágenes */
-        .profile-img {
-            width: 130px;
-            height: 160px;
-            object-fit: cover; /* Nota: xhtml2pdf a veces ignora object-fit, mejor recortar la imagen antes */
-            border: 2pt solid #3E2723;
-            margin-bottom: 15px;
-        }
+        .data-row { margin-bottom: 8px; font-size: 9pt; }
+        .data-label { display: block; font-weight: bold; font-size: 7.5pt; text-transform: uppercase; color: #555; }
+        .data-value { display: block; word-wrap: break-word; }
 
-        /* Textos */
-        .name {
-            font-size: 24pt;
+        .job-block { margin-bottom: 15px; page-break-inside: avoid; }
+        .job-title { font-weight: bold; font-size: 11pt; }
+        .job-meta { font-size: 9pt; font-style: italic; color: #333; margin-bottom: 4px; }
+        .job-desc { text-align: justify; font-size: 9.5pt; color: #222; }
+
+        .tag { display: inline-block; border: 0.5pt solid #666; padding: 2px 6px; margin: 0 2px 2px 0; font-size: 8pt; border-radius: 3px; background-color: #f9f9f9; }
+
+        /* ESTILO PARA ANEXOS SIMPLE Y ROBUSTO */
+        .appendix-header {
+            font-size: 14pt;
             font-weight: bold;
             text-transform: uppercase;
-            color: #3E2723;
-            margin: 0;
-            line-height: 1.1;
-        }
-
-        .job-title {
-            font-size: 11pt;
-            color: #3E2723;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-            opacity: 0.8;
-        }
-
-        .section-title {
-            font-size: 13pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #3E2723;
-            border-bottom: 1.5pt solid #F4C9D6;
-            margin-bottom: 10px;
-            margin-top: 15px;
-            padding-bottom: 2px;
-        }
-
-        .sidebar-title {
-            font-size: 10pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #3E2723;
-            border-bottom: 0.5pt solid #F4C9D6;
-            margin-top: 15px;
-            margin-bottom: 8px;
-            padding-bottom: 1px;
-        }
-
-        /* Detalles */
-        .data-item {
-            margin-bottom: 6px;
-            font-size: 9pt;
-        }
-        .data-label {
-            font-weight: bold;
-            color: #3E2723;
-            display: block;
-            font-size: 8pt;
-            text-transform: uppercase;
-            opacity: 0.7;
-        }
-        .data-value {
-            color: #3E2723;
-            display: block;
-            word-wrap: break-word;
-        }
-
-        .job-header {
-            font-weight: bold;
-            font-size: 11pt;
-            color: #3E2723;
-        }
-        .job-sub {
-            font-style: italic;
-            color: #3E2723;
-            font-weight: bold;
-            font-size: 9pt;
-            margin-bottom: 3px;
-            opacity: 0.8;
-        }
-        .job-desc {
-            text-align: justify;
-            margin-bottom: 12px;
-            font-size: 9.5pt;
-            color: #3E2723;
-        }
-
-        .tag-pill {
-            display: inline-block;
-            background-color: #F4C9D6;
-            color: #3E2723;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 8.5pt;
-            margin-right: 4px;
-            margin-bottom: 4px;
-            font-weight: bold;
-        }
-
-        .footer-simple {
             text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2pt solid #000;
+            padding-bottom: 10px;
+        }
+        .appendix-item {
+            border: 1pt solid #666;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fcfcfc;
+            page-break-inside: avoid;
+        }
+        .appendix-section-label {
             font-size: 8pt;
-            color: #3E2723;
-            opacity: 0.5;
-            border-top: 0.5pt solid #F4C9D6;
-            margin-top: 20px;
-            padding-top: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 5px;
+            display: block;
+        }
+        /* Enlace simple, sin estructuras complejas que rompan xhtml2pdf */
+        .pdf-link {
+            color: #0000EE;
+            text-decoration: underline;
+            font-weight: bold;
+            font-size: 9pt;
         }
     </style>
 </head>
@@ -156,181 +89,184 @@
         <tr>
             <!-- COLUMNA IZQUIERDA -->
             <td class="sidebar-cell">
-                <div style="text-align: center;">
-                    {% if not ocultar_foto %}
-                        {% if perfil.foto %}
-                            <!-- USAMOS .url PARA EVITAR NotImplementedError EN LA NUBE -->
-                            <img src="{{ perfil.foto.url }}" class="profile-img">
-                        {% else %}
-                            <div style="width: 130px; height: 160px; background: #fdfdfd; border: 2pt solid #3E2723; margin: 0 auto 15px auto; line-height: 160px; color: #3E2723; font-size: 8pt; opacity: 0.3;">SIN FOTO</div>
-                        {% endif %}
+                {% if not ocultar_foto %}
+                <div class="profile-container">
+                    {% if perfil.foto %}
+                        <!-- Nota: Para imágenes en PDF, xhtml2pdf necesita rutas locales o URLs accesibles sin auth -->
+                        <img src="{{ perfil.foto.url }}" class="profile-img">
+                    {% else %}
+                        <div class="profile-placeholder">SIN FOTO</div>
                     {% endif %}
                 </div>
-
-                <div class="sidebar-title">Identificación</div>
-                <div class="data-item">
-                    <span class="data-label">Cédula / ID</span>
-                    <span class="data-value">{{ perfil.cedula }}</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">Nacimiento</span>
-                    <span class="data-value">{{ perfil.fecha_nacimiento|date:"d/m/Y" }}</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">Estado Civil</span>
-                    <span class="data-value">{{ perfil.estado_civil }}</span>
-                </div>
-                {% if perfil.licencia %}
-                <div class="data-item">
-                    <span class="data-label">Licencia</span>
-                    <span class="data-value">{{ perfil.licencia }}</span>
-                </div>
                 {% endif %}
+
+                <div class="sidebar-title">Datos Personales</div>
+                <div class="data-row"><span class="data-label">Cédula / ID</span><span class="data-value">{{ perfil.cedula }}</span></div>
+                <div class="data-row"><span class="data-label">Nacimiento</span><span class="data-value">{{ perfil.fecha_nacimiento|date:"d/m/Y" }}</span></div>
+                <div class="data-row"><span class="data-label">Nacionalidad</span><span class="data-value">{{ perfil.nacionalidad }}</span></div>
+                {% if perfil.licencia %}<div class="data-row"><span class="data-label">Licencia</span><span class="data-value">{{ perfil.licencia }}</span></div>{% endif %}
 
                 {% if not ocultar_contacto %}
                 <div class="sidebar-title">Contacto</div>
-                <div class="data-item">
-                    <span class="data-label">Teléfono</span>
-                    <span class="data-value">{{ perfil.telefono }}</span>
-                </div>
-                <div class="data-item">
-                    <span class="data-label">Email</span>
-                    <span class="data-value" style="font-size: 8pt;">{{ perfil.email }}</span>
-                </div>
-                {% if perfil.sitio_web %}
-                <div class="data-item">
-                    <span class="data-label">Sitio Web</span>
-                    <span class="data-value">{{ perfil.sitio_web }}</span>
-                </div>
-                {% endif %}
+                <div class="data-row"><span class="data-label">Teléfono</span><span class="data-value">{{ perfil.telefono }}</span></div>
+                <div class="data-row"><span class="data-label">Email</span><span class="data-value">{{ perfil.email }}</span></div>
+                {% if perfil.direccion %}<div class="data-row"><span class="data-label">Dirección</span><span class="data-value">{{ perfil.direccion }}</span></div>{% endif %}
+                {% if perfil.sitio_web %}<div class="data-row"><span class="data-label">Web</span><span class="data-value">{{ perfil.sitio_web }}</span></div>{% endif %}
                 {% endif %}
 
-                {% if not ocultar_idiomas %}
-                {% if perfil.idiomas.exists %}
+                {% if not ocultar_idiomas and perfil.idiomas.exists %}
                 <div class="sidebar-title">Idiomas</div>
                 {% for idioma in perfil.idiomas.all %}
-                <div class="data-item">
-                    <span class="data-label">{{ idioma.nombre }}</span>
-                    <span class="data-value">{{ idioma.nivel }}</span>
-                </div>
+                <div class="data-row"><span class="data-label">{{ idioma.nombre }}</span><span class="data-value">{{ idioma.nivel }}</span></div>
                 {% endfor %}
-                {% endif %}
                 {% endif %}
 
                 {% if not ocultar_redes %}
-                <div class="sidebar-title">Redes Sociales</div>
-                {% if perfil.url_linkedin %}<div class="data-item"><span class="data-value">LinkedIn</span></div>{% endif %}
-                {% if perfil.url_github %}<div class="data-item"><span class="data-value">GitHub</span></div>{% endif %}
-                {% if perfil.url_instagram %}<div class="data-item"><span class="data-value">Instagram</span></div>{% endif %}
-                {% if perfil.url_youtube %}<div class="data-item"><span class="data-value">YouTube</span></div>{% endif %}
-                {% if perfil.url_tiktok %}<div class="data-item"><span class="data-value">TikTok</span></div>{% endif %}
+                <div class="sidebar-title">Enlaces</div>
+                {% if perfil.url_linkedin %}<div class="data-row"><span class="data-value">LinkedIn</span></div>{% endif %}
+                {% if perfil.url_github %}<div class="data-row"><span class="data-value">GitHub</span></div>{% endif %}
+                {% if perfil.url_instagram %}<div class="data-row"><span class="data-value">Instagram</span></div>{% endif %}
+                {% endif %}
+
+                {% if not ocultar_valores and perfil.valores_profesionales %}
+                <div class="sidebar-title">Valores</div>
+                <div style="text-align: left;">
+                    {% for valor in perfil.valores_profesionales.split %}
+                        <span class="tag">{{ valor|cut:"," }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if not ocultar_intereses and perfil.intereses %}
+                <div class="sidebar-title">Intereses</div>
+                <div class="data-row" style="font-style: italic;">{{ perfil.intereses }}</div>
                 {% endif %}
             </td>
 
             <!-- COLUMNA DERECHA -->
             <td class="content-cell">
-                <div class="name">{{ perfil.nombres }}<br>{{ perfil.apellidos }}</div>
-                <div class="job-title">Curriculum Vitae Profesional</div>
+                <div class="header-name">{{ perfil.nombres }}<br>{{ perfil.apellidos }}</div>
+                <div class="header-subtitle">CURRICULUM VITAE PROFESIONAL</div>
 
-                {% if not ocultar_perfil %}
-                {% if perfil.descripcion_perfil %}
+                {% if not ocultar_perfil and perfil.descripcion_perfil %}
                 <div class="section-title">Perfil Profesional</div>
-                <div class="job-desc">
-                    {{ perfil.descripcion_perfil }}
-                </div>
-                {% endif %}
+                <div class="job-desc" style="font-style: italic; border-left: 2pt solid #000; padding-left: 10px;">"{{ perfil.descripcion_perfil }}"</div>
                 {% endif %}
 
-                {% if not ocultar_intereses %}
-                {% if perfil.intereses %}
-                <div class="section-title">Intereses & Aptitudes</div>
-                <div class="job-desc" style="font-style: italic; opacity: 0.9;">
-                    {{ perfil.intereses }}
-                </div>
-                {% endif %}
-                {% endif %}
-
-                {% if not ocultar_experiencia %}
-                {% if experiencias %}
-                <div class="section-title">Trayectoria Laboral</div>
+                {% if not ocultar_experiencia and experiencias %}
+                <div class="section-title">Experiencia Laboral</div>
                 {% for exp in experiencias %}
-                <div style="margin-bottom: 12px;">
-                    <div class="job-header">{{ exp.cargo }}</div>
-                    <div class="job-sub">{{ exp.empresa }} | {{ exp.fecha_inicio|date:"M Y" }} - {% if exp.activo %}Actualidad{% else %}{{ exp.fecha_fin|date:"M Y" }}{% endif %}</div>
-                    <div class="job-desc">{{ exp.descripcion }}</div>
+                <div class="job-block">
+                    <div class="job-title">{{ exp.cargo }}</div>
+                    <div class="job-meta">{{ exp.empresa }} | {{ exp.fecha_inicio|date:"M Y" }} - {% if exp.activo %}Actualidad{% else %}{{ exp.fecha_fin|date:"M Y" }}{% endif %} {% if exp.modalidad %}({{ exp.get_modalidad_display }}){% endif %}</div>
+                    <div class="job-desc">{{ exp.descripcion|linebreaksbr }}</div>
                 </div>
                 {% endfor %}
                 {% endif %}
-                {% endif %}
 
-                {% if not ocultar_educacion %}
-                {% if estudios %}
+                {% if not ocultar_educacion and estudios %}
                 <div class="section-title">Formación Académica</div>
                 {% for est in estudios %}
-                <div style="margin-bottom: 8px;">
-                    <div class="job-header">{{ est.titulo }}</div>
-                    <div class="job-sub">{{ est.institucion }} | {{ est.fecha_fin|date:"Y" }}</div>
+                <div class="job-block">
+                    <div class="job-title">{{ est.titulo }}</div>
+                    <div class="job-meta">{{ est.institucion }} | Finalizado: {{ est.fecha_fin|date:"Y" }}</div>
                 </div>
                 {% endfor %}
                 {% endif %}
-                {% endif %}
 
-                {% if not ocultar_proyectos %}
-                {% if proyectos %}
+                {% if not ocultar_proyectos and proyectos %}
                 <div class="section-title">Proyectos Académicos</div>
                 {% for pro in proyectos %}
-                <div style="margin-bottom: 8px;">
-                    <div class="job-header">{{ pro.nombre }}</div>
-                    <div class="job-sub">{{ pro.fecha_publicacion|date:"Y" }}</div>
-                    {% if pro.descripcion %}
-                    <div class="job-desc">{{ pro.descripcion }}</div>
-                    {% endif %}
+                <div class="job-block">
+                    <div class="job-title">{{ pro.nombre }}</div>
+                    <div class="job-meta">Publicado: {{ pro.fecha_publicacion|date:"Y" }} {% if pro.registro_id %}| ID: {{ pro.registro_id }}{% endif %}</div>
+                    {% if pro.descripcion %}<div class="job-desc">{{ pro.descripcion }}</div>{% endif %}
                 </div>
                 {% endfor %}
                 {% endif %}
-                {% endif %}
 
-                {% if not ocultar_cursos %}
-                {% if cursos %}
-                <div class="section-title">Capacitaciones & Cursos</div>
+                {% if not ocultar_cursos and cursos %}
+                <div class="section-title">Cursos y Certificaciones</div>
                 {% for curso in cursos %}
                 <div style="margin-bottom: 8px;">
-                    <div class="job-header">{{ curso.nombre_curso }}</div>
-                    <div class="job-sub">{{ curso.institucion }} | {{ curso.fecha_realizacion|date:"Y" }} ({{ curso.horas }}h)</div>
+                    <span style="font-weight: bold;">{{ curso.nombre_curso }}</span><br>
+                    <span style="font-size: 9pt;">{{ curso.institucion }} - {{ curso.fecha_realizacion|date:"Y" }} ({{ curso.horas }}h)</span>
                 </div>
                 {% endfor %}
                 {% endif %}
-                {% endif %}
 
-                {% if not ocultar_reconocimientos %}
-                {% if reconocimientos %}
+                {% if not ocultar_reconocimientos and reconocimientos %}
                 <div class="section-title">Reconocimientos</div>
                 {% for rec in reconocimientos %}
-                <div style="margin-bottom: 8px;">
-                    <div class="job-header">{{ rec.nombre }}</div>
-                    <div class="job-sub">{{ rec.institucion }} | {{ rec.fecha_obtencion|date:"Y" }}</div>
+                <div style="margin-bottom: 6px;">
+                    <span style="font-weight: bold;">{{ rec.nombre }}</span> - {{ rec.institucion }} ({{ rec.fecha_obtencion|date:"Y" }})
                 </div>
                 {% endfor %}
                 {% endif %}
-                {% endif %}
 
-                {% if not ocultar_valores %}
-                {% if perfil.valores_profesionales %}
-                <div class="section-title">Valores Profesionales</div>
-                <div style="margin-bottom: 10px;">
-                    {% for valor in perfil.valores_profesionales.split %}
-                        <span class="tag-pill">{{ valor|cut:"," }}</span>
-                    {% endfor %}
+                {% if not ocultar_venta and productos %}
+                <div class="section-title">Catálogo / Venta</div>
+                {% for prod in productos %}
+                <div style="margin-bottom: 12px; page-break-inside: avoid;">
+                    <div style="font-size: 9pt;">
+                        <strong>{{ prod.nombre_producto }}</strong> ({{ prod.estado }})<br>
+                        <span style="font-size: 8pt; color: #444;">{{ prod.descripcion|truncatewords:20 }}</span>
+                    </div>
                 </div>
-                {% endif %}
+                {% endfor %}
                 {% endif %}
             </td>
         </tr>
     </table>
 
-    <div class="footer-simple">
-        {{ perfil.nombres }} {{ perfil.apellidos }} - Documento generado automáticamente - 2026
+    <!-- SECCIÓN DE ANEXOS / ADJUNTOS -->
+    <div style="page-break-before: always;"></div>
+    
+    <div class="appendix-header">Anexos: Documentación de Respaldo</div>
+    <div style="font-size: 9pt; color: #444; margin-bottom: 20px; text-align: center;">
+        A continuación se encuentran los enlaces directos a los documentos adjuntos.<br>
+        Haga clic en el enlace para visualizar o descargar el archivo original.
     </div>
+
+    <!-- Anexos de Educación -->
+    {% if not ocultar_educacion %}
+        {% for est in estudios %}
+            {% if est.certificado_pdf %}
+            <div class="appendix-item">
+                <span class="appendix-section-label">FORMACIÓN ACADÉMICA</span>
+                <div style="font-weight: bold;">{{ est.titulo }}</div>
+                <div style="font-size: 9pt; margin-bottom: 5px;">{{ est.institucion }}</div>
+                
+                <!-- Lógica de Enlace Absoluto -->
+                <div style="margin-top: 8px;">
+                    <a class="pdf-link" href="{% if 'http' in est.certificado_pdf.url %}{{ est.certificado_pdf.url }}{% else %}{{ base_url }}{{ est.certificado_pdf.url }}{% endif %}" target="_blank">
+                        VER DOCUMENTO ADJUNTO (PDF)
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <!-- Anexos de Proyectos -->
+    {% if not ocultar_proyectos %}
+        {% for pro in proyectos %}
+            {% if pro.archivo %}
+            <div class="appendix-item">
+                <span class="appendix-section-label">PROYECTO ACADÉMICO</span>
+                <div style="font-weight: bold;">{{ pro.nombre }}</div>
+                <div style="font-size: 9pt; margin-bottom: 5px;">ID Registro: {{ pro.registro_id|default:"N/A" }}</div>
+                
+                <!-- Lógica de Enlace Absoluto -->
+                <div style="margin-top: 8px;">
+                    <a class="pdf-link" href="{% if 'http' in pro.archivo.url %}{{ pro.archivo.url }}{% else %}{{ base_url }}{{ pro.archivo.url }}{% endif %}" target="_blank">
+                        VER DOCUMENTO DEL PROYECTO (PDF)
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 
 </body>
 </html>

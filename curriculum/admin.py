@@ -5,7 +5,7 @@ from .models import (
     CursoCapacitacion, Reconocimiento, VentaGarage, Idioma
 )
 
-# --- GESTIÓN DE IDIOMAS (Como Inline dentro de Datos Personales) ---
+# --- GESTIÓN DE IDIOMAS (Inline) ---
 class IdiomaInline(admin.TabularInline):
     model = Idioma
     extra = 1
@@ -15,38 +15,15 @@ class DatosPersonalesAdmin(admin.ModelAdmin):
     list_display = ('nombres', 'apellidos', 'cedula', 'email', 'mostrar_seccion')
     list_editable = ('mostrar_seccion',)
     inlines = [IdiomaInline]
-    
-    # Organizamos los campos por secciones para optimizar el espacio y mejorar la navegación
     fieldsets = (
         ('Identidad Básica', {
-            'fields': (
-                ('cedula', 'sexo'), 
-                ('nombres', 'apellidos'), 
-                ('estado_civil', 'nacionalidad'), 
-                'lugar_nacimiento', 
-                'fecha_nacimiento', 
-                'foto'
-            )
+            'fields': (('cedula', 'sexo'), ('nombres', 'apellidos'), ('estado_civil', 'nacionalidad'), 'lugar_nacimiento', 'fecha_nacimiento', 'foto')
         }),
         ('Contacto y Ubicación', {
-            'fields': (
-                ('telefono', 'telefono_convencional'), 
-                'email', 
-                'sitio_web', 
-                'direccion', 
-                'direccion_trabajo', 
-                'licencia'
-            )
+            'fields': (('telefono', 'telefono_convencional'), 'email', 'sitio_web', 'direccion', 'direccion_trabajo', 'licencia')
         }),
         ('Perfil y Redes Sociales', {
-            'fields': (
-                'descripcion_perfil',
-                'intereses', 
-                'valores_profesionales', 
-                ('url_linkedin', 'url_github'), 
-                ('url_instagram', 'url_youtube', 'url_tiktok'), 
-                'mostrar_seccion'
-            )
+            'fields': ('descripcion_perfil', 'intereses', 'valores_profesionales', ('url_linkedin', 'url_github'), ('url_instagram', 'url_youtube', 'url_tiktok'), 'mostrar_seccion')
         }),
     )
 
@@ -58,9 +35,9 @@ class IdiomaAdmin(admin.ModelAdmin):
 
 @admin.register(ExperienciaLaboral)
 class ExperienciaLaboralAdmin(admin.ModelAdmin):
-    list_display = ('cargo', 'empresa', 'fecha_inicio', 'activo')
-    list_editable = ('activo',)
-    list_filter = ('activo', 'empresa')
+    list_display = ('cargo', 'empresa', 'modalidad', 'fecha_inicio', 'activo')
+    list_editable = ('activo', 'modalidad')
+    list_filter = ('modalidad', 'activo', 'empresa')
     search_fields = ('cargo', 'empresa', 'descripcion')
 
 @admin.register(EstudioRealizado)
@@ -100,15 +77,6 @@ class VentaGarageAdmin(admin.ModelAdmin):
 
 @admin.register(ConfiguracionPagina)
 class ConfiguracionPaginaAdmin(admin.ModelAdmin):
-    list_display = (
-        '__str__', 
-        'mostrar_inicio', 
-        'mostrar_perfil', 
-        'mostrar_experiencia', 
-        'mostrar_educacion',
-        'mostrar_contacto'
-    )
-    
+    list_display = ('__str__', 'mostrar_inicio', 'mostrar_perfil', 'mostrar_experiencia', 'mostrar_educacion', 'mostrar_contacto')
     def has_add_permission(self, request):
-        # Evita crear más de una instancia de configuración global
         return not ConfiguracionPagina.objects.exists()
