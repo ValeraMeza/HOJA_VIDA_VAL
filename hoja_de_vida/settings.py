@@ -86,10 +86,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'curriculum', 'static'),
 ]
 
-# CORRECCIÓN PARA RENDER (ERROR MissingFileError):
-# Cambiamos a 'CompressedStaticFilesStorage'. 
-# La versión anterior ('Manifest') es demasiado estricta y falla si los CSS internos de Django tienen referencias rotas.
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# CORRECCIÓN DEFINITIVA PARA RENDER:
+# Usamos el almacenamiento estándar de Django. 
+# Esto evita que Whitenoise intente comprimir archivos (lo que está causando el FileNotFoundError)
+# y permite que el build termine exitosamente. El middleware de Whitenoise seguirá sirviendo los archivos.
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
@@ -108,8 +109,8 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage" if CLOUDINARY_STORAGE.get('CLOUD_NAME') else "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        # Actualizamos también aquí para coincidir con la configuración de arriba
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        # Backend estándar (sin compresión estricta) para asegurar el deploy
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
