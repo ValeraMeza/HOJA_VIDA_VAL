@@ -5,22 +5,13 @@ from .models import (
     CursoCapacitacion, Reconocimiento, VentaGarage, Idioma
 )
 
-class BaseAdmin(admin.ModelAdmin):
-    """
-    Clase base para centralizar la inyección de estilos CSS y configuraciones comunes.
-    """
-    class Media:
-        css = {
-            'all': ('curriculum/admin_custom.css',)
-        }
-
 # --- GESTIÓN DE IDIOMAS (Como Inline dentro de Datos Personales) ---
 class IdiomaInline(admin.TabularInline):
     model = Idioma
     extra = 1
 
 @admin.register(DatosPersonales)
-class DatosPersonalesAdmin(BaseAdmin):
+class DatosPersonalesAdmin(admin.ModelAdmin):
     list_display = ('nombres', 'apellidos', 'cedula', 'email', 'mostrar_seccion')
     list_editable = ('mostrar_seccion',)
     inlines = [IdiomaInline]
@@ -49,7 +40,7 @@ class DatosPersonalesAdmin(BaseAdmin):
         }),
         ('Perfil y Redes Sociales', {
             'fields': (
-                'descripcion_perfil',  # <-- ¡AQUÍ FALTABA ESTE CAMPO!
+                'descripcion_perfil',
                 'intereses', 
                 'valores_profesionales', 
                 ('url_linkedin', 'url_github'), 
@@ -60,27 +51,26 @@ class DatosPersonalesAdmin(BaseAdmin):
     )
 
 @admin.register(Idioma)
-class IdiomaAdmin(BaseAdmin):
+class IdiomaAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'nivel', 'perfil')
-    # Añadimos filtros por nombre y nivel para mejorar la tabla de idiomas
     list_filter = ('nombre', 'nivel')
     search_fields = ('nombre', 'perfil__nombres', 'perfil__apellidos')
 
 @admin.register(ExperienciaLaboral)
-class ExperienciaLaboralAdmin(BaseAdmin):
+class ExperienciaLaboralAdmin(admin.ModelAdmin):
     list_display = ('cargo', 'empresa', 'fecha_inicio', 'activo')
     list_editable = ('activo',)
     list_filter = ('activo', 'empresa')
     search_fields = ('cargo', 'empresa', 'descripcion')
 
 @admin.register(EstudioRealizado)
-class EstudioRealizadoAdmin(BaseAdmin):
+class EstudioRealizadoAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'institucion', 'fecha_fin', 'activo')
     list_editable = ('activo',)
     list_filter = ('activo',)
 
 @admin.register(ProductoAcademico)
-class ProductoAcademicoAdmin(BaseAdmin):
+class ProductoAcademicoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'registro_id', 'fecha_publicacion', 'activo')
     list_filter = ('categorias', 'activo')
     filter_horizontal = ('categorias',)
@@ -88,28 +78,28 @@ class ProductoAcademicoAdmin(BaseAdmin):
     search_fields = ('nombre', 'descripcion')
 
 @admin.register(CategoriaTag)
-class CategoriaTagAdmin(BaseAdmin):
+class CategoriaTagAdmin(admin.ModelAdmin):
     search_fields = ('nombre',)
 
 @admin.register(CursoCapacitacion)
-class CursoCapacitacionAdmin(BaseAdmin):
+class CursoCapacitacionAdmin(admin.ModelAdmin):
     list_display = ('nombre_curso', 'institucion', 'fecha_realizacion', 'activo')
     list_editable = ('activo',)
 
 @admin.register(Reconocimiento)
-class ReconocimientoAdmin(BaseAdmin):
+class ReconocimientoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'institucion', 'fecha_obtencion', 'activo')
     list_editable = ('activo',)
 
 @admin.register(VentaGarage)
-class VentaGarageAdmin(BaseAdmin):
+class VentaGarageAdmin(admin.ModelAdmin):
     list_display = ('nombre_producto', 'precio', 'estado', 'stock', 'activo')
     list_filter = ('estado', 'activo')
     list_editable = ('activo', 'stock')
     search_fields = ('nombre_producto',)
 
 @admin.register(ConfiguracionPagina)
-class ConfiguracionPaginaAdmin(BaseAdmin):
+class ConfiguracionPaginaAdmin(admin.ModelAdmin):
     list_display = (
         '__str__', 
         'mostrar_inicio', 

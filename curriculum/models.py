@@ -120,17 +120,30 @@ class Idioma(models.Model):
         return f"{self.nombre} - {self.nivel}"
     
 class ExperienciaLaboral(models.Model):
+    """Registro de trayectoria profesional con modalidad de trabajo."""
+    class Modalidad(models.TextChoices):
+        PRESENCIAL = 'PRE', 'Presencial'
+        REMOTO = 'REM', 'Remoto'
+        HIBRIDO = 'HIB', 'Híbrido / Mixto'
+
     cargo = models.CharField(max_length=150)
     empresa = models.CharField(max_length=150)
     fecha_inicio = models.DateField(validators=[validar_no_futuro])
     fecha_fin = models.DateField(null=True, blank=True, help_text="Vacío si es Actual", validators=[validar_no_futuro])
     descripcion = models.TextField()
     activo = models.BooleanField(default=True)
-
+    modalidad = models.CharField(
+        max_length=3,
+        choices=Modalidad.choices,
+        default=Modalidad.PRESENCIAL,
+        verbose_name="Modalidad de trabajo",
+        help_text="Selecciona si el trabajo fue presencial, remoto o mixto."
+    )
+    
     class Meta:
         verbose_name = "Experiencia Laboral"
         verbose_name_plural = "2. Trayectoria Profesional"
-        ordering = ['fecha_inicio'] 
+        ordering = ['-fecha_inicio'] 
 
     def clean(self):
         if self.fecha_fin and self.fecha_inicio > self.fecha_fin:
@@ -140,6 +153,7 @@ class ExperienciaLaboral(models.Model):
         return f"{self.cargo} - {self.empresa}"
 
 class EstudioRealizado(models.Model):
+    """Títulos y grados académicos obtenidos."""
     titulo = models.CharField(max_length=200)
     institucion = models.CharField(max_length=200)
     fecha_inicio = models.DateField(validators=[validar_no_futuro])
@@ -160,6 +174,7 @@ class EstudioRealizado(models.Model):
         return self.titulo
 
 class ProductoAcademico(models.Model):
+    """Publicaciones, proyectos o registros de propiedad intelectual."""
     nombre = models.CharField(max_length=200, verbose_name="Nombre del Producto")
     descripcion = models.TextField(verbose_name="Descripción Detallada")
     registro_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="ID / Registro de Propiedad")
@@ -181,6 +196,7 @@ class ProductoAcademico(models.Model):
         return f"{self.nombre} ({self.registro_id or 'S/N'})"
     
 class CursoCapacitacion(models.Model):
+    """Cursos de corta duración y talleres realizados."""
     nombre_curso = models.CharField(max_length=200)
     institucion = models.CharField(max_length=200)
     fecha_realizacion = models.DateField(validators=[validar_no_futuro], null=True)
@@ -195,6 +211,7 @@ class CursoCapacitacion(models.Model):
         return self.nombre_curso
 
 class Reconocimiento(models.Model):
+    """Premios, becas o menciones honoríficas."""
     nombre = models.CharField(max_length=200)
     institucion = models.CharField(max_length=200)
     fecha_obtencion = models.DateField(validators=[validar_no_futuro], null=True)
@@ -203,12 +220,13 @@ class Reconocimiento(models.Model):
 
     class Meta:
         verbose_name_plural = "6. Reconocimientos y Premios"
-        ordering = ['fecha_obtencion']
+        ordering = ['-fecha_obtencion']
 
     def __str__(self):
         return self.nombre
 
 class VentaGarage(models.Model):
+    """Artículos disponibles para la venta en la sección de garage."""
     ESTADO_CHOICES = [
         ('Nuevo', 'Nuevo'),
         ('Bueno', 'Bueno'),
@@ -231,6 +249,7 @@ class VentaGarage(models.Model):
         return self.nombre_producto
 
 class ConfiguracionPagina(models.Model):
+    """Ajustes globales para ocultar o mostrar secciones en la página web."""
     mostrar_inicio = models.BooleanField(default=True, verbose_name="Mostrar Inicio")
     mostrar_perfil = models.BooleanField(default=True, verbose_name="Mostrar Perfil (Datos Personales)")
     mostrar_experiencia = models.BooleanField(default=True, verbose_name="Mostrar Experiencia")

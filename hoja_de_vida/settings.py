@@ -2,20 +2,24 @@ import os
 import dj_database_url
 from pathlib import Path
 
+# Directorio base del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Seguridad
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-rvzge8n4%jfd6zyasjatj0)u4$(lm3-kfi4s&m9)e!=o@vv8*&')
+# --- SEGURIDAD ---
+# Cambiamos DEBUG a True para que puedas ver la descripción exacta del error en el navegador
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# Render Hostnames
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-rvzge8n4%jfd6zyasjatj0)u4$(lm3-kfi4s&m9)e!=o@vv8*&')
+
+# Configuración de Hosts permitidos
 ALLOWED_HOSTS = ['*']
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-# Aplicaciones
+# --- APLICACIONES ---
 INSTALLED_APPS = [
+    'cloudinary_storage',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -23,11 +27,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic', 
     'django.contrib.staticfiles',
-    'cloudinary_storage',
     'cloudinary',
-    'curriculum', # Tu app actual
+    'curriculum',
 ]
 
+# --- MIDDLEWARE ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -36,15 +40,20 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware', # NOMBRE CORRECTO
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'hoja_de_vida.urls'
 
+# --- TEMPLATES ---
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            # Ruta absoluta a la carpeta de templates de tu app
+            os.path.join(BASE_DIR/ 'curriculum' / 'templates' / 'curriculum'),
+            os.path.join(BASE_DIR, 'templates'),
+        ], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -53,6 +62,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                # NOTA: Si este archivo no existe, comentamos la línea para evitar el Error 500
+                # 'curriculum.context_processors.visibilidad_context',
             ],
         },
     },
@@ -60,7 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hoja_de_vida.wsgi.application'
 
-# Base de Datos (Postgres en Render)
+# --- BASE DE DATOS ---
 DATABASES = {
     'default': dj_database_url.config(
         default='sqlite:///db.sqlite3',
@@ -68,13 +79,13 @@ DATABASES = {
     )
 }
 
-# Estáticos y Media
+# --- ARCHIVOS ESTÁTICOS Y MEDIA ---
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# Si tienes una carpeta global de static, descomenta la siguiente línea:
-# STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'curriculum', 'static'),
+]
 
-# Cloudinary
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
@@ -85,18 +96,18 @@ if CLOUDINARY_STORAGE['CLOUD_NAME']:
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 else:
     MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STORAGES = {
     "default": {
-        "BACKEND": DEFAULT_FILE_STORAGE if 'DEFAULT_FILE_STORAGE' in locals() else "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage" if CLOUDINARY_STORAGE.get('CLOUD_NAME') else "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
-# Regionalización (Ecuador)
+# --- REGIONALIZACIÓN ---
 LANGUAGE_CODE = 'es-ec'
 TIME_ZONE = 'America/Guayaquil'
 USE_I18N = True
