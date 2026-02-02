@@ -143,7 +143,8 @@ class ExperienciaLaboral(models.Model):
     class Meta:
         verbose_name = "Experiencia Laboral"
         verbose_name_plural = "2. Trayectoria Profesional"
-        ordering = ['-fecha_inicio'] 
+        # CORRECCIÓN: Quitamos el '-' para orden Ascendente (Antiguos primero)
+        ordering = ['fecha_inicio'] 
 
     def clean(self):
         if self.fecha_fin and self.fecha_inicio > self.fecha_fin:
@@ -164,7 +165,8 @@ class EstudioRealizado(models.Model):
     class Meta:
         verbose_name = "Título Académico"
         verbose_name_plural = "3. Formación Académica"
-        ordering = ['-fecha_fin']
+        # CORRECCIÓN: Orden ascendente por fecha de graduación
+        ordering = ['fecha_fin']
 
     def clean(self):
         if self.fecha_inicio > self.fecha_fin:
@@ -190,7 +192,8 @@ class ProductoAcademico(models.Model):
     class Meta:
         verbose_name = "Producto Académico"
         verbose_name_plural = "4. Producción Intelectual"
-        ordering = ['-fecha_publicacion']
+        # CORRECCIÓN: Orden ascendente por fecha publicación
+        ordering = ['fecha_publicacion']
 
     def __str__(self):
         return f"{self.nombre} ({self.registro_id or 'S/N'})"
@@ -201,13 +204,13 @@ class CursoCapacitacion(models.Model):
     institucion = models.CharField(max_length=200)
     fecha_realizacion = models.DateField(validators=[validar_no_futuro], null=True)
     horas = models.PositiveIntegerField()
-    # CAMBIO: Agregamos el campo para subir el PDF
     certificado_pdf = models.FileField(upload_to='cursos/', null=True, blank=True, verbose_name="Certificado (PDF)")
     activo = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "5. Cursos y Certificaciones"
-        ordering = ['-fecha_realizacion']
+        # CORRECCIÓN: Orden ascendente por fecha realización
+        ordering = ['fecha_realizacion']
 
     def __str__(self):
         return self.nombre_curso
@@ -222,7 +225,8 @@ class Reconocimiento(models.Model):
 
     class Meta:
         verbose_name_plural = "6. Reconocimientos y Premios"
-        ordering = ['-fecha_obtencion']
+        # CORRECCIÓN: Orden ascendente
+        ordering = ['fecha_obtencion']
 
     def __str__(self):
         return self.nombre
@@ -245,7 +249,8 @@ class VentaGarage(models.Model):
 
     class Meta:
         verbose_name_plural = "7. Venta de Garage"
-        ordering = ['-fecha_publicacion']
+        # CORRECCIÓN: Orden ascendente (lo publicado primero sale primero)
+        ordering = ['fecha_publicacion']
 
     def __str__(self):
         return self.nombre_producto
