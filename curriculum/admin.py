@@ -38,7 +38,20 @@ class ExperienciaLaboralAdmin(admin.ModelAdmin):
     list_display = ('cargo', 'empresa', 'modalidad', 'fecha_inicio', 'activo')
     list_editable = ('activo', 'modalidad')
     list_filter = ('modalidad', 'activo', 'empresa')
-    search_fields = ('cargo', 'empresa', 'descripcion')
+    search_fields = ('cargo', 'empresa', 'descripcion', 'nombre_contacto')
+    
+    # AGREGADO: Sección de Referencias en el formulario
+    fieldsets = (
+        ('Información del Puesto', {
+            'fields': (('cargo', 'empresa'), 'modalidad', 'descripcion')
+        }),
+        ('Periodo y Estado', {
+            'fields': (('fecha_inicio', 'fecha_fin'), 'activo')
+        }),
+        ('Referencias y Verificación', {
+            'fields': (('nombre_contacto', 'telefono_contacto'),)
+        }),
+    )
 
 @admin.register(EstudioRealizado)
 class EstudioRealizadoAdmin(admin.ModelAdmin):

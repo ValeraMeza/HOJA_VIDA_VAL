@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title>CV - {{ perfil.nombres }}</title>
     <style>
+        /* CONFIGURACIÓN DE PÁGINA */
         @page {
             size: a4;
-            margin: 1cm;
+            margin: 1cm; /* Márgenes un poco más ajustados para aprovechar espacio */
             @frame footer_frame {
                 -pdf-frame-content: footerContent;
                 bottom: 0.5cm;
@@ -24,32 +25,123 @@
             background-color: #ffffff;
         }
 
-        .main-table { width: 100%; border-collapse: collapse; }
-        .sidebar-cell { width: 30%; vertical-align: top; padding-right: 15px; border-right: 1pt solid #444; }
-        .content-cell { width: 70%; vertical-align: top; padding-left: 20px; }
+        /* ESTRUCTURA PRINCIPAL (TABLA DOS COLUMNAS) */
+        .main-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-        .profile-container { text-align: center; margin-bottom: 20px; }
-        .profile-img { width: 130px; height: 160px; object-fit: cover; border: 1pt solid #000; }
-        .profile-placeholder { width: 130px; height: 160px; background: #f0f0f0; border: 1pt solid #000; margin: 0 auto; line-height: 160px; color: #666; font-size: 8pt; }
+        /* BARRA LATERAL (IZQUIERDA) */
+        .sidebar-cell {
+            width: 30%; /* Ancho fijo para la barra lateral */
+            vertical-align: top;
+            padding-right: 15px;
+            border-right: 1pt solid #444444; /* Línea divisoria oscura */
+        }
 
-        .sidebar-title { font-size: 10pt; font-weight: bold; text-transform: uppercase; color: #000; border-bottom: 1pt solid #000; margin-top: 20px; margin-bottom: 8px; padding-bottom: 2px; letter-spacing: 1px; }
-        .section-title { font-size: 12pt; font-weight: bold; text-transform: uppercase; color: #000; border-bottom: 1.5pt solid #000; margin-bottom: 12px; margin-top: 20px; padding-bottom: 3px; letter-spacing: 1px; }
-        
-        .header-name { font-size: 26pt; font-weight: bold; text-transform: uppercase; color: #000; line-height: 0.9; margin-bottom: 5px; }
-        .header-subtitle { font-size: 10pt; text-transform: uppercase; letter-spacing: 3px; color: #444; margin-bottom: 25px; }
+        /* CONTENIDO PRINCIPAL (DERECHA) */
+        .content-cell {
+            width: 70%;
+            vertical-align: top;
+            padding-left: 20px;
+        }
 
+        /* --- ESTILOS VISUALES --- */
+
+        /* FOTO */
+        .profile-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-img {
+            width: 130px;
+            height: 160px;
+            object-fit: cover;
+            border: 1pt solid #000;
+        }
+        .profile-placeholder {
+            width: 130px; 
+            height: 160px; 
+            background: #f0f0f0; 
+            border: 1pt solid #000; 
+            margin: 0 auto; 
+            line-height: 160px; 
+            color: #666; 
+            font-size: 8pt;
+        }
+
+        /* TÍTULOS DE SECCIÓN */
+        .sidebar-title {
+            font-size: 10pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #000000;
+            border-bottom: 1pt solid #000000;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            padding-bottom: 2px;
+            letter-spacing: 1px;
+        }
+
+        .section-title {
+            font-size: 12pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #000000;
+            border-bottom: 1.5pt solid #000000;
+            margin-bottom: 12px;
+            margin-top: 20px;
+            padding-bottom: 3px;
+            letter-spacing: 1px;
+        }
+
+        /* ENCABEZADO NOMBRE */
+        .header-name {
+            font-size: 26pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #000000;
+            line-height: 0.9;
+            margin-bottom: 5px;
+        }
+        .header-subtitle {
+            font-size: 10pt;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #444444;
+            margin-bottom: 25px;
+        }
+
+        /* ITEMS DE DATOS (Sidebar) */
         .data-row { margin-bottom: 8px; font-size: 9pt; }
-        .data-label { display: block; font-weight: bold; font-size: 7.5pt; text-transform: uppercase; color: #555; }
+        .data-label {
+            display: block;
+            font-weight: bold;
+            font-size: 7.5pt;
+            text-transform: uppercase;
+            color: #555;
+        }
         .data-value { display: block; word-wrap: break-word; }
 
+        /* ITEMS DE CONTENIDO (Main) */
         .job-block { margin-bottom: 15px; page-break-inside: avoid; }
         .job-title { font-weight: bold; font-size: 11pt; }
         .job-meta { font-size: 9pt; font-style: italic; color: #333; margin-bottom: 4px; }
         .job-desc { text-align: justify; font-size: 9.5pt; color: #222; }
+        .job-ref { font-size: 8.5pt; color: #555; margin-top: 4px; font-style: italic; }
 
-        .tag { display: inline-block; border: 0.5pt solid #666; padding: 2px 6px; margin: 0 2px 2px 0; font-size: 8pt; border-radius: 3px; background-color: #f9f9f9; }
+        /* TAGS (Para Skills/Valores) */
+        .tag {
+            display: inline-block;
+            border: 0.5pt solid #666;
+            padding: 2px 6px;
+            margin: 0 2px 2px 0;
+            font-size: 8pt;
+            border-radius: 3px;
+            background-color: #f9f9f9;
+        }
 
-        /* ESTILO PARA ANEXOS SIMPLE Y ROBUSTO */
+        /* ESTILO PARA ANEXOS */
         .appendix-header {
             font-size: 14pt;
             font-weight: bold;
@@ -60,7 +152,7 @@
             padding-bottom: 10px;
         }
         .appendix-item {
-            border: 1pt solid #666;
+            border: 1pt solid #ccc;
             padding: 10px;
             margin-bottom: 10px;
             background-color: #fcfcfc;
@@ -74,7 +166,17 @@
             margin-bottom: 5px;
             display: block;
         }
-        /* Enlace simple, sin estructuras complejas que rompan xhtml2pdf */
+        .appendix-link {
+            display: block;
+            text-align: center;
+            background-color: #eee;
+            color: #000;
+            text-decoration: none;
+            padding: 8px;
+            margin-top: 5px;
+            font-weight: bold;
+            border: 1pt solid #999;
+        }
         .pdf-link {
             color: #0000EE;
             text-decoration: underline;
@@ -87,12 +189,13 @@
 
     <table class="main-table">
         <tr>
-            <!-- COLUMNA IZQUIERDA -->
+            <!-- ================= COLUMNA IZQUIERDA (SIDEBAR) ================= -->
             <td class="sidebar-cell">
+                
+                <!-- 1. FOTO -->
                 {% if not ocultar_foto %}
                 <div class="profile-container">
                     {% if perfil.foto %}
-                        <!-- Nota: Para imágenes en PDF, xhtml2pdf necesita rutas locales o URLs accesibles sin auth -->
                         <img src="{{ perfil.foto.url }}" class="profile-img">
                     {% else %}
                         <div class="profile-placeholder">SIN FOTO</div>
@@ -100,27 +203,64 @@
                 </div>
                 {% endif %}
 
+                <!-- 2. IDENTIFICACIÓN -->
                 <div class="sidebar-title">Datos Personales</div>
-                <div class="data-row"><span class="data-label">Cédula / ID</span><span class="data-value">{{ perfil.cedula }}</span></div>
-                <div class="data-row"><span class="data-label">Nacimiento</span><span class="data-value">{{ perfil.fecha_nacimiento|date:"d/m/Y" }}</span></div>
-                <div class="data-row"><span class="data-label">Nacionalidad</span><span class="data-value">{{ perfil.nacionalidad }}</span></div>
-                {% if perfil.licencia %}<div class="data-row"><span class="data-label">Licencia</span><span class="data-value">{{ perfil.licencia }}</span></div>{% endif %}
-
-                {% if not ocultar_contacto %}
-                <div class="sidebar-title">Contacto</div>
-                <div class="data-row"><span class="data-label">Teléfono</span><span class="data-value">{{ perfil.telefono }}</span></div>
-                <div class="data-row"><span class="data-label">Email</span><span class="data-value">{{ perfil.email }}</span></div>
-                {% if perfil.direccion %}<div class="data-row"><span class="data-label">Dirección</span><span class="data-value">{{ perfil.direccion }}</span></div>{% endif %}
-                {% if perfil.sitio_web %}<div class="data-row"><span class="data-label">Web</span><span class="data-value">{{ perfil.sitio_web }}</span></div>{% endif %}
+                <div class="data-row">
+                    <span class="data-label">Cédula / ID</span>
+                    <span class="data-value">{{ perfil.cedula }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Nacimiento</span>
+                    <span class="data-value">{{ perfil.fecha_nacimiento|date:"d/m/Y" }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Nacionalidad</span>
+                    <span class="data-value">{{ perfil.nacionalidad }}</span>
+                </div>
+                {% if perfil.licencia %}
+                <div class="data-row">
+                    <span class="data-label">Licencia</span>
+                    <span class="data-value">{{ perfil.licencia }}</span>
+                </div>
                 {% endif %}
 
+                <!-- 3. CONTACTO -->
+                {% if not ocultar_contacto %}
+                <div class="sidebar-title">Contacto</div>
+                <div class="data-row">
+                    <span class="data-label">Teléfono</span>
+                    <span class="data-value">{{ perfil.telefono }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Email</span>
+                    <span class="data-value">{{ perfil.email }}</span>
+                </div>
+                {% if perfil.direccion %}
+                <div class="data-row">
+                    <span class="data-label">Dirección</span>
+                    <span class="data-value">{{ perfil.direccion }}</span>
+                </div>
+                {% endif %}
+                {% if perfil.sitio_web %}
+                <div class="data-row">
+                    <span class="data-label">Web</span>
+                    <span class="data-value">{{ perfil.sitio_web }}</span>
+                </div>
+                {% endif %}
+                {% endif %}
+
+                <!-- 4. IDIOMAS -->
                 {% if not ocultar_idiomas and perfil.idiomas.exists %}
                 <div class="sidebar-title">Idiomas</div>
                 {% for idioma in perfil.idiomas.all %}
-                <div class="data-row"><span class="data-label">{{ idioma.nombre }}</span><span class="data-value">{{ idioma.nivel }}</span></div>
+                <div class="data-row">
+                    <span class="data-label">{{ idioma.nombre }}</span>
+                    <span class="data-value">{{ idioma.nivel }}</span>
+                </div>
                 {% endfor %}
                 {% endif %}
 
+                <!-- 5. REDES SOCIALES -->
                 {% if not ocultar_redes %}
                 <div class="sidebar-title">Enlaces</div>
                 {% if perfil.url_linkedin %}<div class="data-row"><span class="data-value">LinkedIn</span></div>{% endif %}
@@ -128,6 +268,7 @@
                 {% if perfil.url_instagram %}<div class="data-row"><span class="data-value">Instagram</span></div>{% endif %}
                 {% endif %}
 
+                <!-- 6. VALORES / APTITUDES (SIDEBAR) -->
                 {% if not ocultar_valores and perfil.valores_profesionales %}
                 <div class="sidebar-title">Valores</div>
                 <div style="text-align: left;">
@@ -137,33 +278,54 @@
                 </div>
                 {% endif %}
                 
+                <!-- 7. INTERESES (SIDEBAR) -->
                 {% if not ocultar_intereses and perfil.intereses %}
                 <div class="sidebar-title">Intereses</div>
-                <div class="data-row" style="font-style: italic;">{{ perfil.intereses }}</div>
+                <div class="data-row" style="font-style: italic;">
+                    {{ perfil.intereses }}
+                </div>
                 {% endif %}
             </td>
 
-            <!-- COLUMNA DERECHA -->
+            <!-- ================= COLUMNA DERECHA (CONTENIDO) ================= -->
             <td class="content-cell">
+                
+                <!-- ENCABEZADO -->
                 <div class="header-name">{{ perfil.nombres }}<br>{{ perfil.apellidos }}</div>
                 <div class="header-subtitle">CURRICULUM VITAE PROFESIONAL</div>
 
+                <!-- 8. PERFIL PROFESIONAL -->
                 {% if not ocultar_perfil and perfil.descripcion_perfil %}
                 <div class="section-title">Perfil Profesional</div>
-                <div class="job-desc" style="font-style: italic; border-left: 2pt solid #000; padding-left: 10px;">"{{ perfil.descripcion_perfil }}"</div>
+                <div class="job-desc" style="font-style: italic; border-left: 2pt solid #000; padding-left: 10px;">
+                    "{{ perfil.descripcion_perfil }}"
+                </div>
                 {% endif %}
 
+                <!-- 9. EXPERIENCIA LABORAL -->
                 {% if not ocultar_experiencia and experiencias %}
                 <div class="section-title">Experiencia Laboral</div>
                 {% for exp in experiencias %}
                 <div class="job-block">
                     <div class="job-title">{{ exp.cargo }}</div>
-                    <div class="job-meta">{{ exp.empresa }} | {{ exp.fecha_inicio|date:"M Y" }} - {% if exp.activo %}Actualidad{% else %}{{ exp.fecha_fin|date:"M Y" }}{% endif %} {% if exp.modalidad %}({{ exp.get_modalidad_display }}){% endif %}</div>
+                    <div class="job-meta">
+                        {{ exp.empresa }} | 
+                        {{ exp.fecha_inicio|date:"M Y" }} - {% if exp.activo %}Actualidad{% else %}{{ exp.fecha_fin|date:"M Y" }}{% endif %}
+                        {% if exp.modalidad %}({{ exp.get_modalidad_display }}){% endif %}
+                    </div>
                     <div class="job-desc">{{ exp.descripcion|linebreaksbr }}</div>
+                    <!-- REFERENCIA EN PDF -->
+                    {% if exp.nombre_contacto or exp.telefono_contacto %}
+                    <div class="job-ref">
+                        Ref: {{ exp.nombre_contacto|default:"RRHH" }} 
+                        {% if exp.telefono_contacto %} - Tel: {{ exp.telefono_contacto }}{% endif %}
+                    </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
                 {% endif %}
 
+                <!-- 10. FORMACIÓN ACADÉMICA -->
                 {% if not ocultar_educacion and estudios %}
                 <div class="section-title">Formación Académica</div>
                 {% for est in estudios %}
@@ -174,27 +336,33 @@
                 {% endfor %}
                 {% endif %}
 
+                <!-- 11. PROYECTOS -->
                 {% if not ocultar_proyectos and proyectos %}
                 <div class="section-title">Proyectos Académicos</div>
                 {% for pro in proyectos %}
                 <div class="job-block">
                     <div class="job-title">{{ pro.nombre }}</div>
                     <div class="job-meta">Publicado: {{ pro.fecha_publicacion|date:"Y" }} {% if pro.registro_id %}| ID: {{ pro.registro_id }}{% endif %}</div>
-                    {% if pro.descripcion %}<div class="job-desc">{{ pro.descripcion }}</div>{% endif %}
+                    {% if pro.descripcion %}
+                    <div class="job-desc">{{ pro.descripcion }}</div>
+                    {% endif %}
                 </div>
                 {% endfor %}
                 {% endif %}
 
+                <!-- 12. CURSOS -->
                 {% if not ocultar_cursos and cursos %}
                 <div class="section-title">Cursos y Certificaciones</div>
                 {% for curso in cursos %}
                 <div style="margin-bottom: 8px;">
-                    <span style="font-weight: bold;">{{ curso.nombre_curso }}</span><br>
+                    <span style="font-weight: bold;">{{ curso.nombre_curso }}</span>
+                    <br>
                     <span style="font-size: 9pt;">{{ curso.institucion }} - {{ curso.fecha_realizacion|date:"Y" }} ({{ curso.horas }}h)</span>
                 </div>
                 {% endfor %}
                 {% endif %}
 
+                <!-- 13. LOGROS -->
                 {% if not ocultar_reconocimientos and reconocimientos %}
                 <div class="section-title">Reconocimientos</div>
                 {% for rec in reconocimientos %}
@@ -204,28 +372,27 @@
                 {% endfor %}
                 {% endif %}
 
+                <!-- 14. VENTA (Opcional) -->
                 {% if not ocultar_venta and productos %}
                 <div class="section-title">Catálogo / Venta</div>
                 {% for prod in productos %}
-                <div style="margin-bottom: 12px; page-break-inside: avoid;">
-                    <div style="font-size: 9pt;">
-                        <strong>{{ prod.nombre_producto }}</strong> ({{ prod.estado }})<br>
-                        <span style="font-size: 8pt; color: #444;">{{ prod.descripcion|truncatewords:20 }}</span>
-                    </div>
+                <div style="font-size: 9pt; margin-bottom: 3px;">
+                    • <strong>{{ prod.nombre_producto }}</strong>: {{ prod.descripcion|truncatewords:15 }}
                 </div>
                 {% endfor %}
                 {% endif %}
+
             </td>
         </tr>
     </table>
 
-    <!-- SECCIÓN DE ANEXOS / ADJUNTOS -->
+    <!-- SECCIÓN DE ANEXOS / ADJUNTOS (AL FINAL) -->
     <div style="page-break-before: always;"></div>
     
     <div class="appendix-header">Anexos: Documentación de Respaldo</div>
     <div style="font-size: 9pt; color: #444; margin-bottom: 20px; text-align: center;">
-        A continuación se encuentran los enlaces directos a los documentos adjuntos.<br>
-        Haga clic en el enlace para visualizar o descargar el archivo original.
+        Relación de documentos digitales adjuntos a este Curriculum Vitae.
+        Haga clic en los enlaces para visualizar los archivos originales.
     </div>
 
     <!-- Anexos de Educación -->
@@ -233,11 +400,10 @@
         {% for est in estudios %}
             {% if est.certificado_pdf %}
             <div class="appendix-item">
-                <span class="appendix-section-label">FORMACIÓN ACADÉMICA</span>
+                <span class="appendix-section-label">SECCIÓN: FORMACIÓN ACADÉMICA</span>
                 <div style="font-weight: bold;">{{ est.titulo }}</div>
                 <div style="font-size: 9pt; margin-bottom: 5px;">{{ est.institucion }}</div>
                 
-                <!-- Lógica de Enlace Absoluto -->
                 <div style="margin-top: 8px;">
                     <a class="pdf-link" href="{% if 'http' in est.certificado_pdf.url %}{{ est.certificado_pdf.url }}{% else %}{{ base_url }}{{ est.certificado_pdf.url }}{% endif %}" target="_blank">
                         VER DOCUMENTO ADJUNTO (PDF)
@@ -253,11 +419,10 @@
         {% for pro in proyectos %}
             {% if pro.archivo %}
             <div class="appendix-item">
-                <span class="appendix-section-label">PROYECTO ACADÉMICO</span>
+                <span class="appendix-section-label">SECCIÓN: PROYECTOS</span>
                 <div style="font-weight: bold;">{{ pro.nombre }}</div>
                 <div style="font-size: 9pt; margin-bottom: 5px;">ID Registro: {{ pro.registro_id|default:"N/A" }}</div>
                 
-                <!-- Lógica de Enlace Absoluto -->
                 <div style="margin-top: 8px;">
                     <a class="pdf-link" href="{% if 'http' in pro.archivo.url %}{{ pro.archivo.url }}{% else %}{{ base_url }}{{ pro.archivo.url }}{% endif %}" target="_blank">
                         VER DOCUMENTO DEL PROYECTO (PDF)
@@ -267,6 +432,10 @@
             {% endif %}
         {% endfor %}
     {% endif %}
+
+    <div id="footerContent" style="text-align: center; font-size: 8pt; border-top: 1pt solid #000; padding-top: 5px; color: #666;">
+        {{ perfil.nombres }} {{ perfil.apellidos }} - Documento generado automáticamente - {% now "Y" %}
+    </div>
 
 </body>
 </html>

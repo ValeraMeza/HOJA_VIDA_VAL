@@ -62,6 +62,30 @@
                         </p>
                     </div>
 
+                    <!-- SECCIÓN DE REFERENCIAS (NUEVO) -->
+                    {% if exp.nombre_contacto or exp.telefono_contacto %}
+                    <div class="mt-6 {% if not forloop.counter|divisibleby:2 %}lg:pl-12{% endif %}">
+                        <div class="p-4 rounded-2xl bg-pink-50/50 dark:bg-zinc-800/50 border border-pink-100 dark:border-white/5 backdrop-blur-sm">
+                            <span class="text-[9px] font-black text-pink-400 uppercase tracking-widest mb-2 block flex items-center gap-2">
+                                <i data-lucide="user-check" size="12"></i> Referencia Laboral
+                            </span>
+                            <div class="flex flex-col gap-1">
+                                {% if exp.nombre_contacto %}
+                                <div class="text-xs font-bold text-gray-700 dark:text-gray-200">
+                                    {{ exp.nombre_contacto }}
+                                </div>
+                                {% endif %}
+                                {% if exp.telefono_contacto %}
+                                <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 font-mono">
+                                    <i data-lucide="phone" size="10" class="text-pink-500"></i>
+                                    {{ exp.telefono_contacto }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
                     <!-- Detalle visual inferior -->
                     <div class="absolute bottom-6 {% if not forloop.counter|divisibleby:2 %}left-8{% else %}right-8{% endif %} opacity-0 group-hover/card:opacity-20 transition-all duration-700">
                         <span class="text-6xl text-pink-500">𐙚</span>

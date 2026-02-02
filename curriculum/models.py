@@ -139,6 +139,8 @@ class ExperienciaLaboral(models.Model):
         verbose_name="Modalidad de trabajo",
         help_text="Selecciona si el trabajo fue presencial, remoto o mixto."
     )
+    telefono_contacto = models.CharField(max_length=20, null=True, blank=True, verbose_name="Teléfono Empresa/Jefe")
+    nombre_contacto = models.CharField(max_length=100, null=True, blank=True, verbose_name="Persona de Referencia")
     
     class Meta:
         verbose_name = "Experiencia Laboral"
