@@ -201,6 +201,8 @@ class CursoCapacitacion(models.Model):
     institucion = models.CharField(max_length=200)
     fecha_realizacion = models.DateField(validators=[validar_no_futuro], null=True)
     horas = models.PositiveIntegerField()
+    # CAMBIO: Agregamos el campo para subir el PDF
+    certificado_pdf = models.FileField(upload_to='cursos/', null=True, blank=True, verbose_name="Certificado (PDF)")
     activo = models.BooleanField(default=True)
 
     class Meta:
