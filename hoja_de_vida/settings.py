@@ -86,9 +86,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'curriculum', 'static'),
 ]
 
-# CORRECCIÓN PARA RENDER:
-# Definimos explícitamente el almacenamiento antiguo para evitar el AttributeError
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# CORRECCIÓN PARA RENDER (ERROR MissingFileError):
+# Cambiamos a 'CompressedStaticFilesStorage'. 
+# La versión anterior ('Manifest') es demasiado estricta y falla si los CSS internos de Django tienen referencias rotas.
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
@@ -107,7 +108,8 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage" if CLOUDINARY_STORAGE.get('CLOUD_NAME') else "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        # Actualizamos también aquí para coincidir con la configuración de arriba
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
