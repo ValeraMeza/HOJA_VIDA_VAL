@@ -11,6 +11,10 @@ urlpatterns = [
     path('trabajos/', views.trabajos, name='trabajos'),
     path('venta/', views.venta, name='venta'),
     path('contacto/', views.contacto, name='contacto'),
-    # Esta es la ruta que faltaba y causaba el error
-    path('generar-cv/', views.generar_cv, name='generar_cv'),
+
+    # 1. Ruta para VER la pantalla de configuración (los checkboxes)
+    path('generar-cv/', views.configurar_cv, name='generar_cv'),
+
+    # 2. Ruta para PROCESAR y DESCARGAR el PDF (esta faltaba)
+    path('descargar-pdf/', views.generar_cv, name='descargar_pdf'),
 ]

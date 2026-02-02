@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <title>CV - {{ perfil.nombres }}</title>
     <style>
+        /* CSS LIMPIO PARA PDF (Sin animaciones ni Tailwind) */
         @page {
             size: a4;
             margin: 1.2cm;
         }
 
         body {
-            font-family: 'Times New Roman', Times, serif;
-            color: #3E2723; /* Espresso - Tono principal de texto */
-            line-height: 1.4;
+            font-family: 'Helvetica', 'Arial', sans-serif; /* Fuentes seguras para PDF */
+            color: #3E2723;
+            line-height: 1.5;
             font-size: 10pt;
+            background-color: #ffffff;
         }
 
-        /* Estructura Principal */
+        /* Tablas para estructura (xhtml2pdf maneja mejor tablas que flexbox/grid) */
         .main-table {
             width: 100%;
             border-collapse: collapse;
@@ -26,7 +28,7 @@
             width: 28%;
             vertical-align: top;
             padding-right: 15px;
-            border-right: 1.5pt solid #F4C9D6; /* Peony - Línea divisoria */
+            border-right: 1.5pt solid #F4C9D6;
         }
 
         .content-cell {
@@ -35,28 +37,28 @@
             padding-left: 20px;
         }
 
-        /* Foto */
+        /* Imágenes */
         .profile-img {
             width: 130px;
             height: 160px;
-            object-fit: cover;
-            border: 2pt solid #3E2723; /* Espresso */
+            object-fit: cover; /* Nota: xhtml2pdf a veces ignora object-fit, mejor recortar la imagen antes */
+            border: 2pt solid #3E2723;
             margin-bottom: 15px;
         }
 
-        /* Tipografía */
+        /* Textos */
         .name {
             font-size: 24pt;
             font-weight: bold;
             text-transform: uppercase;
-            color: #3E2723; /* Espresso */
+            color: #3E2723;
             margin: 0;
-            line-height: 1;
+            line-height: 1.1;
         }
 
         .job-title {
             font-size: 11pt;
-            color: #3E2723; /* Espresso */
+            color: #3E2723;
             font-weight: bold;
             text-transform: uppercase;
             margin-bottom: 20px;
@@ -64,13 +66,12 @@
             opacity: 0.8;
         }
 
-        /* Títulos de Sección */
         .section-title {
             font-size: 13pt;
             font-weight: bold;
             text-transform: uppercase;
-            color: #3E2723; /* Espresso */
-            border-bottom: 1.5pt solid #F4C9D6; /* Peony */
+            color: #3E2723;
+            border-bottom: 1.5pt solid #F4C9D6;
             margin-bottom: 10px;
             margin-top: 15px;
             padding-bottom: 2px;
@@ -80,40 +81,40 @@
             font-size: 10pt;
             font-weight: bold;
             text-transform: uppercase;
-            color: #3E2723; /* Espresso */
-            border-bottom: 0.5pt solid #F4C9D6; /* Peony */
+            color: #3E2723;
+            border-bottom: 0.5pt solid #F4C9D6;
             margin-top: 15px;
             margin-bottom: 8px;
             padding-bottom: 1px;
         }
 
-        /* Datos Sidebar */
+        /* Detalles */
         .data-item {
             margin-bottom: 6px;
             font-size: 9pt;
         }
         .data-label {
             font-weight: bold;
-            color: #3E2723; /* Espresso */
+            color: #3E2723;
             display: block;
             font-size: 8pt;
             text-transform: uppercase;
             opacity: 0.7;
         }
         .data-value {
-            color: #3E2723; /* Espresso */
+            color: #3E2723;
             display: block;
+            word-wrap: break-word;
         }
 
-        /* Bloques de Contenido */
         .job-header {
             font-weight: bold;
             font-size: 11pt;
-            color: #3E2723; /* Espresso */
+            color: #3E2723;
         }
         .job-sub {
             font-style: italic;
-            color: #3E2723; /* Espresso */
+            color: #3E2723;
             font-weight: bold;
             font-size: 9pt;
             margin-bottom: 3px;
@@ -128,8 +129,8 @@
 
         .tag-pill {
             display: inline-block;
-            background-color: #F4C9D6; /* Peony */
-            color: #3E2723; /* Espresso */
+            background-color: #F4C9D6;
+            color: #3E2723;
             padding: 2px 8px;
             border-radius: 4px;
             font-size: 8.5pt;
@@ -156,11 +157,13 @@
             <!-- COLUMNA IZQUIERDA -->
             <td class="sidebar-cell">
                 <div style="text-align: center;">
-                    {% if perfil.foto %}
-                        <!-- CORRECCIÓN IMPORTANTE: Se usa .url en lugar de .path para compatibilidad con la nube -->
-                        <img src="{{ perfil.foto.url }}" class="profile-img">
-                    {% else %}
-                        <div style="width: 130px; height: 160px; background: #fdfdfd; border: 2pt solid #3E2723; margin: 0 auto 15px auto; line-height: 160px; color: #3E2723; font-size: 8pt; opacity: 0.3;">SIN FOTO</div>
+                    {% if not ocultar_foto %}
+                        {% if perfil.foto %}
+                            <!-- USAMOS .url PARA EVITAR NotImplementedError EN LA NUBE -->
+                            <img src="{{ perfil.foto.url }}" class="profile-img">
+                        {% else %}
+                            <div style="width: 130px; height: 160px; background: #fdfdfd; border: 2pt solid #3E2723; margin: 0 auto 15px auto; line-height: 160px; color: #3E2723; font-size: 8pt; opacity: 0.3;">SIN FOTO</div>
+                        {% endif %}
                     {% endif %}
                 </div>
 
@@ -177,11 +180,14 @@
                     <span class="data-label">Estado Civil</span>
                     <span class="data-value">{{ perfil.estado_civil }}</span>
                 </div>
+                {% if perfil.licencia %}
                 <div class="data-item">
                     <span class="data-label">Licencia</span>
-                    <span class="data-value">{{ perfil.licencia|default:"N/A" }}</span>
+                    <span class="data-value">{{ perfil.licencia }}</span>
                 </div>
+                {% endif %}
 
+                {% if not ocultar_contacto %}
                 <div class="sidebar-title">Contacto</div>
                 <div class="data-item">
                     <span class="data-label">Teléfono</span>
@@ -189,7 +195,7 @@
                 </div>
                 <div class="data-item">
                     <span class="data-label">Email</span>
-                    <span class="data-value" style="font-size: 8pt; word-break: break-all;">{{ perfil.email }}</span>
+                    <span class="data-value" style="font-size: 8pt;">{{ perfil.email }}</span>
                 </div>
                 {% if perfil.sitio_web %}
                 <div class="data-item">
@@ -197,7 +203,10 @@
                     <span class="data-value">{{ perfil.sitio_web }}</span>
                 </div>
                 {% endif %}
+                {% endif %}
 
+                {% if not ocultar_idiomas %}
+                {% if perfil.idiomas.exists %}
                 <div class="sidebar-title">Idiomas</div>
                 {% for idioma in perfil.idiomas.all %}
                 <div class="data-item">
@@ -205,13 +214,17 @@
                     <span class="data-value">{{ idioma.nivel }}</span>
                 </div>
                 {% endfor %}
+                {% endif %}
+                {% endif %}
 
+                {% if not ocultar_redes %}
                 <div class="sidebar-title">Redes Sociales</div>
                 {% if perfil.url_linkedin %}<div class="data-item"><span class="data-value">LinkedIn</span></div>{% endif %}
                 {% if perfil.url_github %}<div class="data-item"><span class="data-value">GitHub</span></div>{% endif %}
                 {% if perfil.url_instagram %}<div class="data-item"><span class="data-value">Instagram</span></div>{% endif %}
                 {% if perfil.url_youtube %}<div class="data-item"><span class="data-value">YouTube</span></div>{% endif %}
                 {% if perfil.url_tiktok %}<div class="data-item"><span class="data-value">TikTok</span></div>{% endif %}
+                {% endif %}
             </td>
 
             <!-- COLUMNA DERECHA -->
@@ -219,20 +232,25 @@
                 <div class="name">{{ perfil.nombres }}<br>{{ perfil.apellidos }}</div>
                 <div class="job-title">Curriculum Vitae Profesional</div>
 
+                {% if not ocultar_perfil %}
                 {% if perfil.descripcion_perfil %}
                 <div class="section-title">Perfil Profesional</div>
                 <div class="job-desc">
                     {{ perfil.descripcion_perfil }}
                 </div>
                 {% endif %}
+                {% endif %}
 
+                {% if not ocultar_intereses %}
                 {% if perfil.intereses %}
                 <div class="section-title">Intereses & Aptitudes</div>
                 <div class="job-desc" style="font-style: italic; opacity: 0.9;">
                     {{ perfil.intereses }}
                 </div>
                 {% endif %}
+                {% endif %}
 
+                {% if not ocultar_experiencia %}
                 {% if experiencias %}
                 <div class="section-title">Trayectoria Laboral</div>
                 {% for exp in experiencias %}
@@ -243,7 +261,9 @@
                 </div>
                 {% endfor %}
                 {% endif %}
+                {% endif %}
 
+                {% if not ocultar_educacion %}
                 {% if estudios %}
                 <div class="section-title">Formación Académica</div>
                 {% for est in estudios %}
@@ -253,7 +273,24 @@
                 </div>
                 {% endfor %}
                 {% endif %}
+                {% endif %}
 
+                {% if not ocultar_proyectos %}
+                {% if proyectos %}
+                <div class="section-title">Proyectos Académicos</div>
+                {% for pro in proyectos %}
+                <div style="margin-bottom: 8px;">
+                    <div class="job-header">{{ pro.nombre }}</div>
+                    <div class="job-sub">{{ pro.fecha_publicacion|date:"Y" }}</div>
+                    {% if pro.descripcion %}
+                    <div class="job-desc">{{ pro.descripcion }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endif %}
+
+                {% if not ocultar_cursos %}
                 {% if cursos %}
                 <div class="section-title">Capacitaciones & Cursos</div>
                 {% for curso in cursos %}
@@ -263,7 +300,21 @@
                 </div>
                 {% endfor %}
                 {% endif %}
+                {% endif %}
 
+                {% if not ocultar_reconocimientos %}
+                {% if reconocimientos %}
+                <div class="section-title">Reconocimientos</div>
+                {% for rec in reconocimientos %}
+                <div style="margin-bottom: 8px;">
+                    <div class="job-header">{{ rec.nombre }}</div>
+                    <div class="job-sub">{{ rec.institucion }} | {{ rec.fecha_obtencion|date:"Y" }}</div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endif %}
+
+                {% if not ocultar_valores %}
                 {% if perfil.valores_profesionales %}
                 <div class="section-title">Valores Profesionales</div>
                 <div style="margin-bottom: 10px;">
@@ -271,6 +322,7 @@
                         <span class="tag-pill">{{ valor|cut:"," }}</span>
                     {% endfor %}
                 </div>
+                {% endif %}
                 {% endif %}
             </td>
         </tr>

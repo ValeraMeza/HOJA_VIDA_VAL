@@ -1,0 +1,139 @@
+{% extends 'curriculum/base.html' %}
+{% load static %}
+
+{% block title %}Configurar Impresión | {{ perfil.nombres }}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-2xl w-full bg-white dark:bg-zinc-900 rounded-[3rem] shadow-2xl p-10 border border-gray-100 dark:border-zinc-800 relative overflow-hidden">
+        
+        <!-- Decoración de Fondo -->
+        <div class="absolute -top-20 -right-20 w-64 h-64 bg-pink-100 dark:bg-pink-900/20 rounded-full blur-3xl opacity-50"></div>
+        <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-purple-100 dark:bg-purple-900/20 rounded-full blur-3xl opacity-50"></div>
+
+        <div class="relative z-10">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-pink-50 dark:bg-zinc-800 text-pink-500 mb-6 shadow-sm">
+                    <i data-lucide="sliders-horizontal" class="w-8 h-8"></i>
+                </div>
+                <h1 class="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-2 uppercase tracking-tight">
+                    Personaliza tu CV
+                </h1>
+                <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                    Selecciona las secciones que deseas <span class="text-pink-500 font-bold">OCULTAR</span> en el documento PDF.
+                </p>
+            </div>
+
+            <!-- CORRECCIÓN: El action ahora apunta a 'descargar_pdf' para romper el bucle -->
+            <form action="{% url 'descargar_pdf' %}" method="get" target="_blank" class="space-y-8">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Opción: Foto -->
+                    <label class="group flex items-center justify-between p-5 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="image" class="w-5 h-5 text-gray-400 group-hover:text-pink-500 transition-colors"></i>
+                            <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">Fotografía</span>
+                        </div>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="ocultar_foto" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-pink-500"></div>
+                        </div>
+                    </label>
+
+                    <!-- Opción: Perfil -->
+                    <label class="group flex items-center justify-between p-5 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="user" class="w-5 h-5 text-gray-400 group-hover:text-pink-500 transition-colors"></i>
+                            <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">Perfil Profesional</span>
+                        </div>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="ocultar_perfil" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                        </div>
+                    </label>
+
+                    <!-- Opción: Datos de Contacto -->
+                    <label class="group flex items-center justify-between p-5 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="phone" class="w-5 h-5 text-gray-400 group-hover:text-pink-500 transition-colors"></i>
+                            <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">Datos de Contacto</span>
+                        </div>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="ocultar_contacto" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                        </div>
+                    </label>
+
+                    <!-- Opción: Experiencia -->
+                    <label class="group flex items-center justify-between p-5 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="briefcase" class="w-5 h-5 text-gray-400 group-hover:text-pink-500 transition-colors"></i>
+                            <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">Experiencia</span>
+                        </div>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="ocultar_experiencia" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                        </div>
+                    </label>
+
+                    <!-- Opción: Educación -->
+                    <label class="group flex items-center justify-between p-5 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="graduation-cap" class="w-5 h-5 text-gray-400 group-hover:text-pink-500 transition-colors"></i>
+                            <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">Educación</span>
+                        </div>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="ocultar_educacion" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                        </div>
+                    </label>
+                    
+                    <!-- Opción: Cursos -->
+                    <label class="group flex items-center justify-between p-5 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="book-open" class="w-5 h-5 text-gray-400 group-hover:text-pink-500 transition-colors"></i>
+                            <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">Cursos</span>
+                        </div>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="ocultar_cursos" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                        </div>
+                    </label>
+
+                     <!-- Opción: Idiomas -->
+                     <label class="group flex items-center justify-between p-5 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="languages" class="w-5 h-5 text-gray-400 group-hover:text-pink-500 transition-colors"></i>
+                            <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">Idiomas</span>
+                        </div>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="ocultar_idiomas" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                        </div>
+                    </label>
+
+                    <!-- Opción: Redes Sociales -->
+                    <label class="group flex items-center justify-between p-5 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="share-2" class="w-5 h-5 text-gray-400 group-hover:text-pink-500 transition-colors"></i>
+                            <span class="font-bold text-gray-700 dark:text-gray-200 text-sm">Redes Sociales</span>
+                        </div>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="ocultar_redes" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-500"></div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="pt-8 text-center">
+                    <button type="submit" class="inline-flex items-center justify-center gap-3 px-12 py-5 bg-[#1a1a1a] dark:bg-pink-600 text-white font-black rounded-full shadow-xl hover:scale-105 hover:shadow-pink-500/30 transition-all uppercase text-xs tracking-[0.2em] group">
+                        Generar Documento PDF
+                        <i data-lucide="file-down" class="w-5 h-5 group-hover:animate-bounce"></i>
+                    </button>
+                    <p class="mt-4 text-xs text-gray-400 uppercase tracking-wide font-bold">Se abrirá en una nueva pestaña</p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

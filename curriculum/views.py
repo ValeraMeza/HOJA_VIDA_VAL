@@ -26,6 +26,7 @@ def link_callback(uri, rel):
     else:
         return uri
 
+    # Asegurarse de que path es una cadena válida antes de verificar si es archivo
     if not os.path.isfile(path):
         return uri
     return path
@@ -41,60 +42,73 @@ def perfil(request):
 
 def experiencia(request):
     perfil = DatosPersonales.objects.first()
-    # Filtramos por activo y el orden ya viene del Meta del modelo (-fecha_inicio)
     experiencias = ExperienciaLaboral.objects.filter(activo=True)
     return render(request, 'curriculum/experiencia.html', {'perfil': perfil, 'experiencias': experiencias})
 
 def educacion(request):
     perfil = DatosPersonales.objects.first()
-    # Filtramos por activo y el orden ya viene del Meta del modelo (-fecha_fin)
     estudios = EstudioRealizado.objects.filter(activo=True)
     return render(request, 'curriculum/educacion.html', {'perfil': perfil, 'estudios': estudios})
 
 def cursos(request):
     perfil = DatosPersonales.objects.first()
-    # Filtramos por activo y el orden ya viene del Meta del modelo (-fecha_realizacion)
     cursos = CursoCapacitacion.objects.filter(activo=True)
     return render(request, 'curriculum/cursos.html', {'perfil': perfil, 'cursos': cursos})
 
 def reconocimientos(request):
     perfil = DatosPersonales.objects.first()
-    # Corregido el campo de ordenamiento a fecha_obtencion
     reconocimientos = Reconocimiento.objects.filter(activo=True)
     return render(request, 'curriculum/reconocimientos.html', {'perfil': perfil, 'reconocimientos': reconocimientos})
 
 def trabajos(request):
-    """Vista para Productos Académicos (Renombrado de ProductoLaboral)"""
     perfil = DatosPersonales.objects.first()
-    # Cambiado a ProductoAcademico y filtrado por activo
     proyectos = ProductoAcademico.objects.filter(activo=True)
     return render(request, 'curriculum/proyectos.html', {'perfil': perfil, 'proyectos': proyectos})
 
 def venta(request):
-    # Obtenemos el perfil desde el modelo DatosPersonales
     perfil = DatosPersonales.objects.first()
-    
-    # Filtramos los productos que están marcados como activos
     productos = VentaGarage.objects.filter(activo=True) 
-    
-    # Pasamos 'productos' al contexto para que coincida con el template
     context = {
         'perfil': perfil,
         'productos': productos
     }
-    
     return render(request, 'curriculum/venta.html', context)
 
 def contacto(request):
     perfil = DatosPersonales.objects.first()
     return render(request, 'curriculum/contacto.html', {'perfil': perfil})
 
+def configurar_cv(request):
+    """
+    Vista intermedia para seleccionar qué secciones mostrar en el PDF.
+    Muestra un formulario con checkboxes.
+    """
+    perfil = DatosPersonales.objects.first()
+    return render(request, 'curriculum/configurar_cv.html', {'perfil': perfil})
+
 def generar_cv(request):
     """
     Función para generar el PDF dinámico.
-    Solo incluye elementos marcados como 'activo'.
+    Permite ocultar secciones mediante parámetros GET desde configurar_cv.
     """
-    perfil = DatosPersonales.objects.filter(mostrar_seccion=True).first()
+    # IMPORTANTE: Usamos .first() directo para tener siempre los datos básicos del perfil
+    # independientemente de si la sección está 'activa' en la web o no.
+    perfil = DatosPersonales.objects.first()
+    
+    # Capturamos los parámetros del formulario de configuración
+    ocultar_foto = request.GET.get('ocultar_foto') == 'on'
+    ocultar_contacto = request.GET.get('ocultar_contacto') == 'on'
+    ocultar_perfil = request.GET.get('ocultar_perfil') == 'on'
+    ocultar_intereses = request.GET.get('ocultar_intereses') == 'on'
+    ocultar_experiencia = request.GET.get('ocultar_experiencia') == 'on'
+    ocultar_educacion = request.GET.get('ocultar_educacion') == 'on'
+    ocultar_cursos = request.GET.get('ocultar_cursos') == 'on'
+    ocultar_idiomas = request.GET.get('ocultar_idiomas') == 'on'
+    ocultar_redes = request.GET.get('ocultar_redes') == 'on'
+    ocultar_valores = request.GET.get('ocultar_valores') == 'on'
+    ocultar_proyectos = request.GET.get('ocultar_proyectos') == 'on'
+    ocultar_reconocimientos = request.GET.get('ocultar_reconocimientos') == 'on'
+
     context = {
         'perfil': perfil,
         'experiencias': ExperienciaLaboral.objects.filter(activo=True),
@@ -103,6 +117,20 @@ def generar_cv(request):
         'reconocimientos': Reconocimiento.objects.filter(activo=True),
         'proyectos': ProductoAcademico.objects.filter(activo=True),
         'MEDIA_URL': settings.MEDIA_URL,
+        
+        # Enviamos las banderas de control al template
+        'ocultar_foto': ocultar_foto,
+        'ocultar_contacto': ocultar_contacto,
+        'ocultar_perfil': ocultar_perfil,
+        'ocultar_intereses': ocultar_intereses,
+        'ocultar_experiencia': ocultar_experiencia,
+        'ocultar_educacion': ocultar_educacion,
+        'ocultar_cursos': ocultar_cursos,
+        'ocultar_idiomas': ocultar_idiomas,
+        'ocultar_redes': ocultar_redes,
+        'ocultar_valores': ocultar_valores,
+        'ocultar_proyectos': ocultar_proyectos,
+        'ocultar_reconocimientos': ocultar_reconocimientos,
     }
     
     template = get_template('curriculum/cv_pdf.html')

@@ -22,16 +22,23 @@
             </span>
         </h1>
         
-        {% if perfil.descripcion_perfil %}
-            <div class="p-6 rounded-[2.5rem] overflow-hidden relative">
-                <div class="absolute -top-2 -right-2 opacity-10">
-                    <i data-lucide="quote" size="40" class="text-pink-500"></i>
+         {% if perfil.descripcion_perfil %}
+            <!-- CORRECCIÓN VISUAL: Tarjeta con efecto cristal (Glassmorphism) -->
+            <div class="p-8 rounded-[2.5rem] relative mb-10 bg-white/60 dark:bg-zinc-800/40 backdrop-blur-md border border-white/50 dark:border-white/10 shadow-xl dark:shadow-pink-900/5">
+                
+                <!-- Icono de cita decorativo -->
+                <div class="absolute -top-4 -right-2 opacity-20 rotate-12">
+                    <i data-lucide="quote" class="w-16 h-16 text-pink-500"></i>
                 </div>
-                <h3 class="text-[14px] font-black uppercase tracking-[0.4em] text-pink-500 mb-3 italic">﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌</h3>
-                <!-- Texto descriptivo: Gris oscuro a gris claro para legibilidad -->
-                <p class="text-gray-800 dark:text-gray-300 font-bold italic leading-tight transition-colors">
-                    "{{ perfil.descripcion_perfil }}"
-                </p>
+                
+                <h3 class="text-[10px] font-black uppercase tracking-[0.4em] text-pink-500 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-pink-500"></span> SOBRE MÍ
+                </h3>
+                
+                <!-- CORRECCIÓN DE TEXTO: |linebreaksbr respeta los espacios del admin -->
+                <div class="text-gray-700 dark:text-gray-300 font-medium italic leading-relaxed text-lg text-justify pr-2">
+                    {{ perfil.descripcion_perfil|linebreaksbr }}
+                </div>
             </div>
         {% endif %} 
 
