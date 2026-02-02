@@ -120,6 +120,13 @@ def configurar_cv(request):
     perfil = DatosPersonales.objects.first()
     return render(request, 'curriculum/configurar_cv.html', {'perfil': perfil})
 
+def checkout(request):
+    perfil = DatosPersonales.objects.first()
+    return render(request, 'curriculum/checkout.html', {
+        'perfil': perfil,
+        'secciones': get_visibilidad()
+    })
+
 def generar_cv(request):
     """
     Función para generar el PDF dinámico y adjuntar los certificados.

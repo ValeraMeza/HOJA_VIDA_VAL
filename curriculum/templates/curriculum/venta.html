@@ -106,7 +106,7 @@
                         data-qty="qty-{{ item.id }}"
                         data-stock="{{ item.stock|default:0 }}"
                         onclick="addToCart(this)"
-                        class="flex-grow flex items-center justify-center gap-3 py-4 bg-[#1a1a1a] dark:bg-pink-500 text-white rounded-2xl hover:bg-pink-500 dark:hover:bg-pink-600 transition-all duration-300 group/btn font-black text-[10px] uppercase tracking-widest shadow-lg active:scale-95 disabled:bg-gray-200 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none"
+                        class="flex-grow flex items-center justify-center gap-3 py-4 bg-[#1a1a1a] dark:bg-pink-500 text-white rounded-2xl hover:bg-pink-50 dark:hover:bg-pink-600 transition-all duration-300 group/btn font-black text-[10px] uppercase tracking-widest shadow-lg active:scale-95 disabled:bg-gray-200 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed disabled:transform-none"
                     >
                         <span id="btn-text-{{ item.id }}">Agregar</span> 
                         <i data-lucide="shopping-cart" size="16" id="btn-icon-{{ item.id }}" class="group-hover/btn:rotate-12 transition-transform"></i>
@@ -147,9 +147,10 @@
                 <span class="text-xs font-black text-gray-400 uppercase tracking-widest">Total del Pedido</span>
                 <span id="cart-total" class="text-4xl font-black tracking-tighter text-gray-900 dark:text-white">$0</span>
             </div>
-            <a id="whatsapp-checkout" href="#" target="_blank" class="w-full py-6 bg-[#1a1a1a] dark:bg-pink-500 text-white rounded-[2.5rem] font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center gap-4 hover:bg-pink-600 dark:hover:bg-pink-600 hover:-translate-y-1 transition-all duration-500 shadow-2xl">
-                <i data-lucide="message-circle" size="20"></i>
-                Completar Pedido
+            <!-- CAMBIO: Ahora apunta a la vista de Checkout -->
+            <a href="{% url 'checkout' %}" class="w-full py-6 bg-[#1a1a1a] dark:bg-pink-500 text-white rounded-[2.5rem] font-black uppercase text-xs tracking-[0.4em] flex items-center justify-center gap-4 hover:bg-pink-600 dark:hover:bg-pink-600 hover:-translate-y-1 transition-all duration-500 shadow-2xl">
+                <i data-lucide="credit-card" size="20"></i>
+                Ir a Pagar
             </a>
         </div>
     </div>
@@ -277,7 +278,6 @@
     function renderCart() {
         const container = document.getElementById('cart-items');
         const totalEl = document.getElementById('cart-total');
-        const checkoutBtn = document.getElementById('whatsapp-checkout');
         const modalCount = document.getElementById('modal-count');
         
         const totalItems = cart.reduce((acc, curr) => acc + curr.quantity, 0);
@@ -286,13 +286,11 @@
         if (cart.length === 0) {
             container.innerHTML = `<div class="py-20 text-center text-gray-300 dark:text-gray-700 font-black uppercase text-[10px] tracking-widest opacity-50">Bolsa Vacía</div>`;
             totalEl.innerText = "$0";
-            checkoutBtn.classList.add('opacity-40', 'pointer-events-none');
             return;
         }
 
         let subtotal = 0;
         
-        // 1. Generamos la lista visual del carrito
         container.innerHTML = cart.map((item, index) => {
             subtotal += (item.price * item.quantity);
             return `
@@ -312,19 +310,6 @@
         }).join('');
 
         totalEl.innerText = `$${subtotal.toFixed(0)}`;
-        checkoutBtn.classList.remove('opacity-40', 'pointer-events-none');
-        
-        // 2. CONSTRUCCIÓN DE LA ORDEN DE COMPRA PARA WHATSAPP
-        const itemsList = cart.map(i => `▪️ ${i.quantity}x ${i.name} ($${(i.price * i.quantity).toFixed(0)})`).join('\n');
-        
-        const messageText = `Hola! 👋\nEs de mi interés realizar la siguiente *Orden de Compra*:\n\n${itemsList}\n\n💰 *Total: $${subtotal.toFixed(0)}*\n\nPor favor, confirmar métodos de pago y entrega. Gracias!`;
-        
-        const message = encodeURIComponent(messageText);
-        
-        // Limpiamos el número de teléfono para evitar errores en el enlace (quita espacios y símbolos)
-        const phone = "{% if perfil %}{{ perfil.telefono }}{% endif %}".replace(/[^\d]/g, '');
-        checkoutBtn.href = `https://wa.me/${phone}?text=${message}`;
-        
         if (window.lucide) lucide.createIcons();
     }
 

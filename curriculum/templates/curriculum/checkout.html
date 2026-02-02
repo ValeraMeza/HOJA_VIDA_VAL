@@ -1,0 +1,288 @@
+{% extends 'curriculum/base.html' %}
+
+{% block title %}Finalizar Compra | Valeria Meza{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-[#f3f4f6] dark:bg-black font-sans pb-20">
+    
+    <!-- Header Simplificado de Checkout -->
+    <header class="bg-white dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-white/5 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <a href="{% url 'venta' %}" class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
+                    <i data-lucide="arrow-left" size="20"></i>
+                </a>
+                <span class="font-black text-lg text-gray-900 dark:text-white uppercase tracking-tight">Checkout</span>
+            </div>
+            <div class="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                <span class="text-pink-500">Envío</span>
+                <i data-lucide="chevron-right" size="12"></i>
+                <span>Pago</span>
+                <i data-lucide="chevron-right" size="12"></i>
+                <span>Confirmar</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-8 grid lg:grid-cols-12 gap-8">
+        
+        <!-- COLUMNA IZQUIERDA: FORMULARIOS (Span 8) -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- 1. Información de Contacto -->
+            <section class="bg-white dark:bg-[#1a1a1a] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-50 dark:border-white/5">
+                    <div class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-500 flex items-center justify-center">1</div>
+                    <h2 class="text-sm font-black uppercase text-gray-900 dark:text-white tracking-widest">Información de Contacto</h2>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Correo Electrónico</label>
+                        <div class="relative">
+                            <i data-lucide="mail" size="16" class="absolute left-4 top-3.5 text-gray-400"></i>
+                            <input type="email" id="customer-email" placeholder="ejemplo@correo.com" class="w-full bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-400">
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Teléfono Móvil <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <i data-lucide="smartphone" size="16" class="absolute left-4 top-3.5 text-gray-400"></i>
+                            <input type="tel" id="customer-phone" placeholder="099..." class="w-full bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-400">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Dirección de Entrega -->
+            <section class="bg-white dark:bg-[#1a1a1a] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-50 dark:border-white/5">
+                    <div class="w-8 h-8 rounded-full bg-pink-50 dark:bg-pink-900/20 text-pink-500 flex items-center justify-center">2</div>
+                    <h2 class="text-sm font-black uppercase text-gray-900 dark:text-white tracking-widest">Datos de Envío</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Nombre Completo <span class="text-red-500">*</span></label>
+                        <input type="text" id="customer-name" placeholder="Quién recibe el pedido" class="w-full bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-pink-500 transition-colors text-gray-900 dark:text-white">
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Ciudad / Provincia <span class="text-red-500">*</span></label>
+                            <input type="text" id="customer-city" placeholder="Ej: Manta, Manabí" class="w-full bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-pink-500 transition-colors text-gray-900 dark:text-white">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Código Postal (Opcional)</label>
+                            <input type="text" id="customer-zip" class="w-full bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-pink-500 transition-colors text-gray-900 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Dirección Exacta <span class="text-red-500">*</span></label>
+                        <input type="text" id="customer-address" placeholder="Calle principal, número, intersección" class="w-full bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-pink-500 transition-colors text-gray-900 dark:text-white">
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Referencia / Notas</label>
+                        <textarea id="customer-notes" rows="2" placeholder="Ej: Casa color azul, dejar en recepción..." class="w-full bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-pink-500 transition-colors text-gray-900 dark:text-white resize-none"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Método de Pago -->
+            <section class="bg-white dark:bg-[#1a1a1a] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-50 dark:border-white/5">
+                    <div class="w-8 h-8 rounded-full bg-green-50 dark:bg-green-900/20 text-green-500 flex items-center justify-center">3</div>
+                    <h2 class="text-sm font-black uppercase text-gray-900 dark:text-white tracking-widest">Método de Pago</h2>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <!-- Opción Transferencia -->
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="payment" value="Transferencia Bancaria" class="peer sr-only" checked>
+                        <div class="p-5 rounded-2xl border-2 border-gray-100 dark:border-white/10 peer-checked:border-pink-500 peer-checked:bg-pink-50/50 dark:peer-checked:bg-pink-900/10 transition-all h-full flex flex-col justify-center items-center text-center gap-3">
+                            <div class="w-12 h-12 bg-white dark:bg-black rounded-full flex items-center justify-center text-gray-400 peer-checked:text-pink-500 shadow-sm border border-gray-100 dark:border-white/5">
+                                <i data-lucide="landmark" size="20"></i>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-sm text-gray-900 dark:text-white">Transferencia</span>
+                                <span class="text-xs text-gray-400">Pichincha, Guayaquil, Produbanco</span>
+                            </div>
+                        </div>
+                        <div class="absolute top-4 right-4 text-pink-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <i data-lucide="check-circle-2" size="20" fill="currentColor" class="text-white"></i>
+                        </div>
+                    </label>
+
+                    <!-- Opción Efectivo -->
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="payment" value="Efectivo" class="peer sr-only">
+                        <div class="p-5 rounded-2xl border-2 border-gray-100 dark:border-white/10 peer-checked:border-green-500 peer-checked:bg-green-50/50 dark:peer-checked:bg-green-900/10 transition-all h-full flex flex-col justify-center items-center text-center gap-3">
+                            <div class="w-12 h-12 bg-white dark:bg-black rounded-full flex items-center justify-center text-gray-400 peer-checked:text-green-500 shadow-sm border border-gray-100 dark:border-white/5">
+                                <i data-lucide="banknote" size="20"></i>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-sm text-gray-900 dark:text-white">Efectivo</span>
+                                <span class="text-xs text-gray-400">Pago contra entrega (Manta)</span>
+                            </div>
+                        </div>
+                        <div class="absolute top-4 right-4 text-green-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <i data-lucide="check-circle-2" size="20" fill="currentColor" class="text-white"></i>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- COLUMNA DERECHA: RESUMEN (Sticky) (Span 4) -->
+        <div class="lg:col-span-4">
+            <div class="bg-white dark:bg-[#1a1a1a] rounded-3xl p-6 shadow-xl border border-gray-100 dark:border-white/5 sticky top-24">
+                <h3 class="text-sm font-black uppercase text-gray-900 dark:text-white tracking-widest mb-6">Tu Pedido</h3>
+                
+                <!-- Lista de Items (Scrollable si es muy larga) -->
+                <div id="checkout-items" class="space-y-4 max-h-[300px] overflow-y-auto custom-scrollbar mb-6 pr-2">
+                    <!-- JS Populates this -->
+                </div>
+
+                <!-- Desglose de Costos -->
+                <div class="space-y-3 pt-6 border-t border-gray-100 dark:border-white/5 border-dashed">
+                    <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                        <span>Subtotal</span>
+                        <span id="checkout-subtotal" class="font-medium">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                        <span>Envío</span>
+                        <span class="text-xs bg-gray-100 dark:bg-white/10 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">Por coordinar</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-end pt-4 border-t border-gray-100 dark:border-white/5">
+                        <span class="text-sm font-black uppercase text-gray-900 dark:text-white">Total a Pagar</span>
+                        <span id="checkout-total" class="text-3xl font-black text-pink-500 tracking-tighter">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Botón de Acción -->
+                <button onclick="confirmOrder()" class="w-full mt-8 py-4 bg-[#1a1a1a] dark:bg-white text-white dark:text-black rounded-2xl font-black uppercase text-xs tracking-[0.2em] hover:scale-[1.02] hover:shadow-lg transition-all flex items-center justify-center gap-3">
+                    <span>Confirmar Pedido</span>
+                    <i data-lucide="arrow-right" size="16"></i>
+                </button>
+                
+                <p class="text-center text-[10px] text-gray-400 mt-4 leading-relaxed">
+                    Al confirmar, serás redirigido a WhatsApp para finalizar la coordinación con Valeria.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        loadCart();
+        if (window.lucide) lucide.createIcons();
+    });
+
+    function loadCart() {
+        const cart = JSON.parse(localStorage.getItem('garage_cart')) || [];
+        const container = document.getElementById('checkout-items');
+        const subtotalEl = document.getElementById('checkout-subtotal');
+        const totalEl = document.getElementById('checkout-total');
+
+        if (cart.length === 0) {
+            container.innerHTML = `<div class="text-center py-8 text-gray-300 dark:text-gray-700 italic text-xs">Tu bolsa está vacía. <a href="{% url 'venta' %}" class="text-pink-500 underline">Volver a tienda</a></div>`;
+            return;
+        }
+
+        let total = 0;
+        container.innerHTML = cart.map(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            return `
+                <div class="flex gap-4">
+                    <div class="w-14 h-14 bg-gray-50 dark:bg-black rounded-xl overflow-hidden shrink-0 border border-gray-100 dark:border-white/5">
+                        ${item.image ? `<img src="${item.image}" class="w-full h-full object-cover">` : `<div class="flex items-center justify-center h-full"><i data-lucide="image" size="14" class="text-gray-300"></i></div>`}
+                    </div>
+                    <div class="flex-grow min-w-0">
+                        <h4 class="text-xs font-bold text-gray-900 dark:text-white truncate">${item.name}</h4>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400">Cant: ${item.quantity}</p>
+                    </div>
+                    <span class="text-sm font-bold text-gray-900 dark:text-white">$${itemTotal.toFixed(0)}</span>
+                </div>
+            `;
+        }).join('');
+
+        subtotalEl.innerText = `$${total.toFixed(0)}`;
+        totalEl.innerText = `$${total.toFixed(0)}`;
+        if (window.lucide) lucide.createIcons();
+    }
+
+    function confirmOrder() {
+        const cart = JSON.parse(localStorage.getItem('garage_cart')) || [];
+        
+        // Elementos del formulario
+        const nameInput = document.getElementById('customer-name');
+        const phoneInput = document.getElementById('customer-phone');
+        const cityInput = document.getElementById('customer-city');
+        const addressInput = document.getElementById('customer-address');
+        const emailInput = document.getElementById('customer-email');
+        const notesInput = document.getElementById('customer-notes');
+        
+        const inputs = [nameInput, phoneInput, cityInput, addressInput];
+        let isValid = true;
+
+        // Validación visual simple
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add('border-red-500', 'bg-red-50', 'dark:bg-red-900/10');
+                isValid = false;
+            } else {
+                input.classList.remove('border-red-500', 'bg-red-50', 'dark:bg-red-900/10');
+            }
+        });
+
+        if (!isValid) {
+            // Shake effect opcional
+            alert("Por favor completa los campos obligatorios marcados.");
+            return;
+        }
+
+        const payment = document.querySelector('input[name="payment"]:checked').value;
+        const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+        
+        // Construcción del mensaje profesional
+        let message = `🧾 *NUEVA ORDEN WEB*\n\n`;
+        message += `👤 *Cliente:* ${nameInput.value.trim()}\n`;
+        message += `📱 *Teléfono:* ${phoneInput.value.trim()}\n`;
+        message += `📍 *Ciudad:* ${cityInput.value.trim()}\n`;
+        message += `🏠 *Dirección:* ${addressInput.value.trim()}\n`;
+        if(emailInput.value) message += `📧 *Email:* ${emailInput.value.trim()}\n`;
+        if(notesInput.value) message += `📝 *Notas:* ${notesInput.value.trim()}\n`;
+        
+        message += `\n*DETALLE DEL PEDIDO:*\n`;
+        message += `━━━━━━━━━━━━━━━━━━━\n`;
+        
+        cart.forEach(item => {
+            message += `▪️ (${item.quantity}) ${item.name} - $${(item.price * item.quantity).toFixed(0)}\n`;
+        });
+        
+        message += `━━━━━━━━━━━━━━━━━━━\n`;
+        message += `💳 *Método de Pago:* ${payment}\n`;
+        message += `💰 *TOTAL A PAGAR: $${total.toFixed(0)}*\n\n`;
+        message += `Hola Valeria, he generado este pedido desde la web. Quedo a la espera de los datos para concretar. Gracias!`;
+
+        const phone = "{% if perfil %}{{ perfil.telefono }}{% endif %}".replace(/[^\d]/g, '');
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        
+        // Opcional: localStorage.removeItem('garage_cart');
+    }
+</script>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #ddd; border-radius: 10px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #333; }
+</style>
+{% endblock %}
