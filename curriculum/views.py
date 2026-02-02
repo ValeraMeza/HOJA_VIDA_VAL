@@ -134,7 +134,7 @@ def generar_cv(request):
     host = request.get_host()
     base_url = f"{scheme}://{host}"
     
-    # Parámetros de visibilidad
+    # Captura de parámetros
     ocultar_foto = request.GET.get('ocultar_foto') == 'on'
     ocultar_contacto = request.GET.get('ocultar_contacto') == 'on'
     ocultar_perfil = request.GET.get('ocultar_perfil') == 'on'
@@ -148,7 +148,9 @@ def generar_cv(request):
     ocultar_proyectos = request.GET.get('ocultar_proyectos') == 'on'
     ocultar_reconocimientos = request.GET.get('ocultar_reconocimientos') == 'on'
     ocultar_venta = request.GET.get('ocultar_venta') == 'on'
-    ocultar_certificados = request.GET.get('ocultar_certificados') == 'on'
+    
+    # NUEVO PARAMETRO: OCULTAR ANEXOS
+    ocultar_anexos = request.GET.get('ocultar_anexos') == 'on'
 
     estudios = EstudioRealizado.objects.filter(activo=True)
     proyectos = ProductoAcademico.objects.filter(activo=True)
@@ -165,6 +167,7 @@ def generar_cv(request):
         'MEDIA_URL': settings.MEDIA_URL,
         'base_url': base_url,
         
+        # Banderas
         'ocultar_foto': ocultar_foto,
         'ocultar_contacto': ocultar_contacto,
         'ocultar_perfil': ocultar_perfil,
@@ -178,10 +181,9 @@ def generar_cv(request):
         'ocultar_proyectos': ocultar_proyectos,
         'ocultar_reconocimientos': ocultar_reconocimientos,
         'ocultar_venta': ocultar_venta,
-        'ocultar_certificados': ocultar_certificados,
+        'ocultar_anexos': ocultar_anexos, # Pasamos la bandera al template
     }
     
-    # 1. Generar PDF principal
     template = get_template('curriculum/cv_pdf.html')
     html = template.render(context)
     
@@ -195,15 +197,11 @@ def generar_cv(request):
     cv_buffer.seek(0)
     merger.append(cv_buffer)
 
-    # FUNCIÓN MEJORADA: Valida que sea PDF real
     def adjuntar_archivo(campo_archivo):
         try:
             if not campo_archivo: return
             
             content = None
-            filename = getattr(campo_archivo, 'name', 'archivo desconocido')
-
-            # Descargar o leer archivo
             if hasattr(campo_archivo, 'url') and campo_archivo.url.startswith('http'):
                 response = requests.get(campo_archivo.url)
                 if response.status_code == 200:
@@ -215,19 +213,13 @@ def generar_cv(request):
                 except Exception:
                     pass
 
-            if content:
-                # VALIDACIÓN CRÍTICA: Chequear cabecera PDF
-                if not content.startswith(b'%PDF'):
-                    print(f"⚠️ OMITIDO: El archivo '{filename}' NO es un PDF válido (Detectado header: {content[:4]}).")
-                    return
-
+            if content and content.startswith(b'%PDF'):
                 merger.append(io.BytesIO(content))
-            
         except Exception as e:
             print(f"Error adjuntando archivo: {e}")
 
-    # Solo intentamos adjuntar si el usuario NO ocultó certificados
-    if not ocultar_certificados:
+    # LÓGICA CONDICIONAL: Solo fusionar si NO se marcó ocultar anexos
+    if not ocultar_anexos:
         if not ocultar_educacion:
             for estudio in estudios:
                 adjuntar_archivo(estudio.certificado_pdf)
@@ -241,7 +233,7 @@ def generar_cv(request):
                 adjuntar_archivo(curso.certificado_pdf)
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="Hoja_de_Vida_Completa.pdf"'
+    response['Content-Disposition'] = 'inline; filename="Hoja_de_Vida.pdf"'
     
     merger.write(response)
     

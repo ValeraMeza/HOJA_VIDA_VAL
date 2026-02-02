@@ -4,13 +4,11 @@
 {% block title %}Configurar Impresión | {{ perfil.nombres }}{% endblock %}
 
 {% block content %}
-<!-- Layout Split-Screen: Mantiene la estética pero divide el espacio -->
 <div class="flex flex-col lg:flex-row h-[calc(100vh-80px)] overflow-hidden">
     
-    <!-- 1. PANEL IZQUIERDO: CONTROLES -->
+    <!-- PANEL IZQUIERDO: CONTROLES -->
     <div class="w-full lg:w-5/12 h-full bg-white dark:bg-zinc-900 border-r border-gray-100 dark:border-zinc-800 relative z-20 shadow-2xl flex flex-col">
         
-        <!-- Cabecera -->
         <div class="p-8 pb-4 shrink-0">
             <div class="flex items-center gap-4 mb-2">
                 <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-pink-50 dark:bg-zinc-800 text-pink-500 shadow-sm">
@@ -21,11 +19,10 @@
                 </h1>
             </div>
             <p class="text-gray-500 dark:text-gray-400 text-xs font-medium ml-16">
-                Oculta secciones para adaptar tu PDF final.
+                Selecciona qué ocultar. <br><b>Nota:</b> Si ocultas los anexos, el PDF será más ligero.
             </p>
         </div>
 
-        <!-- Formulario Scrollable -->
         <div class="flex-1 overflow-y-auto custom-scrollbar p-8 pt-0">
             <form id="cvForm" action="{% url 'descargar_pdf' %}" method="get" target="_blank" class="space-y-4">
                 
@@ -136,15 +133,18 @@
                         <input type="checkbox" name="ocultar_venta" class="accent-pink-500 w-4 h-4 rounded cursor-pointer" onchange="togglePreview('preview-venta')">
                     </label>
                     <!-- Redes -->
-                    <label class="group flex items-center justify-between p-3 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all">
+                    <label class="group flex items-center justify-between p-3 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-gray-50 dark:bg-zinc-800/50 cursor-pointer transition-all col-span-2">
                         <span class="font-bold text-gray-700 dark:text-gray-200 text-xs">Redes Sociales</span>
                         <input type="checkbox" name="ocultar_redes" class="accent-pink-500 w-4 h-4 rounded cursor-pointer" onchange="togglePreview('preview-redes')">
                     </label>
                     
-                    <!-- NUEVA OPCIÓN: ANEXOS -->
-                    <label class="group flex items-center justify-between p-3 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-pink-50 dark:bg-pink-900/10 cursor-pointer transition-all border-l-4 border-l-pink-500 shadow-sm">
-                        <span class="font-bold text-gray-700 dark:text-gray-200 text-xs">Anexos (PDFs)</span>
-                        <input type="checkbox" name="ocultar_certificados" class="accent-pink-500 w-4 h-4 rounded cursor-pointer">
+                    <!-- OPCIÓN DE ANEXOS / CERTIFICADOS -->
+                    <label class="group flex items-center justify-between p-3 rounded-2xl border border-gray-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-700 bg-pink-50 dark:bg-pink-900/10 cursor-pointer transition-all border-l-4 border-l-pink-500 shadow-sm col-span-2">
+                        <div class="flex flex-col">
+                            <span class="font-bold text-gray-900 dark:text-white text-xs">NO adjuntar Anexos (PDFs)</span>
+                            <span class="text-[10px] text-gray-500">Solo enlaces, sin páginas extra al final.</span>
+                        </div>
+                        <input type="checkbox" name="ocultar_anexos" class="accent-pink-500 w-5 h-5 rounded cursor-pointer" onchange="togglePreview('preview-anexos')">
                     </label>
                 </div>
             </form>
@@ -159,10 +159,9 @@
         </div>
     </div>
 
-    <!-- 2. PANEL DERECHO: VISTA PREVIA (Estrictamente Blanco y Negro) -->
+    <!-- PANEL DERECHO: VISTA PREVIA -->
     <div class="w-full lg:w-7/12 bg-gray-100 dark:bg-black relative flex items-center justify-center p-8 lg:p-12 overflow-hidden">
-        
-        <!-- Blobs Decorativos del Fondo (Solo ambiente) -->
+        <!-- Blobs Decorativos -->
         <div class="absolute top-10 right-10 w-96 h-96 bg-gray-300/40 dark:bg-zinc-900/30 rounded-full blur-[100px]"></div>
         <div class="absolute bottom-10 left-10 w-96 h-96 bg-gray-300/40 dark:bg-zinc-900/30 rounded-full blur-[100px]"></div>
 
@@ -260,19 +259,20 @@
                     <div id="preview-venta" class="bg-white border border-black h-6 flex items-center justify-center text-[7px] font-black text-black uppercase">VENTA</div>
                     <div id="preview-redes" class="bg-white border border-black h-6 flex items-center justify-center text-[7px] font-black text-black uppercase">REDES</div>
                 </div>
+                
+                <!-- Indicador Visual de Anexos -->
+                <div id="preview-anexos" class="mt-2 text-center transition-all duration-300">
+                    <div class="inline-block px-4 py-1 bg-black text-white text-[7px] font-bold uppercase tracking-widest rounded-full">
+                        + Páginas de Anexos
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    /* Estilo para ocultar secciones en la vista previa: Desvanecimiento extremo */
-    .preview-hidden {
-        opacity: 0.05;
-        filter: grayscale(100%) blur(1px);
-        pointer-events: none;
-    }
-    
+    .preview-hidden { opacity: 0.05; filter: grayscale(100%) blur(1px); pointer-events: none; }
     .custom-scrollbar::-webkit-scrollbar { width: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(236, 72, 153, 0.3); border-radius: 20px; }
@@ -282,7 +282,6 @@
     function togglePreview(id) {
         const element = document.getElementById(id);
         if (element) {
-            // Checkbox marcado = OCULTAR -> Añadimos clase 'preview-hidden'
             const checkbox = event.target;
             if (checkbox.checked) {
                 element.classList.add('preview-hidden');
