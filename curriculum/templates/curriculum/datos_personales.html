@@ -105,54 +105,67 @@
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2 text-gray-400 dark:text-zinc-500">
-                            <i data-lucide="user" size="12"></i>
-                            <label class="text-[8px] font-black uppercase tracking-widest">Nombres</label>
-                        </div>
-                        <p class="text-xs font-black text-gray-900 dark:text-zinc-100 uppercase">{{ perfil.nombres }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2 text-gray-400 dark:text-zinc-500">
-                            <i data-lucide="users" size="12"></i>
-                            <label class="text-[8px] font-black uppercase tracking-widest">Apellidos</label>
-                        </div>
-                        <p class="text-xs font-black text-gray-900 dark:text-zinc-100 uppercase">{{ perfil.apellidos }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2 text-gray-400 dark:text-zinc-500">
-                            <i data-lucide="users-2" size="12"></i>
-                            <label class="text-[8px] font-black uppercase tracking-widest">Género</label>
-                        </div>
-                        <p class="text-xs font-black text-gray-900 dark:text-zinc-100 uppercase">{{ perfil.sexo }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2 text-gray-400 dark:text-zinc-500">
-                            <i data-lucide="heart" size="12"></i>
-                            <label class="text-[8px] font-black uppercase tracking-widest">Estado Civil</label>
-                        </div>
-                        <p class="text-xs font-black text-gray-900 dark:text-zinc-100 uppercase">{{ perfil.estado_civil }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2 text-gray-400 dark:text-zinc-500">
-                            <i data-lucide="flag" size="12"></i>
-                            <label class="text-[8px] font-black uppercase tracking-widest">Nacionalidad</label>
-                        </div>
-                        <p class="text-xs font-black text-gray-900 dark:text-zinc-100 uppercase">{{ perfil.nacionalidad }}</p>
-                    </div>
-                    <div class="space-y-1 md:col-span-1">
-                        <div class="flex items-center gap-2 text-gray-400 dark:text-zinc-500">
-                            <i data-lucide="map" size="12"></i>
-                            <label class="text-[8px] font-black uppercase tracking-widest">Origen</label>
-                        </div>
-                        <p class="text-xs font-black text-gray-900 dark:text-zinc-100 uppercase">{{ perfil.lugar_nacimiento }}</p>
-                    </div>
-                    <div class="space-y-1 md:col-span-2">
-                        <div class="flex items-center gap-2 text-gray-400 dark:text-zinc-500">
-                            <i data-lucide="calendar" size="12"></i>
-                            <label class="text-[8px] font-black uppercase tracking-widest">Fecha Nacimiento</label>
-                        </div>
-                        <p class="text-xs font-black text-gray-900 dark:text-zinc-100 uppercase">{{ perfil.fecha_nacimiento|date:"d \d\e F, Y" }}</p>
+                   <div class="space-y-1">
+                <div class="flex items-center gap-2 text-pink-500 dark:text-pink-400">
+                    <i data-lucide="user" size="12"></i>
+                    <label class="text-[8px] font-black uppercase tracking-widest">Nombres</label>
+                </div>
+                <p class="text-xs font-black text-[#1a1a1a] dark:text-zinc-200 uppercase">{{ perfil.nombres }}</p>
+            </div>
+
+            <!-- Apellidos -->
+            <div class="space-y-1">
+                <div class="flex items-center gap-2 text-pink-500 dark:text-pink-400">
+                    <i data-lucide="users" size="12"></i>
+                    <label class="text-[8px] font-black uppercase tracking-widest">Apellidos</label>
+                </div>
+                <p class="text-xs font-black text-[#1a1a1a] dark:text-zinc-200 uppercase">{{ perfil.apellidos }}</p>
+            </div>
+
+            <!-- Género -->
+            <div class="space-y-1">
+                <div class="flex items-center gap-2 text-pink-500 dark:text-pink-400">
+                    <!-- Cambiado de venus-mars a users para asegurar compatibilidad -->
+                    <i data-lucide="users" size="12"></i>
+                    <label class="text-[8px] font-black uppercase tracking-widest">Género</label>
+                </div>
+                <p class="text-xs font-black text-[#1a1a1a] dark:text-zinc-200 uppercase">{{ perfil.sexo }}</p>
+            </div>
+
+            <!-- Estado Civil -->
+            <div class="space-y-1">
+                <div class="flex items-center gap-2 text-pink-500 dark:text-pink-400">
+                    <i data-lucide="heart" size="12"></i>
+                    <label class="text-[8px] font-black uppercase tracking-widest">Estado Civil</label>
+                </div>
+                <p class="text-xs font-black text-[#1a1a1a] dark:text-zinc-200 uppercase">{{ perfil.estado_civil }}</p>
+            </div>
+
+            <!-- Nacionalidad -->
+            <div class="space-y-1">
+                <div class="flex items-center gap-2 text-pink-500 dark:text-pink-400">
+                    <i data-lucide="flag" size="12"></i>
+                    <label class="text-[8px] font-black uppercase tracking-widest">Nacionalidad</label>
+                </div>
+                <p class="text-xs font-black text-[#1a1a1a] dark:text-zinc-200 uppercase">{{ perfil.nacionalidad }}</p>
+            </div>
+
+            <!-- Origen -->
+            <div class="space-y-1">
+                <div class="flex items-center gap-2 text-pink-500 dark:text-pink-400">
+                    <i data-lucide="map" size="12"></i>
+                    <label class="text-[8px] font-black uppercase tracking-widest">Origen</label>
+                </div>
+                <p class="text-xs font-black text-[#1a1a1a] dark:text-zinc-200 uppercase">{{ perfil.lugar_nacimiento }}</p>
+            </div>
+
+            <!-- Fecha Nacimiento -->
+            <div class="space-y-1 md:col-span-2">
+                <div class="flex items-center gap-2 text-pink-500 dark:text-pink-400">
+                    <i data-lucide="calendar" size="12"></i>
+                    <label class="text-[8px] font-black uppercase tracking-widest">Fecha Nacimiento</label>
+                </div>
+                <p class="text-xs font-black text-[#1a1a1a] dark:text-zinc-200 uppercase">{{ perfil.fecha_nacimiento|date:"d \d\e F, Y" }}</p>
                     </div>
                 </div>
             </div>
