@@ -141,6 +141,7 @@ class ExperienciaLaboral(models.Model):
     )
     telefono_contacto = models.CharField(max_length=20, null=True, blank=True, verbose_name="Teléfono Empresa/Jefe")
     nombre_contacto = models.CharField(max_length=100, null=True, blank=True, verbose_name="Persona de Referencia")
+    certificado_pdf = models.FileField(upload_to='experiencia/', null=True, blank=True, verbose_name="Constancia Laboral (PDF)")
     
     class Meta:
         verbose_name = "Experiencia Laboral"

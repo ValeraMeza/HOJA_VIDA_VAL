@@ -40,7 +40,7 @@ class ExperienciaLaboralAdmin(admin.ModelAdmin):
     list_filter = ('modalidad', 'activo', 'empresa')
     search_fields = ('cargo', 'empresa', 'descripcion', 'nombre_contacto')
     
-    # AGREGADO: Sección de Referencias en el formulario
+     # AGREGADO: Incluimos el certificado PDF en los fieldsets
     fieldsets = (
         ('Información del Puesto', {
             'fields': (('cargo', 'empresa'), 'modalidad', 'descripcion')
@@ -48,8 +48,8 @@ class ExperienciaLaboralAdmin(admin.ModelAdmin):
         ('Periodo y Estado', {
             'fields': (('fecha_inicio', 'fecha_fin'), 'activo')
         }),
-        ('Referencias y Verificación', {
-            'fields': (('nombre_contacto', 'telefono_contacto'),)
+        ('Referencias y Documentos', {
+            'fields': (('nombre_contacto', 'telefono_contacto'), 'certificado_pdf')
         }),
     )
 
