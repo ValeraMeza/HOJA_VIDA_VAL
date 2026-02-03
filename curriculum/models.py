@@ -162,7 +162,8 @@ class EstudioRealizado(models.Model):
     titulo = models.CharField(max_length=200)
     institucion = models.CharField(max_length=200)
     fecha_inicio = models.DateField(validators=[validar_no_futuro])
-    fecha_fin = models.DateField(validators=[validar_no_futuro])
+    # CORRECCIÓN: Agregado null=True y blank=True para permitir estudios en curso
+    fecha_fin = models.DateField(null=True, blank=True, validators=[validar_no_futuro], help_text="Deja vacío si cursas actualmente")
     certificado_pdf = models.FileField(upload_to='educacion/', null=True, blank=True)
     activo = models.BooleanField(default=True)
 
@@ -172,7 +173,8 @@ class EstudioRealizado(models.Model):
         ordering = ['fecha_fin']
 
     def clean(self):
-        if self.fecha_inicio > self.fecha_fin:
+        # CORRECCIÓN: Verificamos que fecha_fin exista antes de comparar
+        if self.fecha_fin and self.fecha_inicio > self.fecha_fin:
             raise ValidationError({'fecha_fin': 'La fecha de graduación no puede ser anterior al inicio.'})
 
     def __str__(self):

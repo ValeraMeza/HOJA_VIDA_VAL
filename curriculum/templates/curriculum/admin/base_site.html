@@ -81,7 +81,6 @@ body, #container, #main, #content {
 .breadcrumbs a:hover { color: var(--accent-pink) !important; }
 
 /* --- SIDEBAR DINÁMICO --- */
-/* Esta sección se actualizará sola cuando agregues modelos */
 #nav-sidebar, .nav-sidebar {
   background: var(--secondary-bg) !important;
   border-right: 1px solid var(--border-color) !important;
@@ -144,13 +143,12 @@ body.dashboard #content {
   margin-top: 0 !important;
 }
 
-/* Ocultar acciones recientes para mantener limpieza visual */
 #content-related {
   display: none !important;
 }
 
-/* Estilo para los bloques de aplicaciones (Módulos) */
-.module {
+/* --- ESTILO DE MÓDULOS (EXCLUYENDO CALENDARIO) --- */
+.module:not(.calendarbox) {
   background: var(--secondary-bg) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: 20px !important;
@@ -159,7 +157,7 @@ body.dashboard #content {
   box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
 }
 
-.module caption, .module h2 {
+.module:not(.calendarbox) caption, .module:not(.calendarbox) h2 {
   background: rgba(255, 255, 255, 0.03) !important;
   color: var(--accent-pink) !important;
   font-weight: 900 !important;
@@ -182,7 +180,9 @@ body.dashboard #content {
   background: rgba(255, 255, 255, 0.02) !important;
 }
 
-.module table th, .module table td {
+/* IMPORTANTE: Forzamos a que las tablas dentro de widgets de fecha NO hereden el padding de 1.2rem */
+.module table:not(.calendar) th, 
+.module table:not(.calendar) td {
   padding: 1.2rem 1.5rem !important;
   vertical-align: middle;
 }
@@ -222,10 +222,10 @@ body.dashboard #content {
   text-decoration: none !important;
 }
 
-/* --- BOTONES ESTILO PÍLDORA --- */
+/* --- BOTONES ESTILO PÍLDORA (EXCLUYENDO CALENDARIO) --- */
 .object-tools a.addlink,
-input[type="submit"],
-.button,
+input[type="submit"]:not(.calendar-shortcuts input),
+.button:not(.calendar-shortcuts a),
 .submit-row input[type="submit"],
 .add-another,
 .actions .button {
@@ -245,22 +245,110 @@ input[type="submit"],
   letter-spacing: 0.05em;
 }
 
-.object-tools a.addlink:hover,
-input[type="submit"]:hover {
-  transform: scale(1.02) !important;
-  filter: brightness(1.1) !important;
-  box-shadow: 0 15px 30px rgba(255, 126, 185, 0.4) !important;
+/* --- FIX DEFINITIVO Y CUADRADO PARA CALENDARIO --- */
+.calendarbox, .clockbox {
+    position: absolute !important;
+    background: #ffffff !important;
+    border: 1px solid var(--accent-pink) !important;
+    color: #333 !important;
+    border-radius: 12px !important;
+    z-index: 1100 !important;
+    width: 300px !important; /* AUMENTADO: Antes 220px, ahora 300px para evitar que se vea aplastado */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6) !important;
+    overflow: hidden !important;
 }
 
-/* Iconos de añadir/editar pequeños */
-.addlink, .changelink {
-  color: var(--accent-pink) !important;
-  font-weight: 800 !important;
-  text-decoration: none !important;
-  font-size: 11px;
+/* Tabla interna */
+.calendar table { 
+    margin: 0 !important; 
+    border: none !important; 
+    width: 100% !important; 
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
 }
 
-/* Estilo para los mensajes de éxito */
+/* Celdas (Días) */
+.calendar td { 
+    padding: 10px !important; /* AUMENTADO: Antes 6px 2px. Ahora 10px hace que se vea cuadrado */
+    font-size: 12px !important; 
+    background: #fff !important; 
+    color: #333 !important;
+    text-align: center !important;
+    border: 1px solid #f0f0f0 !important;
+    font-weight: 600 !important;
+    height: 40px !important; /* Forzamos altura para cuadrar */
+}
+
+/* Cabecera de días (L M M...) */
+.calendar th {
+    padding: 12px 0 !important;
+    background: #f8f8f8 !important;
+    color: #888 !important;
+    font-weight: 800 !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    border-bottom: 1px solid #eee !important;
+}
+
+/* Título del Mes */
+.calendar caption { 
+    background: var(--accent-pink) !important; 
+    color: #000 !important; 
+    font-weight: 900 !important; 
+    padding: 12px !important;
+    text-transform: uppercase !important;
+    font-size: 14px !important;
+    letter-spacing: 1px !important;
+}
+
+/* Enlaces de los días */
+.calendar td a {
+    color: #333 !important;
+    text-decoration: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.calendar td a:hover {
+    background: var(--accent-pink) !important;
+    color: #000 !important;
+    border-radius: 4px;
+}
+
+/* Hoy */
+.calendar td.today a {
+    font-weight: 900 !important;
+    border-bottom: 2px solid var(--accent-pink) !important;
+}
+
+/* Seleccionado */
+.calendar td.selected a {
+    background: var(--accent-pink) !important;
+    color: white !important;
+}
+
+/* Accesos directos abajo */
+.calendar-shortcuts { 
+    background: #1a1a1a !important; 
+    color: #fff !important; 
+    padding: 10px !important; 
+    border-top: 1px solid #eee !important;
+    text-align: center !important;
+}
+
+.calendar-shortcuts a { 
+    color: var(--accent-pink) !important; 
+    font-weight: 800 !important; 
+    font-size: 11px !important; 
+    text-transform: uppercase !important;
+    margin: 0 8px !important;
+    text-decoration: none !important;
+}
+
+/* --- OTROS --- */
 .messagelist li {
     background: #1e293b !important;
     border-left: 5px solid var(--accent-pink) !important;
@@ -277,7 +365,7 @@ input[type="submit"]:hover {
 <div id="branding">
   <h1 id="site-name">
     <a href="{% url 'admin:index' %}">
-       Panel de <span>Administración</span>
+        Panel de <span>Administración</span>
     </a>
   </h1>
 </div>
