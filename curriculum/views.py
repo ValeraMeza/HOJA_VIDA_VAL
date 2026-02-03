@@ -109,7 +109,8 @@ def venta(request):
         'productos': productos,
         'secciones': get_visibilidad()
     }
-    return render(request, 'curriculum/venta_garage.html', context)
+    # CORRECCIÓN: Cambiado de 'venta_garage.html' a 'venta.html' para coincidir con tu archivo
+    return render(request, 'curriculum/venta.html', context)
 
 def contacto(request):
     perfil = DatosPersonales.objects.first()
