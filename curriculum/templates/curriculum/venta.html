@@ -24,14 +24,14 @@
         {% for item in productos %}
         <div class="bg-white dark:bg-[#1a1a1a] p-6 rounded-[3rem] border border-gray-100 dark:border-white/5 shadow-sm relative overflow-hidden group hover:shadow-xl dark:hover:border-pink-500/30 transition-all duration-500 flex flex-col h-full">
             
-            <!-- Etiqueta de Precio -->
+            <!-- Etiqueta de Precio (Protegido con default 0) -->
             <div class="absolute right-5 top-5 z-20">
                 <div class="bg-[#1a1a1a] dark:bg-pink-500 text-white px-5 py-2 rounded-xl group-hover:bg-pink-500 dark:group-hover:bg-pink-600 transition-all shadow-md">
-                    <span class="text-xl font-black tracking-tighter">${{ item.precio|floatformat:0 }}</span>
+                    <span class="text-xl font-black tracking-tighter">${{ item.precio|default:0|floatformat:0 }}</span>
                 </div>
             </div>
 
-            <!-- Imagen del Producto -->
+            <!-- Imagen del Producto (Protección Visual) -->
             <div class="w-full h-48 mb-6 overflow-hidden rounded-3xl bg-gray-50/50 dark:bg-[#0d0d0d] relative border border-gray-50 dark:border-white/5 group-hover:bg-white dark:group-hover:bg-[#1a1a1a] transition-colors duration-500 p-3">
                 {% if item.imagen %}
                     <img src="{{ item.imagen.url }}" 
@@ -70,20 +70,26 @@
             <div class="px-1 mb-6 flex-grow flex flex-col">
                 <div class="flex items-center gap-2 mb-2">
                     <div class="h-1 w-4 bg-pink-400 rounded-full"></div>
-                    <span class="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Stock: {{ item.stock }} disponibles</span>
+                    <span class="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Stock: {{ item.stock|default:0 }} disponibles</span>
                 </div>
                 
                 <h3 class="text-2xl font-black uppercase text-gray-900 dark:text-white leading-tight mb-3 group-hover:text-pink-500 transition-colors pr-12">
-                    {{ item.nombre_producto }}
+                    {{ item.nombre_producto|default:"Producto sin nombre" }}
                 </h3>
                 
                 <div class="relative">
                     <p id="desc-{{ item.id }}" class="text-gray-500 dark:text-gray-400 text-sm font-medium italic leading-relaxed line-clamp-2 transition-all duration-500">
-                        "{{ item.descripcion }}"
+                        {% if item.descripcion %}
+                            "{{ item.descripcion }}"
+                        {% else %}
+                            Sin descripción detallada.
+                        {% endif %}
                     </p>
+                    {% if item.descripcion %}
                     <button type="button" onclick="toggleDescription('{{ item.id }}')" id="btn-desc-{{ item.id }}" class="text-[9px] font-black uppercase text-pink-400 mt-2 hover:text-pink-600 transition-colors tracking-widest">
                         Leer más +
                     </button>
+                    {% endif %}
                 </div>
             </div>
             
@@ -92,8 +98,8 @@
                 <div class="flex items-center justify-between gap-4">
                     <div class="flex items-center bg-gray-50 dark:bg-[#0d0d0d] rounded-xl p-1 border border-gray-100 dark:border-white/10">
                         <button type="button" onclick="decrementQty('{{ item.id }}')" class="p-2 text-gray-500 hover:text-pink-500 transition-colors"><i data-lucide="minus" size="14"></i></button>
-                        <input type="number" id="qty-{{ item.id }}" min="1" max="{{ item.stock }}" value="1" class="bg-transparent w-10 text-center font-black text-xs outline-none text-gray-900 dark:text-white" readonly>
-                        <button type="button" onclick="incrementQty('{{ item.id }}', {{ item.stock }})" class="p-2 text-gray-500 hover:text-pink-500 transition-colors"><i data-lucide="plus" size="14"></i></button>
+                        <input type="number" id="qty-{{ item.id }}" min="1" max="{{ item.stock|default:1 }}" value="1" class="bg-transparent w-10 text-center font-black text-xs outline-none text-gray-900 dark:text-white" readonly>
+                        <button type="button" onclick="incrementQty('{{ item.id }}', {{ item.stock|default:1 }})" class="p-2 text-gray-500 hover:text-pink-500 transition-colors"><i data-lucide="plus" size="14"></i></button>
                     </div>
                     
                     <button 
@@ -102,7 +108,7 @@
                         data-id="{{ item.id }}"
                         data-nombre="{{ item.nombre_producto|escapejs }}"
                         data-precio="{{ item.precio|default:0|floatformat:2 }}"
-                        data-imagen="{{ item.imagen.url|default:'' }}"
+                        data-imagen="{% if item.imagen %}{{ item.imagen.url }}{% endif %}"
                         data-qty="qty-{{ item.id }}"
                         data-stock="{{ item.stock|default:0 }}"
                         onclick="addToCart(this)"

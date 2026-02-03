@@ -7,15 +7,16 @@ from datetime import date
 
 def validar_no_futuro(value):
     """Evita que se ingresen fechas posteriores a hoy."""
-    if value > date.today():
+    if value and value > date.today():
         raise ValidationError('La fecha no puede estar en el futuro.')
 
 def validar_fecha_nacimiento(value):
     """Valida que el año de nacimiento sea lógico (1900-Hoy)."""
-    if value.year < 1900:
-        raise ValidationError('Por favor, ingresa un año posterior a 1900.')
-    if value > date.today():
-        raise ValidationError('La fecha de nacimiento no puede ser futura.')
+    if value:
+        if value.year < 1900:
+            raise ValidationError('Por favor, ingresa un año posterior a 1900.')
+        if value > date.today():
+            raise ValidationError('La fecha de nacimiento no puede ser futura.')
 
 # --- MODELOS DE APOYO ---
 
@@ -130,7 +131,8 @@ class ExperienciaLaboral(models.Model):
     empresa = models.CharField(max_length=150)
     fecha_inicio = models.DateField(validators=[validar_no_futuro])
     fecha_fin = models.DateField(null=True, blank=True, help_text="Vacío si es Actual", validators=[validar_no_futuro])
-    descripcion = models.TextField()
+    # CORRECCIÓN: Descripción ahora es opcional
+    descripcion = models.TextField(null=True, blank=True, verbose_name="Descripción de actividades")
     activo = models.BooleanField(default=True)
     modalidad = models.CharField(
         max_length=3,
@@ -146,7 +148,6 @@ class ExperienciaLaboral(models.Model):
     class Meta:
         verbose_name = "Experiencia Laboral"
         verbose_name_plural = "2. Trayectoria Profesional"
-        # CORRECCIÓN: Quitamos el '-' para orden Ascendente (Antiguos primero)
         ordering = ['fecha_inicio'] 
 
     def clean(self):
@@ -168,7 +169,6 @@ class EstudioRealizado(models.Model):
     class Meta:
         verbose_name = "Título Académico"
         verbose_name_plural = "3. Formación Académica"
-        # CORRECCIÓN: Orden ascendente por fecha de graduación
         ordering = ['fecha_fin']
 
     def clean(self):
@@ -181,7 +181,8 @@ class EstudioRealizado(models.Model):
 class ProductoAcademico(models.Model):
     """Publicaciones, proyectos o registros de propiedad intelectual."""
     nombre = models.CharField(max_length=200, verbose_name="Nombre del Producto")
-    descripcion = models.TextField(verbose_name="Descripción Detallada")
+    # CORRECCIÓN: Descripción ahora es opcional
+    descripcion = models.TextField(null=True, blank=True, verbose_name="Descripción Detallada")
     registro_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="ID / Registro de Propiedad")
     fecha_publicacion = models.DateField(validators=[validar_no_futuro], verbose_name="Fecha de Publicación")
     archivo = models.FileField(upload_to='academicos/', null=True, blank=True, verbose_name="Documentación (PDF/Zip)")
@@ -195,7 +196,6 @@ class ProductoAcademico(models.Model):
     class Meta:
         verbose_name = "Producto Académico"
         verbose_name_plural = "4. Producción Intelectual"
-        # CORRECCIÓN: Orden ascendente por fecha publicación
         ordering = ['fecha_publicacion']
 
     def __str__(self):
@@ -205,14 +205,14 @@ class CursoCapacitacion(models.Model):
     """Cursos de corta duración y talleres realizados."""
     nombre_curso = models.CharField(max_length=200)
     institucion = models.CharField(max_length=200)
-    fecha_realizacion = models.DateField(validators=[validar_no_futuro], null=True)
+    # CORRECCIÓN: Agregado blank=True para que el admin permita dejarlo vacío
+    fecha_realizacion = models.DateField(validators=[validar_no_futuro], null=True, blank=True)
     horas = models.PositiveIntegerField()
     certificado_pdf = models.FileField(upload_to='cursos/', null=True, blank=True, verbose_name="Certificado (PDF)")
     activo = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "5. Cursos y Certificaciones"
-        # CORRECCIÓN: Orden ascendente por fecha realización
         ordering = ['fecha_realizacion']
 
     def __str__(self):
@@ -222,13 +222,13 @@ class Reconocimiento(models.Model):
     """Premios, becas o menciones honoríficas."""
     nombre = models.CharField(max_length=200)
     institucion = models.CharField(max_length=200)
-    fecha_obtencion = models.DateField(validators=[validar_no_futuro], null=True)
+    # CORRECCIÓN: Agregado blank=True para que el admin permita dejarlo vacío
+    fecha_obtencion = models.DateField(validators=[validar_no_futuro], null=True, blank=True)
     codigo_registro = models.CharField(max_length=100, null=True, blank=True)
     activo = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "6. Reconocimientos y Premios"
-        # CORRECCIÓN: Orden ascendente
         ordering = ['fecha_obtencion']
 
     def __str__(self):
@@ -242,9 +242,11 @@ class VentaGarage(models.Model):
         ('Regular', 'Regular'),
     ]
     nombre_producto = models.CharField(max_length=200)
-    descripcion = models.TextField()
+    # CORRECCIÓN: Descripción ahora es opcional (para evitar el error al subir productos rápidos)
+    descripcion = models.TextField(null=True, blank=True)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     estado = models.CharField(max_length=50, choices=ESTADO_CHOICES)
+    # Imagen ya era opcional, se mantiene igual
     imagen = models.ImageField(upload_to='venta/', null=True, blank=True)
     fecha_publicacion = models.DateField(default=timezone.now, validators=[validar_no_futuro])
     stock = models.PositiveIntegerField(default=1)
@@ -252,7 +254,6 @@ class VentaGarage(models.Model):
 
     class Meta:
         verbose_name_plural = "7. Venta de Garage"
-        # CORRECCIÓN: Orden ascendente (lo publicado primero sale primero)
         ordering = ['fecha_publicacion']
 
     def __str__(self):

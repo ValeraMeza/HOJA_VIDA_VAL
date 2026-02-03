@@ -40,15 +40,17 @@ def get_visibilidad():
     return ConfiguracionPagina.objects.first()
 
 def inicio(request):
-    perfil = DatosPersonales.objects.filter(mostrar_seccion=True).first()
-    # Pasamos 'secciones' explícitamente
+    # CORRECCIÓN: Usamos .first() en lugar de filtrar por mostrar_seccion.
+    # Si ocultas la sección, quieres que desaparezca el bloque de contenido, 
+    # pero NO el nombre/foto del header que se usa en base.html.
+    perfil = DatosPersonales.objects.first()
     return render(request, 'curriculum/inicio.html', {
         'perfil': perfil, 
         'secciones': get_visibilidad()
     })
 
 def perfil(request):
-    perfil = DatosPersonales.objects.filter(mostrar_seccion=True).first()
+    perfil = DatosPersonales.objects.first()
     return render(request, 'curriculum/datos_personales.html', {
         'perfil': perfil, 
         'secciones': get_visibilidad()
@@ -107,7 +109,7 @@ def venta(request):
         'productos': productos,
         'secciones': get_visibilidad()
     }
-    return render(request, 'curriculum/venta.html', context)
+    return render(request, 'curriculum/venta_garage.html', context)
 
 def contacto(request):
     perfil = DatosPersonales.objects.first()
@@ -134,7 +136,7 @@ def generar_cv(request):
     host = request.get_host()
     base_url = f"{scheme}://{host}"
     
-    # Captura de parámetros
+    # Captura de parámetros (Banderas booleanas)
     ocultar_foto = request.GET.get('ocultar_foto') == 'on'
     ocultar_contacto = request.GET.get('ocultar_contacto') == 'on'
     ocultar_perfil = request.GET.get('ocultar_perfil') == 'on'
@@ -148,22 +150,24 @@ def generar_cv(request):
     ocultar_proyectos = request.GET.get('ocultar_proyectos') == 'on'
     ocultar_reconocimientos = request.GET.get('ocultar_reconocimientos') == 'on'
     ocultar_venta = request.GET.get('ocultar_venta') == 'on'
-    
-    # NUEVO PARAMETRO: OCULTAR ANEXOS
     ocultar_anexos = request.GET.get('ocultar_anexos') == 'on'
 
+    # CORRECCIÓN: Definimos las variables AQUÍ para usarlas tanto en context como en el loop de anexos
+    experiencias = ExperienciaLaboral.objects.filter(activo=True)
     estudios = EstudioRealizado.objects.filter(activo=True)
     proyectos = ProductoAcademico.objects.filter(activo=True)
     cursos = CursoCapacitacion.objects.filter(activo=True)
+    reconocimientos = Reconocimiento.objects.filter(activo=True)
+    productos_venta = VentaGarage.objects.filter(activo=True)
 
     context = {
         'perfil': perfil,
-        'experiencias': ExperienciaLaboral.objects.filter(activo=True),
+        'experiencias': experiencias, # Ahora usamos la variable definida arriba
         'estudios': estudios,
         'cursos': cursos,
-        'reconocimientos': Reconocimiento.objects.filter(activo=True),
+        'reconocimientos': reconocimientos,
         'proyectos': proyectos,
-        'productos': VentaGarage.objects.filter(activo=True),
+        'productos': productos_venta,
         'MEDIA_URL': settings.MEDIA_URL,
         'base_url': base_url,
         
@@ -181,7 +185,7 @@ def generar_cv(request):
         'ocultar_proyectos': ocultar_proyectos,
         'ocultar_reconocimientos': ocultar_reconocimientos,
         'ocultar_venta': ocultar_venta,
-        'ocultar_anexos': ocultar_anexos, # Pasamos la bandera al template
+        'ocultar_anexos': ocultar_anexos,
     }
     
     template = get_template('curriculum/cv_pdf.html')
@@ -218,8 +222,14 @@ def generar_cv(request):
         except Exception as e:
             print(f"Error adjuntando archivo: {e}")
 
-    # LÓGICA CONDICIONAL: Solo fusionar si NO se marcó ocultar anexos
+    # LÓGICA DE FUSIÓN (ANEXOS)
     if not ocultar_anexos:
+        # CORRECCIÓN: Usamos la variable booleana 'ocultar_experiencia' en lugar de request.GET
+        # Y 'experiencias' ahora está definida correctamente.
+        if not ocultar_experiencia:
+            for exp in experiencias:
+                adjuntar_archivo(exp.certificado_pdf)
+                
         if not ocultar_educacion:
             for estudio in estudios:
                 adjuntar_archivo(estudio.certificado_pdf)
