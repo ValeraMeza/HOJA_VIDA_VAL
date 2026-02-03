@@ -272,10 +272,25 @@
         message += `💰 *TOTAL A PAGAR: $${total.toFixed(0)}*\n\n`;
         message += `Hola Valeria, he generado este pedido desde la web. Quedo a la espera de los datos para concretar. Gracias!`;
 
-        const phone = "{% if perfil %}{{ perfil.telefono }}{% endif %}".replace(/[^\d]/g, '');
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        // --- CORRECCIÓN DE NÚMERO PARA WHATSAPP (ECUADOR) ---
+        // 1. Obtenemos el teléfono y limpiamos todo lo que no sea número
+        let phone = "{% if perfil %}{{ perfil.telefono }}{% endif %}".replace(/[^\d]/g, '');
         
-        // Opcional: localStorage.removeItem('garage_cart');
+        // 2. Lógica para Ecuador: Si empieza con '0' (ej: 099...), lo cambiamos por 593
+        if (phone.startsWith('0')) {
+            phone = '593' + phone.substring(1);
+        } 
+        // 3. Fallback: Si no tiene código de país (asumimos que tiene 9 dígitos), le agregamos 593
+        else if (!phone.startsWith('593') && phone.length === 9) {
+            phone = '593' + phone;
+        }
+        
+        // Solo abrir si hay un número válido
+        if (phone.length >= 10) {
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        } else {
+            alert("Error: El número de teléfono de la tienda no está configurado correctamente en el perfil.");
+        }
     }
 </script>
 
